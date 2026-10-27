@@ -38,16 +38,6 @@
         .pill-shadow {
             box-shadow: 0 2px 10px rgba(108, 67, 192, 0.05);
         }
-
-        /* ----- ĐƯỜNG LINE UỐN LƯỢN HÌNH CHỮ S (chỉ desktop) -----
-           Một đường SVG liền mạch, các phần tử đặt theo toạ độ (px) trong khung 976 x 827 */
-        .s-wrap { position: relative; width: 976px; height: 827px; margin: 0 auto; }
-        .s-line { position: absolute; left: 0; top: 0; overflow: visible; }
-        .s-abs  { position: absolute; }
-        .s-txt  { position: absolute; font-size: 27px; line-height: 37px; }
-        .s-sws  { position: absolute; display: flex; }
-        .s-sws > div { flex-shrink: 0; }
-        .sw { width: 40px; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 md:p-6 relative select-none">
@@ -100,191 +90,166 @@
         </div>
     </header>
 
-    <!-- ================= NỘI DUNG ================= -->
-    <main class="max-w-[976px] w-full mx-auto relative flex-1 flex flex-col px-4 lg:px-0 z-10 pb-24">
-
-        <!-- Tiêu đề -->
-        <h1 class="font-dejavu-title text-[44px] sm:text-[64px] lg:text-[88px] leading-[1.15] text-[#7549bb] text-center mt-10 lg:mt-14 mb-10 lg:mb-14">
-            Quốc Trưởng Hehe
-        </h1>
-
-        <!-- Khung chữ nhật trắng + ảnh đè ở giữa (ảnh nhô lên trên khung) -->
-        <section class="relative w-full lg:pt-[194px] mb-20 lg:mb-[108px]">
-            <!-- Desktop -->
-            <div class="hidden lg:block relative h-[248px]">
-                <div class="absolute inset-0 bg-white rounded-[30px]"></div>
-                <div class="absolute inset-0 grid grid-cols-[1fr_328px_1fr] items-center">
-                    <p class="text-[20px] leading-[1.5] text-right pl-[41px] pr-[18px]">
-                        Quốc trưởng HeHe là danh xưng dành cho người đứng đầu Hẻm Chuột, cộng đồng được hình thành xoay quanh Giang HeHe.
-                    </p>
-                    <span></span>
-                    <p class="text-[20px] leading-[1.5] text-left pl-[29px] pr-[54px]">
-                        Đây là danh hiệu mang tính biểu tượng, đại diện cho vai trò khởi lập, dẫn dắt và duy trì bản sắc của cộng đồng.
-                    </p>
-                </div>
-                <img src="https://i.ibb.co/93njPYXn/pad2.png" alt="Giang HeHe"
-                     class="absolute bottom-[48px] left-1/2 -translate-x-1/2 w-[328px] h-auto object-contain" />
-            </div>
-            <!-- Mobile / tablet -->
-            <div class="lg:hidden flex flex-col items-center gap-5">
-                <img src="https://i.ibb.co/93njPYXn/pad2.png" alt="Giang HeHe" class="w-[260px] h-auto object-contain" />
-                <p class="bg-white rounded-[24px] p-5 text-center text-[17px] leading-[1.5] w-full">
-                    Quốc trưởng HeHe là danh xưng dành cho người đứng đầu Hẻm Chuột, cộng đồng được hình thành xoay quanh Giang HeHe.
-                </p>
-                <p class="bg-white rounded-[24px] p-5 text-center text-[17px] leading-[1.5] w-full">
-                    Đây là danh hiệu mang tính biểu tượng, đại diện cho vai trò khởi lập, dẫn dắt và duy trì bản sắc của cộng đồng.
-                </p>
-            </div>
-        </section>
-
-     <!-- ================= ĐƯỜNG LINE UỐN LƯỢN HÌNH CHỮ S (Desktop) ================= -->
-        <section class="hidden lg:block w-full mb-[106px]">
-            <div class="s-wrap">
-                <!-- Đường line: đầu trên bo tròn, cung trái, đường giữa, cung phải, đầu dưới bo tròn -->
-                <svg class="s-line" width="976" height="827" viewBox="0 0 976 827" fill="none" aria-hidden="true">
-                    <path d="M 961.5 5.5 H 214.75 A 204.25 204.25 0 0 0 214.75 414 H 758 A 203.5 203.5 0 0 1 758 821 H 10.5"
-                          stroke="#8652d8" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-
-                <!-- Nửa trên: ảnh + 3 ô màu (trái), đoạn văn (phải) -->
-                <img src="https://i.ibb.co/SDgLQBgn/vt1-1.png" alt="vt1 1" class="s-abs" style="left:194.5px; top:16px; width:156px; height:auto;" />
-                <div class="s-sws" style="left:194.5px; top:248px; gap:16px;">
-                    <div class="bg-white"     style="width:41px; height:135px;"></div>
-                    <div class="bg-[#c180da]" style="width:41px; height:135px;"></div>
-                    <div class="bg-[#f8e3d3]" style="width:41px; height:135px;"></div>
-                </div>
-                <p class="s-txt text-left" style="left:416.5px; top:64px; width:490px;">
-                    Quốc trưởng HeHe hiện tại là Giang HeHe de Montmorency Noire, người giữ ngôi Quốc trưởng đời thứ nhất, đồng thời là nhân vật đặt nền móng cho hệ thống danh xưng, văn hóa và những quy ước riêng của Hẻm Chuột.
-                </p>
-
-                <!-- Nửa dưới: đoạn văn (trái, căn phải), ảnh + 4 ô màu (phải) -->
-                <p class="s-txt text-right" style="left:97.5px; top:448px; width:425px;">
-                    Với tư cách là Quốc trưởng đời thứ nhất, Giang HeHe de Montmorency Noire giữ vị trí khởi nguyên trong lịch sử Hẻm Chuột. Danh hiệu này đánh dấu sự hình thành của hệ thống Quốc trưởng và tạo tiền đề cho sự bành trướng phát triển sau này.
-                </p>
-                <img src="https://i.ibb.co/FLLMKwxJ/vt1-2.png" alt="vt1 2" class="s-abs" style="left:584.5px; top:421px; width:195px; height:auto;" />
-                <div class="s-sws" style="left:584.5px; top:663px; gap:10px;">
-                    <div class="bg-white"     style="width:41px; height:140px;"></div>
-                    <div class="bg-[#c180da]" style="width:41px; height:140px;"></div>
-                    <div class="bg-[#d2834f]" style="width:41px; height:140px;"></div>
-                    <div class="bg-[#fd4f35]" style="width:41px; height:140px;"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Timeline (Mobile / tablet: xếp dọc) -->
-        <section class="lg:hidden flex flex-col gap-12 mb-16">
-            <div class="flex flex-col items-center text-center gap-4">
-                <img src="https://i.ibb.co/SDgLQBgn/vt1-1.png" alt="vt1 1" class="w-40 object-contain" />
-                <div class="flex gap-3">
-                    <div class="sw h-20 bg-white"></div><div class="sw h-20 bg-[#c180da]"></div><div class="sw h-20 bg-[#f8e3d3]"></div>
-                </div>
-                <p class="text-[20px] leading-[1.4]">Quốc trưởng HeHe hiện tại là Giang HeHe de Montmorency Noire, người giữ ngôi Quốc trưởng đời thứ nhất, đồng thời là nhân vật đặt nền móng cho hệ thống danh xưng, văn hóa và những quy ước riêng của Hẻm Chuột.</p>
-            </div>
-            <div class="h-[6px] bg-[#8652d8] rounded-full -mx-4"></div>
-            <div class="flex flex-col items-center text-center gap-4">
-                <img src="https://i.ibb.co/FLLMKwxJ/vt1-2.png" alt="vt1 2" class="w-44 object-contain" />
-                <div class="flex gap-3">
-                    <div class="sw h-20 bg-white"></div><div class="sw h-20 bg-[#c180da]"></div><div class="sw h-20 bg-[#d2834f]"></div><div class="sw h-20 bg-[#fd4f35]"></div>
-                </div>
-                <p class="text-[20px] leading-[1.4]">Với tư cách là Quốc trưởng đời thứ nhất, Giang HeHe de Montmorency Noire giữ vị trí khởi nguyên trong lịch sử Hẻm Chuột. Danh hiệu này đánh dấu sự hình thành của hệ thống Quốc trưởng và tạo tiền đề cho sự bành trướng phát triển sau này.</p>
-            </div>
-        </section>
-
-        <!-- Đường kẻ ngang phân cách + nhãn -->
-        <div class="w-full lg:w-[1040px] lg:-ml-[32px] h-[4px] bg-[#8652d8] mb-10"></div>
-        <div class="w-full lg:w-[928px] mx-auto self-center bg-white rounded-full py-[10px] px-6 text-center shadow-[0_2px_8px_rgba(60,40,100,0.18)] mb-[67px]">
-            <span class="text-[11px] sm:text-[13.5px] text-[#7549bb] uppercase">NHỮNG NGHĨA CỬ CAO ĐẸP CỦA QUỐC TRƯỞNG GIANG HEHE DE MONTMORENCY NOIRE</span>
-        </div>
-
-        <!-- ===== 1. Hơi thở hy vọng ===== -->
-        <img src="https://i.ibb.co/Lz5Q0JrT/vt1-3.png" alt="vt1 3" class="w-full h-auto object-contain mb-[41px]" />
-        <h2 class="font-dejavu-title h-sec mb-3">Hơi Thở Hy Vọng Và Chùm Bóng<br>Nâng Bước Ước Mơ</h2>
-        <div class="grid md:grid-cols-2 gap-6 md:gap-8 body-text mb-[72px]">
-            <p>Tương truyền, có một chú cua nhỏ bé kia luôn ấp ủ một ước mơ vĩ đại, được bay lượn ngắm nhìn bầu trời bao la. Thấu hiểu khát vọng xé lòng ấy, ngài Quốc trưởng đã ân cần buộc sẵn những quả bóng bay rực rỡ sắc màu gồm vàng, đỏ và xanh vào tay chú cua. Sợi dây ấy chính là bệ phóng êm ái nâng đỡ thần dân thoát khỏi sự nặng nề của mặt đất. Đôi mắt chú cua mở to tròn ngỡ ngàng tột độ, xúc động đến mức không nói nên lời trước ân huệ quá đỗi lớn lao này.</p>
-            <p>Và chưa dừng lại ở đó, ngài Quốc trưởng vẫn không màng địa vị cao quý, đích thân dồn hết tâm can và hơi thở của mình để tiếp tục thổi thêm một quả bóng màu hồng nữa. Ngài lo sợ ba quả bóng kia là chưa đủ, nên muốn tự tay chuẩn bị thêm để đảm bảo rằng thần dân của mình có bệ phóng vững chắc nhất để chạm tới đỉnh cao của hạnh phúc. Hình ảnh ngài Quốc trưởng cặm cụi phồng má thổi bóng chính là minh chứng sống động nhất cho một vị lãnh tụ luôn dốc cạn sinh lực vì ước mơ của từng công dân nhỏ bé nhất!</p>
-        </div>
-
-        <!-- ===== 2. Cú ném tịnh hóa ===== -->
-        <div class="flex flex-col md:flex-row gap-6 md:gap-[39px] mb-8">
-            <div class="md:w-[38%] flex flex-col md:justify-between order-2 md:order-1">
-                <div class="md:text-right md:pr-2">
-                    <h2 class="font-dejavu-title h-sec pt-4">Cú Ném Tịnh Hóa</h2>
-                    <h3 class="font-dejavu-title text-[25px] leading-[1.45] mt-10">Đánh Thức<br>Đứa Con Lầm Lỡ</h3>
-                </div>
-                <p class="body-text mt-8 md:mt-0">Những kẻ thiển cận có thể vội vã kết luận rằng ngài Quốc trưởng đang bắt nạt thần dân khi ném một vật thể trúng thẳng vào mặt người đàn ông cơ bắp ở góc trái. Nhưng sự thật đằng sau khoảnh khắc này lại vô cùng vĩ đại!</p>
-            </div>
-            <div class="md:w-[56%] order-1 md:order-2">
-                <img src="https://i.ibb.co/MD1TwTts/vt1-4.png" alt="vt1 4" class="w-full h-auto object-contain" />
-            </div>
-        </div>
-        <div class="grid md:grid-cols-2 gap-6 md:gap-8 body-text mb-[56px]">
-            <p>Thực chất, người công dân kia đang rơi vào cơn hoang tưởng và mất kiểm soát. Không thể đứng nhìn thần dân chịu khổ, ngài Quốc trưởng Giang HeHe đã đích thân ra tay. Bằng bộ óc thiên tài, ngài đã giăng sẵn hệ thống lưới tọa độ không gian trên mặt đất để tính toán quỹ đạo hoàn hảo nhất. Sau đó, ngài tung ra "Quả Cầu Tịnh Hóa" bay với tốc độ ánh sáng, nhắm trúng vào huyệt đạo giải trừ mê muội trên trán người đàn.</p>
-            <p>Vụ nổ ánh sáng rực rỡ ngay trên khuôn mặt tuyệt đối không phải là sự va đập đau đớn, mà là khoảnh khắc tà khí bị thanh tẩy, nhường chỗ cho ánh sáng của chân lý và trí tuệ ùa vào. Đứng ở góc phải, ngài Quốc trưởng đang nở một nụ cười rạng rỡ và hiền hậu. Nụ cười ấy chính là sự mãn nguyện, là niềm hạnh phúc tột cùng của một vị minh quân khi vừa tự tay cứu rỗi và đưa một linh hồn lạc lối trở về với bến bờ chánh niệm!</p>
-        </div>
-
-        <!-- ===== 3. Giọt nước tình thương ===== -->
-        <div class="flex flex-col md:flex-row gap-6 md:gap-8 mb-[56px]">
-            <div class="md:w-[42%] flex flex-col gap-3 body-text">
-                <p>Trong khoảnh khắc lịch sử đầy xúc động này, ngài Quốc trưởng Giang HeHe với mái tóc trắng giản dị đang âm thầm túc trực phía sau bức tường gạch đỏ. Bức tường kiên cố ấy chính là minh chứng cho hàng rào an ninh vững chắc do ngài đích thân dựng lên để bảo vệ thần dân.</p>
-                <p>Phía dưới bức tường, một công dân cua nhỏ bé đang được an toàn ôm trọn ổ bánh mì phúc lợi. Tuy nhiên, khi chứng kiến thần dân của mình phải gặm nhấm ổ bánh mì khô khan, ngài Quốc trưởng đã không giấu nổi sự xót xa. Ánh mắt ngài đăm đăm nhìn xuống đầy lo âu, và chất lỏng vương trên miệng ngài tuyệt đối không phải là sự thèm thuồng vặt vãnh. Đó chính là những giọt nước mắt đồng cảm, xót thương chực trào dâng!</p>
-                <p>Bằng phép màu của sự bác ái, giọt nước mắt ấy đã hóa thành một vũng nước xanh trong vắt ngay bên cạnh chú cua, mang đến nguồn nước ngọt lành giúp người dân xua tan cơn khát. Chú cua đỏ giữ chặt ổ bánh mì với vẻ mặt đầy kiên định, thể hiện niềm tin tuyệt đối vào sự che chở bao la và tình yêu thương vô bờ bến của Quốc trưởng vĩ đại.</p>
-            </div>
-            <div class="md:w-[56%]">
-                <img src="https://i.ibb.co/ynpgLKws/vt1-5.png" alt="vt1 5" class="w-full h-auto object-contain" />
-                <h2 class="font-dejavu-title h-sec mt-10">Giọt Nước Tình Thương<br>Nơi Bức Tường Che Chở</h2>
-            </div>
-        </div>
-
-        <!-- ===== 4. Lộc trời ban tặng ===== -->
-        <div class="flex flex-col md:flex-row gap-6 md:gap-[26px] mb-8">
-            <div class="md:w-[59%]">
-                <img src="https://i.ibb.co/d05cXtWX/vt1-6.png" alt="vt1 6" class="w-full h-auto object-contain" />
-            </div>
-            <div class="md:w-[38%] flex flex-col md:justify-between">
-                <h2 class="font-dejavu-title h-sec md:pt-16">Lộc Trời Ban Tặng<br>Và Viên Gạch Mở Đường</h2>
-                <p class="body-text mt-6 md:mt-0">Phía sau bức tường kiên cố, ngài Quốc trưởng với ánh mắt hiền từ đang ngày đêm canh gác sự bình yên cho bờ cõi. Khi phát hiện người thanh niên cơ bắp bên dưới đang suy kiệt vì thiếu hụt protein, ngài đã không ngần ngại ban phát ngay một chú cá xanh tươi rói từ trên cao xuống. Cú va chạm rực sáng chói lòa ngay trên khuôn mặt người thanh niên là sự bùng nổ của niềm hạnh phúc tột độ, là vầng hào quang chói lọi khi công dân được đích thân lân tiếp tế tận miệng nguồn dinh dưỡng cao cấp.</p>
-            </div>
-        </div>
-        <p class="body-text mb-[40px]">Đồng thời, viên gạch đang rơi xuống đập nứt cả mặt đất dưới chân người dân chính là hành động dọn đường đầy uy dũng của ngài Quốc trưởng. Ngài đã dùng viên gạch ấy để ném vỡ những cạm bẫy ngầm, phá tan lớp đất cằn cỗi để mở ra một con đường tương lai bằng phẳng, bảo vệ sự an nguy cho đôi chân của người thanh niên. Ngay cả chú cua đỏ đứng cạnh ngài trên tường thành cũng phải giơ cao đôi càng để tung hô, thán phục trước sự tính toán chuẩn xác và lòng nhân đạo bao la của vị cha già dân tộc!</p>
-
-        <!-- ===== 5. Buồng thủy liệu pháp ===== -->
-        <div class="md:grid md:grid-cols-[1fr_69%_1fr] md:items-end mb-5">
-            <h2 class="font-dejavu-title h-sec whitespace-nowrap md:text-right md:pr-5 order-2 md:order-1 hidden md:block">Buồng<br>Thủy<br>Liệu<br>Pháp</h2>
-            <img src="https://i.ibb.co/RpN1JHQL/vt1-7.png" alt="vt1 7" class="w-full h-auto object-contain md:order-2" />
-            <h2 class="font-dejavu-title h-sec whitespace-nowrap md:pl-5 hidden md:block md:order-3">Chăm<br>Sóc Sức<br>Khỏe<br>Toàn<br>Diện</h2>
-            <h2 class="font-dejavu-title h-sec md:hidden mt-4">Buồng Thủy Liệu Pháp<br>Chăm Sóc Sức Khỏe Toàn Diện</h2>
-        </div>
-        <p class="body-text mb-6">Ngài Quốc trưởng Giang HeHe đang đích thân vận hành hệ thống Bể Năng Lượng Tiên Tiến để phục hồi thể lực cho một công dân. Bằng sự ân cần sâu sắc, ngài tự tay bấm nút màu đỏ để kích hoạt chế độ mát-xa thủy lực tối tân nhất trên bảng điều khiển. Làn nước xanh trong vắt sục lên tung tóe bên trong buồng kính chính là luồng sinh khí tinh khiết đang gọt rửa mọi mệt mỏi, tiếp thêm năng lượng tích cực cho thần dân. Chú cua bên trong bể đang nhắm nghiền hai mắt lại, thu gọn càng để tận hưởng trọn vẹn sự thư giãn tuyệt đối đến từng tế bào. Ánh mắt vô cùng tập trung của ngài Quốc trưởng khi giám sát sát sao quá trình trị liệu là minh chứng cho sự tận tâm, luôn lo lắng và chăm chút cho sức khỏe thể chất của từng cá nhân nhỏ bé nhất trong vương quốc.</p>
-
-        <!-- ===== 6. Chuyến xe tuổi thơ ===== -->
-        <img src="https://i.ibb.co/xtwc46JB/vt1-8.png" alt="vt1 8" class="w-full h-auto object-contain mb-[50px]" />
-        <h2 class="font-dejavu-title h-sec mb-3">Chuyến Xe Tuổi Thơ Và Căn Hầm Bình Yên</h2>
-        <div class="grid md:grid-cols-[1fr_2.63fr] gap-6 md:gap-7 body-text mb-[46px]">
-            <p>Ngài Quốc trưởng đích thân thiết kế và vận hành "Chuyến tàu lượn siêu tốc tuổi thơ" để giúp người dân giải tỏa căng thẳng sau những giờ lao động mệt nhọc.</p>
-            <p>Cái hố là một bến đỗ an toàn được che chắn bằng bìa carton êm ái. Ngài Quốc trưởng đã tự tay đẩy chiếc xe trượt xuống một cách nhẹ nhàng, đưa thần dân của mình vào một không gian hầm trú ẩn bình yên, nơi họ được bao bọc khỏi mọi sóng gió của thế giới bên ngoài. Nụ cười hạnh phúc rạng ngời của người đàn ông trên xe chính là lời tri ân sâu sắc nhất dành cho tấm lòng bao dung và dịch vụ chăm sóc sức khỏe tâm lý tuyệt vời của vị lãnh tụ vĩ đại!</p>
-        </div>
-
-        <!-- ===== 7. Suối nguồn tươi trẻ ===== -->
-        <img src="images/vt1-9.png" alt="vt1 9" class="w-full h-auto object-contain mb-[40px]" />
-        <h2 class="font-dejavu-title h-sec mb-3">Suối Nguồn Tươi Trẻ Và<br>Phương Thuốc Phục Hồi Sinh Lực</h2>
-        <div class="grid md:grid-cols-[1fr_1.73fr] gap-6 md:gap-8 body-text mb-[80px]">
-            <p>Đứng bên trái là vị danh y xuất chúng đang cẩn thận cầm bản ghi chép công thức dược liệu bí truyền để điều chế ra dung dịch thảo dược phục hồi thể lực. Trong giai đoạn đầu, một chiếc muỗng khổng lồ được sử dụng để khuấy đều các tinh chất quý giá hòa quyện vào làn nước màu xanh lục ấm áp.</p>
-            <p>Ngay sau khi dung dịch đạt đến độ hoàn hảo, ngài Quốc trưởng đã ban đặc ân cho 2 người dân nhỏ bé được trải nghiệm liệu trình tắm khoáng trị liệu này. Hình ảnh người công dân đang nhẹ nhàng bay vào vạc nước chính là khoảnh khắc tận hưởng sự thư giãn tuyệt đối, gột rửa mọi ưu phiền. Đứng ở góc phải, ngài Quốc trưởng Giang HeHe luôn nở một nụ cười rạng rỡ và tự hào, minh chứng cho niềm vui sướng của một vị lãnh tụ khi thấy thần dân của mình được chăm sóc y tế một cách tận tình và chu đáo nhất.</p>
-        </div>
-
-        <!-- ===== 8. Cánh cửa tương lai (hình 10 + 11 ghép liền) ===== -->
-        <div class="flex flex-col md:flex-row gap-6 md:gap-[33px] items-start">
-            <div class="w-full md:w-[35.3%] flex flex-col">
-                <img src="images/vt1-10.png" alt="vt1 10" class="w-full h-auto object-contain" />
-            </div>
-            <div class="flex-1 flex flex-col gap-[14px]">
-                <h2 class="font-dejavu-title h-sec">Cánh Cửa Tương Lai Và Chuyến Du Hành Của Sự Yêu Thương</h2>
-                <p class="body-text">Sự vĩ đại của ngài Quốc trưởng không chỉ dừng lại ở những hành động chăm lo đời sống thường ngày, mà ngài còn là một nhà khoa học thiên tài mang tầm vóc vũ trụ! Bức ảnh này ghi lại khoảnh khắc lịch sử khi ngài đích thân kiểm tra cỗ máy màu xanh vĩ đại mang tên "MÁY XUYÊN KHÔNG".</p>
-                <p class="body-text">Ngài chế tạo ra cỗ máy này với một mục đích vô cùng cao cả: mở ra một kỷ nguyên mới, đưa thần dân của mình du hành đến những chiều không gian tốt đẹp hơn, nơi không còn rào cản về vật chất hay sự thiếu thốn. Việc ngài tự mình kề mặt vào kiểm tra hệ thống chính là sự hi sinh to lớn của một vị lãnh tụ sẵn sàng gánh vác mọi rủi ro, chỉ để đảm bảo chuyến đi tới bến bờ hạnh phúc của người dân được trọn vẹn nhất!</p>
-            </div>
-        </div>
-    </main>
+    <!-- ================= KHU VỰC NỘI DUNG CHÍNH ================= -->
+    <main class="max-w-4xl w-full mx-auto relative flex-1 flex flex-col px-4 md:px-0 z-10 mb-16">
         
+        <!-- 1. Tiêu đề và Hình ảnh 2 nhân vật (Banner) -->
+        <div class="relative w-full pt-10 md:pt-16 mb-16 flex flex-col md:flex-row justify-between items-center md:items-start h-auto md:h-[400px]">
+            
+            <!-- Dấu cộng trang trí -->
+            <div class="absolute top-0 right-[25%] text-[#764bd6]/50 text-2xl font-black">+</div>
+            <div class="absolute top-[20%] right-4 text-[#764bd6]/70 text-3xl font-black">+</div>
+            <div class="absolute top-[35%] left-[45%] text-[#764bd6]/60 text-2xl font-black">+</div>
+            <div class="absolute top-[10%] left-[20%] text-[#764bd6] text-3xl font-black">+</div>
+            <div class="absolute top-[60%] left-[30%] text-[#764bd6]/40 text-4xl font-black">+</div>
+            <div class="absolute bottom-[10%] right-[40%] text-[#764bd6] text-4xl font-black">+</div>
+
+            <!-- Chữ Baby Cat Gang -->
+            <div class="w-full md:w-1/2 z-10 text-center md:text-left md:pl-4 mt-8 md:mt-20">
+                <h1 class="font-dejavu-title text-[56px] md:text-[84px] text-[#764bd6] leading-[1.1] tracking-wide">
+                    Baby<br>Cat<br>Gang
+                </h1>
+            </div>
+
+            <!-- Cụm Hình Cua & Gà -->
+            <div class="w-full md:w-1/2 relative h-[300px] md:h-full mt-10 md:mt-0 flex justify-center md:block">
+                <!-- Con cua (Trái / Trên) -->
+                <img src="https://i.ibb.co/HDLJPBhm/IMG-6520.png" alt="IMG 6520" class="absolute top-0 md:top-4 md:right-32 w-48 md:w-[260px] object-contain drop-shadow-md z-10" />
+                <!-- Con gà (Phải / Dưới) -->
+                <img src="https://i.ibb.co/NvhGZzZ/IMG-6519.png" alt="IMG 6519" class="absolute bottom-0 md:-bottom-12 right-4 md:right-0 w-44 md:w-[240px] object-contain drop-shadow-md z-20" />
+            </div>
+        </div>
+
+        <!-- 2. Khung Thông Tin Chi Tiết -->
+        <div class="w-full flex gap-4 md:gap-8 mb-20 px-2 md:px-0">
+            <!-- Thanh Trắng bên trái -->
+            <div class="w-6 md:w-10 bg-white rounded-full card-shadow flex-shrink-0"></div>
+            
+            <!-- Chữ bên phải -->
+            <div class="flex-1 flex flex-col gap-5 text-[#764bd6] text-[15px] md:text-[17px] leading-relaxed text-justify py-2">
+                <p>Baby Cat Gang là danh xưng dành cho nhóm hoàng thân quốc thích của Quốc trưởng, giữ vị trí đặc biệt trong hệ thống nhân sự và biểu tượng của Hẻm Chuột. Nhóm được xem là một bộ phận thuộc hoàng gia, gắn bó với Quốc trưởng và đồng hành trong các hoạt động của Hẻm Chuột.</p>
+                <p>Khác với hệ thống Tể tướng Ratti, vốn đảm nhiệm những vai trò hỗ trợ điều phối và vận hành cộng đồng, Baby Cat Gang mang ý nghĩa về địa vị, mối quan hệ thân cận và vị thế đặc biệt của các thành viên trong đội ngũ Thân Vương. Danh xưng này xác lập một nhóm nhân vật có vị trí riêng trong hệ thống danh hiệu của Hẻm Chuột.</p>
+                <p>Baby Cat Gang hiện có hai thành viên đương nhiệm, cùng giữ chức vụ Công nương Danisa Ratti. Đây là những người thuộc thế hệ đầu tiên của nhóm, đánh dấu sự khởi đầu của hệ thống danh hiệu Baby Cat Gang trong lịch sử Hẻm Chuột.</p>
+            </div>
+        </div>
+
+        <!-- 3. Pill Title Divider -->
+        <div class="w-full flex justify-center mb-20">
+            <div class="bg-white rounded-full py-3 px-12 md:px-24 card-shadow border border-[#e9e2f8]">
+                <span class="text-[#764bd6] text-[14px] md:text-[16px] uppercase tracking-widest font-bold">CÁC THÀNH VIÊN ĐƯƠNG NHIỆM</span>
+            </div>
+        </div>
+
+        <!-- 4. Thành viên 1: Con Cua -->
+        <div class="flex flex-col md:flex-row w-full mb-20 px-2 md:px-0 items-center md:items-stretch">
+            <!-- Left line -->
+            <div class="hidden md:block w-8 h-[2px] bg-[#764bd6] mt-[128px] flex-shrink-0"></div>
+            
+            <!-- Image Box -->
+            <div class="w-64 h-64 bg-white border-[3px] border-[#764bd6] rounded-[32px] p-4 flex items-center justify-center card-shadow z-10 flex-shrink-0">
+                <img src="https://i.ibb.co/HDLJPBhm/IMG-6520.png" alt="IMG 6520" class="w-full h-full object-contain" />
+            </div>
+            
+            <!-- Text Info -->
+            <div class="flex-1 flex flex-col md:ml-8 mt-6 md:mt-0 w-full text-center md:text-left">
+                <!-- Box tạo viền dưới căn giữa chính xác với ảnh -->
+                <div class="flex items-end border-b-[2px] border-[#764bd6] pb-3 md:h-[128px] justify-center md:justify-start">
+                    <h3 class="font-dejavu-title text-[19px] md:text-[22px] text-[#764bd6] uppercase leading-snug">
+                        Công nương Danisa<br>Ratti crabe muahehe
+                    </h3>
+                </div>
+                <div class="pt-6 space-y-6 text-[#764bd6] text-[15px] md:text-base">
+                    <p class="uppercase">MUSE</p>
+                    <p class="space-y-1 flex flex-col">
+                        <span>Nhiệm kỳ: Đời thứ nhất</span>
+                        <span>Tình trạng: Đương nhiệm</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Thành viên 2: Con Gà -->
+        <div class="flex flex-col-reverse md:flex-row w-full mb-10 px-2 md:px-0 items-center md:items-stretch">
+            
+            <!-- Text Info -->
+            <div class="flex-1 flex flex-col md:mr-8 mt-6 md:mt-0 w-full text-center md:text-right">
+                <!-- Box tạo viền dưới căn giữa chính xác với ảnh -->
+                <div class="flex items-end justify-center md:justify-end border-b-[2px] border-[#764bd6] pb-3 md:h-[128px]">
+                    <h3 class="font-dejavu-title text-[19px] md:text-[22px] text-[#764bd6] uppercase leading-snug">
+                        Công nương Danisa<br>Ratti chick muahehe
+                    </h3>
+                </div>
+                <div class="pt-6 space-y-6 text-[#764bd6] text-[15px] md:text-base">
+                    <p class="uppercase">JU</p>
+                    <p class="space-y-1 flex flex-col">
+                        <span>Nhiệm kỳ: Đời thứ nhất</span>
+                        <span>Tình trạng: Đương nhiệm</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Image Box -->
+            <div class="w-64 h-64 bg-white border-[3px] border-[#764bd6] rounded-[32px] p-6 flex items-center justify-center card-shadow z-10 flex-shrink-0">
+                <img src="https://i.ibb.co/NvhGZzZ/IMG-6519.png" alt="IMG 6519" class="w-full h-full object-contain scale-110" />
+            </div>
+
+            <!-- Right line -->
+            <div class="hidden md:block w-8 h-[2px] bg-[#764bd6] mt-[128px] flex-shrink-0"></div>
+        </div>
+
+    </main>
+
+    <!-- Khoảng trống footer -->
+    <footer></footer>
+    
+    <!-- ================= KHU VỰC THÔNG TIN & FOOTER BÊN DƯỚI ================= -->
+    <footer class="max-w-6xl w-full mx-auto bg-white rounded-[26px] px-8 py-4 card-shadow flex flex-col md:flex-row items-center justify-between gap-6 mt-10 mb-4 z-30 relative">
+        
+        <!-- Cột 1: Thông tin liên hệ -->
+        <div class="flex-1 text-center md:text-left">
+            <h3 class="text-lg text-[#6c43c0] mb-1">Thông tin liên hệ:</h3>
+            <p class="text-sm text-[#6c43c0] underline decoration-1 underline-offset-2">Mèo Ớt Chuông</p>
+            <p class="text-sm text-[#6c43c0] mt-0.5">cuacachoigame2377@gmail.com</p>
+        </div>
+
+        <!-- Vạch ngăn cách 1 -->
+        <div class="hidden md:block w-[2.5px] h-14 bg-[#734bd1] rounded-full"></div>
+
+        <!-- Cột 2: Nền tảng xã hội -->
+        <div class="flex-1 flex flex-col items-center">
+            <div class="text-left">
+                <h3 class="text-lg text-[#6c43c0] mb-2.5">Nền tảng xã hội:</h3>
+                <div class="flex items-center space-x-4">
+                    <!-- Discord -->
+                    <a href="https://discord.gg/dWHXgh8US" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-discord"></i>
+                    </a>
+                    <!-- TikTok -->
+                    <a href="https://www.tiktok.com/@gianghehe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-tiktok"></i>
+                    </a>
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/GiangHeHe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <!-- YouTube -->
+                    <a href="https://www.youtube.com/@GiangHehe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vạch ngăn cách 2 -->
+        <div class="hidden md:block w-[2.5px] h-14 bg-[#734bd1] rounded-full"></div>
+
+        <!-- Cột 3: Hình Model nhỏ góc dưới phải (Hình 7) -->
+        <div class="flex-1 flex justify-center md:justify-end pr-2">
+            <img src="https://i.ibb.co/BK4yqndL/pad2.png" alt="pad2" border="0" class="w-20 h-20 object-contain hover:scale-110 transition" />
+        </div>
+
+    </footer>
+
     <!-- ================= JAVASCRIPT XỬ LÝ THANH MENU PHỤ ================= -->
     <script>
         const menuBtn = document.getElementById('menu-btn');
