@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hẻm Chuột - Giang Hehe</title>
+    <!-- Tích hợp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tích hợp Font Awesome cho các icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Import Font Comfortaa (In đậm 700) và DejaVu Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/dejavu-sans" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* Mặc định tất cả chữ là Comfortaa - in đậm */
+        body {
+            font-family: 'Comfortaa', cursive;
+            font-weight: 700;
+            background-color: #f4f1fa;
+            color: #6c43c0;
+            overflow-x: hidden;
+        }
+
+        /* Font chữ "Giang Hehe": DejaVu Sans - in đậm, in nghiêng */
+        .font-giang-hehe {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        /* Font chữ "Chào mừng đến với Hẻm Chuột!": DejaVu Sans - in đậm */
+        .font-welcome {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-weight: bold;
+        }
+
+        /* Họa tiết chấm bi mờ phía sau lưng Vtuber */
+        .halftone-dots {
+            background-image: radial-gradient(#dcd3f2 3px, transparent 3px);
+            background-size: 16px 16px;
+            mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);
+            -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);
+        }
+
+        /* Chữ năm xoay dọc trong thanh ngày tháng */
+        .vertical-year {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        /* Đổ bóng nhẹ giống thiết kế */
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(108, 67, 192, 0.08);
+        }
+
+        /* Đổ bóng đậm hơn cho các thẻ Vai trò, Nội quy & Sơ đồ */
+        .role-card-shadow {
+            box-shadow: 0 6px 22px rgba(108, 67, 192, 0.16);
+        }
+
+        .pill-shadow {
+            box-shadow: 0 4px 14px rgba(108, 67, 192, 0.14);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-6 relative select-none">
+
+    <!-- ================= HEADER / THANH ĐIỀU HƯỚNG ================= -->
+    <header class="max-w-6xl w-full mx-auto relative z-50">
+        <!-- Khung bao gộp chung Thanh điều hướng và Tiêu đề Hẻm Chuột giống hệt hình mẫu -->
+        <div class="bg-white rounded-[32px] card-shadow pb-7">
+            <nav class="bg-white rounded-[28px] px-5 py-2.5 flex items-center justify-between card-shadow">
+                
+                <!-- Logo con chuột góc trái -> Chuyển về trang chủ -->
+                <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
+                    <img src="https://i.ibb.co/212LVzZq/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
+                </a>
+
+                <!-- Menu điều hướng ở giữa -->
+                <div class="hidden md:flex items-center space-x-6 lg:space-x-12 text-base lg:text-lg text-[#6c43c0]">
+                    <a href="index.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Đầu Hẻm</a>
+                    <a href="chuhem.html" class="bg-[#e9e2f8] px-6 py-2 rounded-full transition hover:bg-[#dcd0f5]">Chủ Hẻm</a>
+                    <a href="donate.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Donate</a>
+                    <a href="lichstream.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Lịch Stream</a>
+                </div>
+
+                <!-- Cụm Icon góc phải: Avatar, Chuông, Ba gạch -->
+                <div class="flex items-center space-x-4 md:space-x-5">
+                    <!-- Icon Avatar -> chuyển miền đến hosochuot -->
+                    <a href="hosochuot.html" class="w-11 h-11 rounded-full bg-[#734bd1] overflow-hidden flex items-center justify-center border-2 border-[#734bd1] hover:opacity-90 transition shadow-sm">
+                        <img id="avatar-img" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
+                    </a>
+
+                    <!-- Icon Chuông -> chuyển miền đến thongbao -->
+                    <a href="thongbao.html" class="text-[#734bd1] hover:scale-110 transition">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                        </svg>
+                    </a>
+
+                    <!-- Icon Ba gạch -> Hiện thanh phụ -->
+                    <button id="menu-btn" class="text-[#734bd1] hover:scale-110 transition focus:outline-none">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 6h14M3 12h18M7 18h14"></path>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Phần tiêu đề Hẻm Chuột bên dưới Navbar -->
+            <div class="pt-7 flex items-center justify-center space-x-5">
+                <img src="https://i.ibb.co/212LVzZq/logo.png" alt="Hẻm Chuột Icon" class="w-14 h-14 md:w-16 md:h-16 object-contain" />
+                <h1 class="font-giang-hehe text-3xl md:text-[42px] text-[#6c43c0] tracking-wide">
+                    Hẻm Chuột
+                </h1>
+            </div>
+        </div>
+
+        <!-- Thanh phụ (Dropdown Menu) -->
+        <div id="sub-menu" class="hidden absolute right-0 top-[72px] w-72 bg-[#764bd6] text-white rounded-b-[24px] rounded-tl-[24px] shadow-2xl overflow-hidden z-50 flex-col">
+            <a href="index.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Đầu Hẻm</a>
+            <a href="chuhem.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Chủ Hẻm</a>
+            <a href="donate.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Donate</a>
+            <a href="lichstream.html" class="px-8 py-5 text-right text-lg hover:bg-white/10 transition">Lịch Stream</a>
+        </div>
+    </header>
+
+    <!-- ================= KHU VỰC NỘI DUNG CHÍNH (HẺM CHUỘT) ================= -->
+    <main class="max-w-6xl w-full mx-auto relative flex-1 mt-12 z-10 space-y-16">
+
+        <!-- ================= 1. PHẦN VAI TRÒ HẺM CHUỘT ================= -->
+        <section>
+            <!-- Tiêu đề & gạch ngang -->
+            <div class="border-b-[3px] border-[#764bd6] pb-2 mb-12">
+                <h2 class="text-base md:text-lg text-[#6c43c0] uppercase tracking-wide pl-3">
+                    VAI TRÒ HẺM CHUỘT
+                </h2>
+            </div>
+
+            <!-- Lưới 6 vai trò -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-12 gap-x-10 lg:gap-x-16 px-4 md:px-10">
+                
+                <!-- Vai trò 1: Quốc Trưởng Hehe -> vaitro1.html -->
+                <a href="vaitro1.html" class="bg-white rounded-[26px] role-card-shadow overflow-hidden flex flex-col hover:-translate-y-1.5 transition duration-300 group max-w-[240px] w-full mx-auto">
+                    <div class="bg-[#cbc2f7] rounded-[24px] aspect-square w-full p-4 flex items-center justify-center">
+                        <img src="https://i.ibb.co/DfdrQCqZ/pam1.png" alt="pam1" border="0" class="w-full h-full object-contain group-hover:scale-105 transition duration-300" />
+                    </div>
+                    <div class="p-4 pt-3.5 pb-3.5 flex items-end justify-between flex-1">
+                        <span class="text-base md:text-[17px] text-[#6c43c0] leading-snug">
+                            Quốc Trưởng<br>Hehe
+                        </span>
+                        <div class="w-7 h-7 rounded-full bg-[#764bd6] text-white flex items-center justify-center text-xs flex-shrink-0 shadow-sm">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Vai trò 2: Tể Tướng Ratti -> vaitro2.html -->
+                <a href="vaitro2.html" class="bg-white rounded-[26px] role-card-shadow overflow-hidden flex flex-col hover:-translate-y-1.5 transition duration-300 group max-w-[240px] w-full mx-auto">
+                    <div class="bg-[#cbc2f7] rounded-[24px] aspect-square w-full p-4 flex items-center justify-center">
+                        <img src="https://i.ibb.co/XZCS0dnw/pam2.png" alt="pam2" border="0" class="w-full h-full object-contain group-hover:scale-105 transition duration-300" />
+                    </div>
+                    <div class="p-4 pt-3.5 pb-3.5 flex items-end justify-between flex-1">
+                        <span class="text-base md:text-[17px] text-[#6c43c0] leading-snug">
+                            Tể Tướng<br>Ratti
+                        </span>
+                        <div class="w-7 h-7 rounded-full bg-[#764bd6] text-white flex items-center justify-center text-xs flex-shrink-0 shadow-sm">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Vai trò 3: Baby Cat Gang -> vaitro3.html -->
+                <a href="vaitro3.html" class="bg-white rounded-[26px] role-card-shadow overflow-hidden flex flex-col hover:-translate-y-1.5 transition duration-300 group max-w-[240px] w-full mx-auto">
+                    <div class="bg-[#cbc2f7] rounded-[24px] aspect-square w-full p-4 flex items-center justify-center">
+                        <img src="https://i.ibb.co/wFDhBsLC/pam3.png" alt="pam3" border="0" class="w-full h-full object-contain group-hover:scale-105 transition duration-300" />
+                    </div>
+                    <div class="p-4 pt-3.5 pb-3.5 flex items-end justify-between flex-1">
+                        <span class="text-base md:text-[17px] text-[#6c43c0] leading-snug">
+                            Baby Cat<br>Gang
+                        </span>
+                        <div class="w-7 h-7 rounded-full bg-[#764bd6] text-white flex items-center justify-center text-xs flex-shrink-0 shadow-sm">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Vai trò 4: Bô Lão Cầu Vồng -> vaitro4.html -->
+                <a href="vaitro4.html" class="bg-white rounded-[26px] role-card-shadow overflow-hidden flex flex-col hover:-translate-y-1.5 transition duration-300 group max-w-[240px] w-full mx-auto">
+                    <div class="bg-[#cbc2f7] rounded-[24px] aspect-square w-full p-4 flex items-center justify-center">
+                        <img src="https://i.ibb.co/HLrZFJfD/pam4.png" alt="pam4" border="0" class="w-full h-full object-contain group-hover:scale-105 transition duration-300" />
+                    </div>
+                    <div class="p-4 pt-3.5 pb-3.5 flex items-end justify-between flex-1">
+                        <span class="text-base md:text-[17px] text-[#6c43c0] leading-snug">
+                            Bô Lão<br>Cầu Vồng
+                        </span>
+                        <div class="w-7 h-7 rounded-full bg-[#764bd6] text-white flex items-center justify-center text-xs flex-shrink-0 shadow-sm">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Vai trò 5: Pho mát -> vaitro5.html -->
+                <a href="vaitro5.html" class="bg-white rounded-[26px] role-card-shadow overflow-hidden flex flex-col hover:-translate-y-1.5 transition duration-300 group max-w-[240px] w-full mx-auto">
+                    <div class="bg-[#cbc2f7] rounded-[24px] aspect-square w-full p-4 flex items-center justify-center">
+                        <img src="https://i.ibb.co/h6b7XXd/pam5.png" alt="pam5" border="0" class="w-full h-full object-contain group-hover:scale-105 transition duration-300" />
+                    </div>
+                    <div class="p-4 pt-3.5 pb-3.5 flex items-end justify-between flex-1">
+                        <span class="text-base md:text-[17px] text-[#6c43c0] leading-snug pb-2">
+                            Pho mát
+                        </span>
+                        <div class="w-7 h-7 rounded-full bg-[#764bd6] text-white flex items-center justify-center text-xs flex-shrink-0 shadow-sm">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Vai trò 6: Chuột Dân -> vaitro6.html -->
+                <a href="vaitro6.html" class="bg-white rounded-[26px] role-card-shadow overflow-hidden flex flex-col hover:-translate-y-1.5 transition duration-300 group max-w-[240px] w-full mx-auto">
+                    <div class="bg-[#cbc2f7] rounded-[24px] aspect-square w-full p-4 flex items-center justify-center">
+                        <img src="https://i.ibb.co/3mK71vQY/pam6.png" alt="pam6" border="0" class="w-full h-full object-contain group-hover:scale-105 transition duration-300" />
+                    </div>
+                    <div class="p-4 pt-3.5 pb-3.5 flex items-end justify-between flex-1">
+                        <span class="text-base md:text-[17px] text-[#6c43c0] leading-snug pb-2">
+                            Chuột Dân
+                        </span>
+                        <div class="w-7 h-7 rounded-full bg-[#764bd6] text-white flex items-center justify-center text-xs flex-shrink-0 shadow-sm">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- ================= 2. PHẦN NỘI QUY ================= -->
+        <section>
+            <!-- Tiêu đề & gạch ngang -->
+            <div class="border-b-[3px] border-[#764bd6] pb-2 mb-10">
+                <h2 class="text-base md:text-lg text-[#6c43c0] uppercase tracking-wide pl-3">
+                    NỘI QUY
+                </h2>
+            </div>
+
+            <!-- Khu vực Nội quy -->
+            <div class="relative flex flex-col items-center pt-2">
+                <!-- Khung nền trắng phía sau (Không phải vùng bấm) -->
+                <div class="bg-white rounded-t-[28px] w-[90%] max-w-[540px] pt-6 pb-8 flex justify-center role-card-shadow">
+                    <!-- Vùng chọn 1: Chỉ nằm ở đúng icon cuốn sách và chiếc búa -->
+                    <a href="noiquy.html" class="inline-block hover:scale-105 transition-transform duration-300">
+                        <img src="https://i.ibb.co/gZqmkSC5/pam7.png" alt="pam7" border="0" class="w-56 md:w-64 h-auto object-contain" />
+                    </a>
+                </div>
+
+                <!-- Vùng chọn 2: Thanh dòng chữ "Nội quy Hẻm Chuột" -->
+                <a href="noiquy.html" class="-mt-3 bg-white rounded-[20px] w-full max-w-[850px] py-4 px-6 pill-shadow text-center text-xl md:text-2xl text-[#6c43c0] hover:bg-[#faf8ff] hover:scale-[1.01] transition duration-200 z-10">
+                    Nội quy Hẻm Chuột
+                </a>
+            </div>
+        </section>
+
+        <!-- ================= 3. PHẦN SƠ ĐỒ HẺM CHUỘT ================= -->
+        <section>
+            <!-- Tiêu đề & gạch ngang -->
+            <div class="border-b-[3px] border-[#764bd6] pb-2 mb-10">
+                <h2 class="text-base md:text-lg text-[#6c43c0] uppercase tracking-wide pl-3">
+                    SƠ ĐỒ HẺM CHUỘT
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center px-2 md:px-4">
+                
+                <!-- Cột Trái: 8 hàng mục Sơ đồ Hẻm Chuột (7 cột) -->
+                <div class="lg:col-span-7 space-y-6">
+                    
+                    <!-- Hàng 1: Thư Viện Gặm Chữ (Mũi tên bên trái -> sdhc1.html) -->
+                    <div class="flex items-center gap-4">
+                        <a href="sdhc1.html" class="bg-white rounded-[20px] w-24 md:w-28 h-14 pill-shadow flex items-center justify-center hover:scale-105 hover:bg-[#faf8ff] transition flex-shrink-0">
+                            <svg class="w-9 h-9 text-[#734bd1]" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 9C2.89543 9 2 9.89543 2 11V13C2 14.1046 2.89543 15 4 15H11V18.5C11 19.3284 11.9546 19.7912 12.6056 19.2774L20.8294 12.7849C21.3362 12.3848 21.3362 11.6152 20.8294 11.2151L12.6056 4.72265C11.9546 4.20876 11 4.67157 11 5.5V9H4Z" />
+                            </svg>
+                        </a>
+                        <div class="bg-white rounded-[20px] h-14 flex-1 pill-shadow flex items-center justify-center px-6 text-lg md:text-[21px] text-[#6c43c0]">
+                            Thư Viện Gặm Chữ
+                        </div>
+                    </div>
+
+                    <!-- Hàng 2: Bảo Tàng Mẻ Chuột (Mũi tên bên phải -> sdhc2.html) -->
+                    <div class="flex items-center gap-4">
+                        <div class="bg-white rounded-[20px] h-14 flex-1 pill-shadow flex items-center justify-center px-6 text-lg md:text-[21px] text-[#6c43c0]">
+                            Bảo Tàng Mẻ Chuột
+                        </div>
+                        <a href="sdhc2.html" class="bg-white rounded-[20px] w-24 md:w-28 h-14 pill-shadow flex items-center justify-center hover:scale-105 hover:bg-[#faf8ff] transition flex-shrink-0">
+                            <svg class="w-9 h-9 text-[#734bd1]" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 9C2.89543 9 2 9.89543 2 11V13C2 14.1046 2.89543 15 4 15H11V18.5C11 19.3284 11.9546 19.7912 12.6056 19.2774L20.8294 12.7849C21.3362 12.3848 21.3362 11.6152 20.8294 11.2151L12.6056 4.72265C11.9546 4.20876 11 4.67157 11 5.5V9H4Z" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Hàng 3: Cục Mèo Bắt Chuột (Mũi tên bên trái) -->
+                    <div class="flex items-center gap-4">
+                        <div class="bg-white rounded-[20px] w-24 md:w-28 h-14 pill-shadow flex items-center justify-center flex-shrink-0">
+                            <svg class="w-9 h-9 text-[#734bd1]" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 9C2.89543 9 2 9.89543 2 11V13C2 14.1046 2.89543 15 4 15H11V18.5C11 19.3284 11.9546 19.7912 12.6056 19.2774L20.8294 12.7849C21.3362 12.3848 21.3362 11.6152 20.8294 11.2151L12.6056 4.72265C11.9546 4.20876 11 4.67157 11 5.5V9H4Z" />
+                            </svg>
+                        </div>
+                        <div class="bg-white rounded-[20px] h-14 flex-1 pill-shadow flex items-center justify-center px-6 text-lg md:text-[21px] text-[#6c43c0]">
+                            Cục Mèo Bắt Chuột
+                        </div>
+                    </div>
+
+                    <!-- Hàng 4: HeHe Holdings (Mũi tên bên phải -> sdhc3.html) -->
+                    <div class="flex items-center gap-4">
+                        <div class="bg-white rounded-[20px] h-14 flex-1 pill-shadow flex items-center justify-center px-6 text-lg md:text-[21px] text-[#6c43c0]">
+                            HeHe Holdings
+                        </div>
+                        <a href="sdhc3.html" class="bg-white rounded-[20px] w-24 md:w-28 h-14 pill-shadow flex items-center justify-center hover:scale-105 hover:bg-[#faf8ff] transition flex-shrink-0">
+                            <svg class="w-9 h-9 text-[#734bd1]" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 9C2.89543 9 2 9.89543 2 11V13C2 14.1046 2.89543 15 4 15H11V18.5C11 19.3284 11.9546 19.7912 12.6056 19.2774L20.8294 12.7849C21.3362 12.3848 21.3362 11.6152 20.8294 11.2151L12.6056 4.72265C11.9546 4.20876 11 4.67157 11 5.5V9H4Z" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Hàng 5: Viện Thẩm Mỹ AI (Mũi tên bên trái -> sdhc4.html) -->
+                    <div class="flex items-center gap-4">
+                        <a href="sdhc4.html" class="bg-white rounded-[20px] w-24 md:w-28 h-14 pill-shadow flex items-center justify-center hover:scale-105 hover:bg-[#faf8ff] transition flex-shrink-0">
+                            <svg class="w-9 h-9 text-[#734bd1]" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 9C2.89543 9 2 9.89543 2 11V13C2 14.1046 2.89543 15 4 15H11V18.5C11 19.3284 11.9546 19.7912 12.6056 19.2774L20.8294 12.7849C21.3362 12.3848 21.3362 11.6152 20.8294 11.2151L12.6056 4.72265C11.9546 4.20876 11 4.67157 11 5.5V9H4Z" />
+                            </svg>
+                        </a>
+                        <div class="bg-white rounded-[20px] h-14 flex-1 pill-shadow flex items-center justify-center px-6 text-lg md:text-[21px] text-[#6c43c0]">
+                            Viện Thẩm Mỹ AI
+                        </div>
+                    </div>
+
+                    <!-- Hàng 6: Rạp Xiếc HeHe (Mũi tên bên phải -> sdhc5.html) -->
+                    <div class="flex items-center gap-4">
+                        <div class="bg-white rounded-[20px] h-14 flex-1 pill-shadow flex items-center justify-center px-6 text-lg md:text-[21px] text-[#6c43c0]">
+                            Rạp Xiếc HeHe
+                        </div>
+                        <a href="sdhc5.html" class="bg-white rounded-[20px] w-24 md:w-28 h-14 pill-shadow flex items-center justify-center hover:scale-105 hover:bg-[#faf8ff] transition flex-shrink-0">
+                            <svg class="w-9 h-9 text-[#734bd1]" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 9C2.89543 9 2 9.89543 2 11V13C2 14.1046 2.89543 15 4 15H11V18.5C11 19.3284 11.9546 19.7912 12.6056 19.2774L20.8294 12.7849C21.3362 12.3848 21.3362 11.6152 20.8294 11.2151L12.6056 4.72265C11.9546 4.20876 11 4.67157 11 5.5V9H4Z" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Hàng 7: Toà soạn Mèo Méo Meo (Mũi tên bên trái -> sdhc6.html) -->
+                    <div class="flex items-center gap-4">
+                        <a href="sdhc6.html" class="bg-white rounded-[20px] w-24 md:w-28 h-14 pill-shadow flex items-center justify-center hover:scale-105 hover:bg-[#faf8ff] transition flex-shrink-0">
+                            <svg class="w-9 h-9 text-[#734bd1]" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 9C2.89543 9 2 9.89543 2 11V13C2 14.1046 2.89543 15 4 15H11V18.5C11 19.3284 11.9546 19.7912 12.6056 19.2774L20.8294 12.7849C21.3362 12.3848 21.3362 11.6152 20.8294 11.2151L12.6056 4.72265C11.9546 4.20876 11 4.67157 11 5.5V9H4Z" />
+                            </svg>
+                        </a>
+                        <div class="bg-white rounded-[20px] h-14 flex-1 pill-shadow flex items-center justify-center px-6 text-lg md:text-[21px] text-[#6c43c0]">
+                            Toà soạn Mèo Méo Meo
+                        </div>
+                    </div>
+
+                    <!-- Hàng 8: Xứ sở thần tiên (Mũi tên bên phải -> sdhc7.html) -->
+                    <div class="flex items-center gap-4">
+                        <div class="bg-white rounded-[20px] h-14 flex-1 pill-shadow flex items-center justify-center px-6 text-lg md:text-[21px] text-[#6c43c0]">
+                            Xứ sở thần tiên
+                        </div>
+                        <a href="sdhc7.html" class="bg-white rounded-[20px] w-24 md:w-28 h-14 pill-shadow flex items-center justify-center hover:scale-105 hover:bg-[#faf8ff] transition flex-shrink-0">
+                            <svg class="w-9 h-9 text-[#734bd1]" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 9C2.89543 9 2 9.89543 2 11V13C2 14.1046 2.89543 15 4 15H11V18.5C11 19.3284 11.9546 19.7912 12.6056 19.2774L20.8294 12.7849C21.3362 12.3848 21.3362 11.6152 20.8294 11.2151L12.6056 4.72265C11.9546 4.20876 11 4.67157 11 5.5V9H4Z" />
+                            </svg>
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- Cột Phải: Hình minh họa đường đi nét đứt và 2 ghim bản đồ (5 cột) -->
+                <div class="lg:col-span-5 flex justify-center items-center pt-6 lg:pt-16">
+                    <svg class="w-full max-w-[360px] h-auto overflow-visible" viewBox="0 0 360 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Đường cong nét đứt màu tím -->
+                        <path d="M 60 265 C 120 270, 175 255, 165 225 C 155 195, 70 200, 65 170 C 60 140, 180 140, 260 165 C 325 185, 345 135, 290 115 C 235 95, 145 100, 195 65 C 230 40, 285 65, 315 35" 
+                              stroke="#7c52d6" stroke-width="6.5" stroke-linecap="round" stroke-dasharray="9 13" fill="none" />
+                        
+                        <!-- Ghim định vị dưới trái (Ghi nghiêng nhẹ sang trái giống hình) -->
+                        <g transform="translate(56, 262) rotate(-18)">
+                            <path d="M0 0 C-14 -18 -20 -30 -20 -42 A 20 20 0 1 1 20 -42 C 20 -30 14 -18 0 0 Z" fill="#f7943c"/>
+                            <path d="M0 0 C-14 -18 -20 -30 -20 -42 A 20 20 0 0 1 0 -62 L 0 0 Z" fill="#fbbc58"/>
+                            <circle cx="0" cy="-42" r="10.5" fill="#f4f1fa"/>
+                        </g>
+
+                        <!-- Ghim định vị trên phải (Nghiêng nhẹ sang phải giống hình) -->
+                        <g transform="translate(318, 32) rotate(16)">
+                            <path d="M0 0 C-14 -18 -20 -30 -20 -42 A 20 20 0 1 1 20 -42 C 20 -30 14 -18 0 0 Z" fill="#f7943c"/>
+                            <path d="M0 0 C-14 -18 -20 -30 -20 -42 A 20 20 0 0 1 0 -62 L 0 0 Z" fill="#fbbc58"/>
+                            <circle cx="0" cy="-42" r="10.5" fill="#f4f1fa"/>
+                        </g>
+                    </svg>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= KHU VỰC THÔNG TIN & FOOTER BÊN DƯỚI ================= -->
+    <footer class="max-w-6xl w-full mx-auto bg-white rounded-[26px] px-8 py-4 card-shadow flex flex-col md:flex-row items-center justify-between gap-6 mt-10 mb-4 z-30 relative">
+        
+        <!-- Cột 1: Thông tin liên hệ -->
+        <div class="flex-1 text-center md:text-left">
+            <h3 class="text-lg text-[#6c43c0] mb-1">Thông tin liên hệ:</h3>
+            <p class="text-sm text-[#6c43c0] underline decoration-1 underline-offset-2">Mèo Ớt Chuông</p>
+            <p class="text-sm text-[#6c43c0] mt-0.5">cuacachoigame2377@gmail.com</p>
+        </div>
+
+        <!-- Vạch ngăn cách 1 -->
+        <div class="hidden md:block w-[2.5px] h-14 bg-[#734bd1] rounded-full"></div>
+
+        <!-- Cột 2: Nền tảng xã hội -->
+        <div class="flex-1 flex flex-col items-center">
+            <div class="text-left">
+                <h3 class="text-lg text-[#6c43c0] mb-2.5">Nền tảng xã hội:</h3>
+                <div class="flex items-center space-x-4">
+                    <!-- Discord -->
+                    <a href="https://discord.gg/dWHXgh8US" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-discord"></i>
+                    </a>
+                    <!-- TikTok -->
+                    <a href="https://www.tiktok.com/@gianghehe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-tiktok"></i>
+                    </a>
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/GiangHeHe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <!-- YouTube -->
+                    <a href="https://www.youtube.com/@GiangHehe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vạch ngăn cách 2 -->
+        <div class="hidden md:block w-[2.5px] h-14 bg-[#734bd1] rounded-full"></div>
+
+        <!-- Cột 3: Hình Model nhỏ góc dưới phải (Hình 7) -->
+        <div class="flex-1 flex justify-center md:justify-end pr-2">
+            <img src="https://i.ibb.co/BK4yqndL/pad2.png" alt="pad2" border="0" class="w-20 h-20 object-contain hover:scale-110 transition" />
+        </div>
+
+    </footer>
+
+    <!-- ================= JAVASCRIPT XỬ LÝ TÍNH NĂNG ================= -->
+    <script>
+        // Xử lý bật/tắt thanh menu phụ khi ấn vào icon 3 gạch
+        const menuBtn = document.getElementById('menu-btn');
+        const subMenu = document.getElementById('sub-menu');
+        const avatarImg = document.getElementById('avatar-img');
+
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            subMenu.classList.toggle('hidden');
+            subMenu.classList.toggle('flex');
+            avatarImg.classList.toggle('opacity-0');
+        });
+
+        // Đóng thanh phụ khi bấm ra ngoài
+        document.addEventListener('click', (e) => {
+            if (!subMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                subMenu.classList.add('hidden');
+                subMenu.classList.remove('flex');
+                avatarImg.classList.remove('opacity-0');
+            }
+        });
+
+        // 3. Cấu hình Supabase
+        const SUPABASE_URL = 'https://jmipwcfmnoygqtaadecv.supabase.co'; 
+        const SUPABASE_KEY = 'sb_publishable_ii-OIerOFW00_e7janGKAg_XKhMsDWn'; 
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Hàm kiểm tra đăng nhập và cập nhật riêng Avatar cho thanh điều hướng
+        async function checkSessionAndUpdateNavAvatar() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            
+            if (session && session.user) {
+                // Lấy link ảnh từ tài khoản, nếu không có thì dùng ảnh con chuột mặc định
+                const avatarUrl = session.user.user_metadata?.avatar_url || 'https://i.ibb.co/HfCMcYyB/hs1.png';
+                
+                // Ở trang Đầu Hẻm, ID của ảnh avatar là 'avatar-img'
+                document.getElementById('avatar-img').src = avatarUrl;
+            }
+        }
+
+        // Chạy hàm ngay khi load trang
+        checkSessionAndUpdateNavAvatar();
+    </script>
+</body>
+</html>

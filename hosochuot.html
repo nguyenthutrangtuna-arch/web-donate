@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Sơ Chuột - Giang Hehe</title>
+    <!-- Tích hợp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tích hợp Font Awesome cho các icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Import Font Comfortaa và DejaVu Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/dejavu-sans" rel="stylesheet">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* Mặc định tất cả chữ là Comfortaa - in đậm */
+        body {
+            font-family: 'Comfortaa', cursive;
+            font-weight: 700;
+            background-color: #f4f1fa;
+            color: #6c43c0;
+            overflow-x: hidden;
+        }
+
+        /* Font DejaVu Sans - in đậm */
+        .font-dejavu-bold {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-weight: bold;
+        }
+
+        /* Đổ bóng nhẹ giống thiết kế */
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(108, 67, 192, 0.08);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-6 relative select-none">
+
+    <!-- ================= HEADER / THANH ĐIỀU HƯỚNG ================= -->
+    <header class="max-w-6xl w-full mx-auto relative z-50">
+        <nav class="bg-white rounded-[28px] px-5 py-2.5 flex items-center justify-between card-shadow">
+            
+            <!-- Logo con chuột góc trái -> Chuyển về trang chủ -->
+            <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
+                <img src="https://i.ibb.co/212LVzZq/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
+            </a>
+
+            <!-- Menu điều hướng ở giữa -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-12 text-base lg:text-lg text-[#6c43c0]">
+                <a href="index.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Đầu Hẻm</a>
+                <a href="chuhem.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Chủ Hẻm</a>
+                <a href="Donate.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Donate</a>
+                <a href="lichstream.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Lịch Stream</a>
+            </div>
+
+            <!-- Cụm Icon góc phải: Avatar, Chuông, Ba gạch -->
+            <div class="flex items-center space-x-4 md:space-x-5">
+                <!-- Icon Avatar -> Đang ở miền hosochuot -->
+                <a href="hosochuot.html" class="w-11 h-11 rounded-full bg-[#734bd1] overflow-hidden flex items-center justify-center border-2 border-[#734bd1] opacity-90 shadow-sm">
+                    <img id="nav-avatar-img" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
+                </a>
+
+                <!-- Icon Chuông -> chuyển miền đến thongbao.html -->
+                <a href="thongbao.html" class="text-[#734bd1] hover:scale-110 transition">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
+                </a>
+
+                <!-- Icon Ba gạch -> Hiện thanh phụ -->
+                <button id="menu-btn" class="text-[#734bd1] hover:scale-110 transition focus:outline-none">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 6h14M3 12h18M7 18h14"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Thanh phụ (Dropdown Menu) -->
+        <div id="sub-menu" class="hidden absolute right-0 top-[72px] w-72 bg-[#764bd6] text-white rounded-b-[24px] rounded-tl-[24px] shadow-2xl overflow-hidden z-50 flex-col">
+            <a href="index.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Đầu Hẻm</a>
+            <a href="chuhem.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Chủ Hẻm</a>
+            <a href="Donate.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Donate</a>
+            <a href="lichstream.html" class="px-8 py-5 text-right text-lg hover:bg-white/10 transition">Lịch Stream</a>
+        </div>
+    </header>
+
+    <!-- ================= KHU VỰC NỘI DUNG CHÍNH ================= -->
+    <main class="max-w-2xl w-full mx-auto relative flex-1 flex flex-col items-center mt-6 mb-12 z-10 px-4">
+        
+        <!-- Tiêu đề chung: HỒ SƠ CHUỘT (Comfortaa - in đậm) -->
+        <h1 class="text-3xl text-[#6c43c0] tracking-widest uppercase mb-10 text-center">
+            HỒ SƠ CHUỘT
+        </h1>
+
+        <!-- ================= TRƯỜNG HỢP 1: CHƯA CÓ TÀI KHOẢN ================= -->
+        <div id="state-logged-out" class="w-full flex flex-col items-center text-center space-y-6">
+            
+            <!-- Hình con chuột Hình 2 (hs1.png) -->
+            <div class="w-64 md:w-[280px]">
+                <img src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="Chuột lạ ghé hẻm" border="0" class="w-full h-auto object-contain drop-shadow-sm" />
+            </div>
+
+            <!-- Tiêu đề: DejaVu Sans - in đậm -->
+            <h2 class="font-dejavu-bold text-[22px] md:text-2xl text-[#734bd1] tracking-wide mt-2 uppercase">
+                CHUỘT LẠ GHÉ HẺM À?
+            </h2>
+
+            <!-- Mô tả: Comfortaa - in đậm -->
+            <p class="text-[#734bd1] text-[15px] md:text-base -mt-3">
+                Có vẻ bạn chưa có tài khoản!
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-[500px] mt-2">
+                <!-- Nút Đăng nhập -> dangnhap.html -->
+                <div class="flex flex-col items-center space-y-2">
+                    <p class="text-[13px] text-[#734bd1]/80 text-center leading-tight h-8">Đăng nhập để nhận diện cư dân cũ,</p>
+                    <a href="dangnhap.html" class="w-full bg-[#734bd1] hover:bg-[#623bb8] text-white py-3.5 px-6 rounded-2xl shadow-md transition font-dejavu-bold text-base text-center tracking-wide">
+                        Đăng nhập
+                    </a>
+                </div>
+
+                <!-- Nút Đăng ký -> dangky.html -->
+                <div class="flex flex-col items-center space-y-2">
+                    <p class="text-[13px] text-[#734bd1]/80 text-center leading-tight h-8">hoặc đăng ký để được Chủ Hẻm cấp hộ khẩu nha.</p>
+                    <a href="dangky.html" class="w-full bg-[#734bd1] hover:bg-[#623bb8] text-white py-3.5 px-6 rounded-2xl shadow-md transition font-dejavu-bold text-base text-center tracking-wide">
+                        Đăng ký
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= TRƯỜNG HỢP 2: ĐÃ CÓ TÀI KHOẢN ================= -->
+        <div id="state-logged-in" class="hidden w-full flex flex-col items-center space-y-6">
+            
+            <!-- Avatar (Bọc đúng cấu trúc div relative) -->
+            <div class="relative group cursor-pointer" title="Bấm để đổi avatar" onclick="document.getElementById('avatar-file-input').click()">
+                <div class="w-40 h-40 rounded-[32px] bg-white p-2 card-shadow overflow-hidden border-2 border-white flex items-center justify-center relative">
+                    <!-- Ảnh mặc định là hs1.png. JS sẽ thay thế bằng ảnh của user nếu có -->
+                    <img id="user-avatar" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="Avatar" class="w-full h-full object-cover rounded-[24px]" />
+                </div>
+            </div>
+
+            <!-- Tên hiển thị và ID -->
+            <div class="text-center w-full max-w-[280px] space-y-2.5 mt-2">
+                <p id="user-id" class="text-xl text-[#734bd1]">@tenid</p>
+                <div class="bg-[#734bd1] text-white py-2.5 px-6 rounded-full w-full shadow-md font-dejavu-bold text-xl tracking-wide truncate">
+                    <span id="user-display-name">Tên hiển thị</span>
+                </div>
+            </div>
+
+            <!-- 3 Cột Thống Kê (Tiền tiếp tế, Huy hiệu, Ngày trong hẻm) -->
+            <div class="bg-white w-full rounded-[24px] py-6 px-4 card-shadow flex justify-between divide-x divide-[#e9e2f8] mt-4">
+                <div class="flex-1 flex flex-col items-center justify-center text-center px-1">
+                    <i class="fa-solid fa-heart text-[28px] text-[#734bd1] mb-2.5"></i>
+                    <span id="stat-money" class="text-lg text-[#734bd1]">0 đ</span>
+                    <span class="text-[13px] text-[#734bd1]/80 mt-1">Đã tiếp tế</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center justify-center text-center px-1">
+                    <i class="fa-solid fa-medal text-[28px] text-[#734bd1] mb-2.5"></i>
+                    <span id="stat-rank" class="text-lg text-[#734bd1]">00</span>
+                    <span class="text-[13px] text-[#734bd1]/80 mt-1">Huy hiệu</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center justify-center text-center px-1">
+                    <i class="fa-regular fa-calendar-days text-[28px] text-[#734bd1] mb-2.5"></i>
+                    <span id="stat-days" class="text-lg text-[#734bd1]">0 ngày</span>
+                    <span class="text-[13px] text-[#734bd1]/80 mt-1">Ở trong hẻm</span>
+                </div>
+            </div>
+
+            <!-- Các Nút Menu Chức năng -->
+            <div class="w-full space-y-4 mt-2">
+                <!-- Thông tin cư dân -->
+                <a href="thongtincudan.html" class="bg-white rounded-[24px] p-4 flex items-center justify-between card-shadow hover:-translate-y-1 transition group">
+                    <div class="flex items-center space-x-5 px-1">
+                        <div class="w-[52px] h-[52px] border-2 border-[#e9e2f8] rounded-[16px] flex items-center justify-center text-[#9f85de] text-2xl bg-white transition group-hover:border-[#dcd0f5]">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+                        <div>
+                            <p class="text-lg text-[#734bd1]">Thông tin cư dân</p>
+                            <p class="text-[13px] text-[#734bd1]/70 mt-0.5">Hồ sơ và giới thiệu</p>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-[#9f85de] text-2xl group-hover:text-[#734bd1] group-hover:translate-x-1 transition">
+                        <i class="fa-solid fa-caret-right"></i>
+                    </div>
+                </a>
+
+                <!-- Nhật ký tiếp tế -->
+                <a href="nhatkytiepte.html" class="bg-white rounded-[24px] p-4 flex items-center justify-between card-shadow hover:-translate-y-1 transition group">
+                    <div class="flex items-center space-x-5 px-1">
+                        <div class="w-[52px] h-[52px] border-2 border-[#e9e2f8] rounded-[16px] flex items-center justify-center text-[#9f85de] text-2xl bg-white transition group-hover:border-[#dcd0f5]">
+                            <i class="fa-solid fa-gift"></i>
+                        </div>
+                        <div>
+                            <p class="text-lg text-[#734bd1]">Nhật ký tiếp tế</p>
+                            <p class="text-[13px] text-[#734bd1]/70 mt-0.5">Giao dịch và lời nhắn</p>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-[#9f85de] text-2xl group-hover:text-[#734bd1] group-hover:translate-x-1 transition">
+                        <i class="fa-solid fa-caret-right"></i>
+                    </div>
+                </a>
+
+                <!-- Huy hiệu của Chuột -->
+                <a href="huyhieucuachuot.html" class="bg-white rounded-[24px] p-4 flex items-center justify-between card-shadow hover:-translate-y-1 transition group">
+                    <div class="flex items-center space-x-5 px-1">
+                        <div class="w-[52px] h-[52px] border-2 border-[#e9e2f8] rounded-[16px] flex items-center justify-center text-[#9f85de] text-2xl bg-white transition group-hover:border-[#dcd0f5]">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                        <div>
+                            <p class="text-lg text-[#734bd1]">Huy hiệu của Chuột</p>
+                            <p class="text-[13px] text-[#734bd1]/70 mt-0.5">Danh hiệu và vật phẩm</p>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-[#9f85de] text-2xl group-hover:text-[#734bd1] group-hover:translate-x-1 transition">
+                        <i class="fa-solid fa-caret-right"></i>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Nút Chỉnh sửa -->
+            <div class="w-full pt-6 pb-10">
+                <a href="chinhsuahosochuot.html" class="block w-full bg-white rounded-full py-4 text-center card-shadow hover:bg-[#faf8ff] hover:scale-[1.02] transition">
+                    <p class="text-[#734bd1] text-[19px] font-bold flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-pen text-xl"></i>
+                        Chỉnh sửa
+                    </p>
+                </a>
+                
+                <!-- Nút Đăng xuất -->
+                <button onclick="handleLogout()" class="mt-6 w-full text-center text-[13px] text-[#734bd1]/50 hover:text-red-500 hover:underline transition">
+                    Đăng xuất khỏi thiết bị
+                </button>
+            </div>
+        </div> <!-- ĐÓNG THẺ STATE-LOGGED-IN TẠI ĐÂY -->
+
+    </main>
+
+    <!-- Khoảng trống footer -->
+    <footer></footer>
+
+    <!-- ================= JAVASCRIPT XỬ LÝ TÍNH NĂNG & KẾT NỐI SUPABASE ================= -->
+    <script>
+        const SUPABASE_URL = 'https://jmipwcfmnoygqtaadecv.supabase.co'; 
+        const SUPABASE_KEY = 'sb_publishable_ii-OIerOFW00_e7janGKAg_XKhMsDWn'; 
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentUser = null;
+
+        // 1. Xử lý bật/tắt thanh menu phụ (3 gạch)
+        const menuBtn = document.getElementById('menu-btn');
+        const subMenu = document.getElementById('sub-menu');
+        const navAvatarImg = document.getElementById('nav-avatar-img');
+
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            subMenu.classList.toggle('hidden');
+            subMenu.classList.toggle('flex');
+            navAvatarImg.classList.toggle('opacity-0');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!subMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                subMenu.classList.add('hidden');
+                subMenu.classList.remove('flex');
+                navAvatarImg.classList.remove('opacity-0');
+            }
+        });
+
+        // 2. HÀM KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP VÀ ĐỔ DỮ LIỆU LÊN HỒ SƠ
+        async function checkSessionAndLoadProfile() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            
+            const loggedOutState = document.getElementById('state-logged-out');
+            const loggedInState = document.getElementById('state-logged-in');
+
+            if (session && session.user) {
+                // TRƯỜNG HỢP 2: ĐÃ ĐĂNG NHẬP
+                currentUser = session.user;
+                loggedOutState.classList.add('hidden');
+                loggedInState.classList.remove('hidden');
+
+                const displayName = currentUser.user_metadata?.display_name || "Cư dân mới";
+                const idChuot = currentUser.user_metadata?.id_chuot || "Chưa cấp ID";
+                const avatarUrl = currentUser.user_metadata?.avatar_url || 'https://i.ibb.co/HfCMcYyB/hs1.png';
+                const joinDate = currentUser.created_at;
+
+                document.getElementById('user-display-name').innerText = displayName;
+                document.getElementById('user-id').innerText = `@${idChuot}`;
+                document.getElementById('user-avatar').src = avatarUrl;
+                document.getElementById('nav-avatar-img').src = avatarUrl;
+
+                const startDate = new Date(joinDate);
+                const today = new Date();
+                const diffTime = Math.abs(today - startDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                document.getElementById('stat-days').innerText = `${diffDays} ngày`;
+
+                fetchUserDonationStats(currentUser.email);
+
+            } else {
+                // TRƯỜNG HỢP 1: CHƯA ĐĂNG NHẬP
+                loggedInState.classList.add('hidden');
+                loggedOutState.classList.remove('hidden');
+            }
+        }
+
+        // 3. Fetch thống kê tiền donate
+        async function fetchUserDonationStats(email) {
+            const { data, error } = await supabaseClient
+                .from('donations')
+                .select('amount, user_email');
+            
+            if (!error && data) {
+                const myDonations = data.filter(d => d.user_email === email);
+                const totalMoney = myDonations.reduce((sum, item) => sum + item.amount, 0);
+                document.getElementById('stat-money').innerText = `${totalMoney.toLocaleString('vi-VN')} đ`;
+
+                let totals = {};
+                data.forEach(d => {
+                    totals[d.user_email] = (totals[d.user_email] || 0) + d.amount;
+                });
+                
+                let sortedEmails = Object.keys(totals).sort((a, b) => totals[b] - totals[a]);
+                let myRank = sortedEmails.indexOf(email) + 1;
+                
+                if (myDonations.length === 0) {
+                    document.getElementById('stat-rank').innerText = "00";
+                } else {
+                    document.getElementById('stat-rank').innerText = (myRank < 10 ? '0' + myRank : myRank);
+                }
+            }
+        }
+
+        // 4. TẢI ẢNH AVATAR LÊN SUPABASE
+        async function uploadAvatar(event) {
+            const file = event.target.files[0];
+            if (!file || !currentUser) return;
+
+            const statusText = document.getElementById('upload-status');
+            statusText.innerText = "Đang xử lý...";
+
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${currentUser.id}-${Math.random()}.${fileExt}`;
+
+            const { error: uploadError } = await supabaseClient.storage
+                .from('avatars')
+                .upload(fileName, file);
+
+            if (uploadError) {
+                alert("Lỗi tải ảnh: " + uploadError.message);
+                statusText.innerText = "Đổi ảnh";
+                return;
+            }
+
+            const { data: publicUrlData } = supabaseClient.storage
+                .from('avatars')
+                .getPublicUrl(fileName);
+            
+            const publicUrl = publicUrlData.publicUrl;
+
+            const { error: updateError } = await supabaseClient.auth.updateUser({
+                data: { avatar_url: publicUrl }
+            });
+
+            if (updateError) {
+                alert("Lỗi cập nhật ảnh đại diện!");
+            } else {
+                document.getElementById('user-avatar').src = publicUrl;
+                document.getElementById('nav-avatar-img').src = publicUrl;
+            }
+            statusText.innerText = "Đổi ảnh";
+        }
+
+        // Đăng xuất khỏi hệ thống
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            window.location.reload(); 
+        }
+
+        // Khởi chạy khi load trang
+        checkSessionAndLoadProfile();
+    </script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đầu Hẻm - Giang Hehe</title>
+    <!-- Tích hợp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tích hợp Font Awesome cho các icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Import Font Comfortaa (In đậm 700) và DejaVu Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/dejavu-sans" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* Mặc định tất cả chữ là Comfortaa - in đậm */
+        body {
+            font-family: 'Comfortaa', cursive;
+            font-weight: 700;
+            background-color: #f4f1fa;
+            color: #6c43c0;
+            overflow-x: hidden;
+        }
+
+        /* Font chữ "Giang Hehe": DejaVu Sans - in đậm, in nghiêng */
+        .font-giang-hehe {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        /* Font chữ "Chào mừng đến với Hẻm Chuột!": DejaVu Sans - in đậm */
+        .font-welcome {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-weight: bold;
+        }
+
+        /* Họa tiết chấm bi mờ phía sau lưng Vtuber */
+        .halftone-dots {
+            background-image: radial-gradient(#dcd3f2 3px, transparent 3px);
+            background-size: 16px 16px;
+            mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);
+            -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);
+        }
+
+        /* Chữ năm xoay dọc trong thanh ngày tháng */
+        .vertical-year {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        /* Đổ bóng nhẹ giống thiết kế */
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(108, 67, 192, 0.08);
+        }
+
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-6 relative select-none">
+
+    <!-- ================= HEADER / THANH ĐIỀU HƯỚNG ================= -->
+    <header class="max-w-6xl w-full mx-auto relative z-50">
+        <nav class="bg-white rounded-[28px] px-5 py-2.5 flex items-center justify-between card-shadow">
+            
+            <!-- Logo con chuột góc trái (Hình 4) -> Chuyển về trang chủ -->
+            <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
+                <img src="https://i.ibb.co/212LVzZq/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
+            </a>
+
+            <!-- Menu điều hướng ở giữa -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-12 text-base lg:text-lg text-[#6c43c0]">
+                <a href="index.html" class="bg-[#e9e2f8] px-6 py-2 rounded-full transition hover:bg-[#dcd0f5]">Đầu Hẻm</a>
+                <a href="chuhem.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Chủ Hẻm</a>
+                <a href="Donate.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Donate</a>
+                <a href="lichstream.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Lịch Stream</a>
+            </div>
+
+            <!-- Cụm Icon góc phải: Avatar, Chuông, Ba gạch -->
+            <div class="flex items-center space-x-4 md:space-x-5">
+                <!-- Icon Avatar -> chuyển miền đến hosochuot -->
+                <a href="hosochuot.html" class="w-11 h-11 rounded-full bg-[#734bd1] overflow-hidden flex items-center justify-center border-2 border-[#734bd1] hover:opacity-90 transition shadow-sm">
+                    <img id="avatar-img" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
+                </a>
+
+                <!-- Icon Chuông -> chuyển miền đến thongbao -->
+                <a href="thongbao.html" class="text-[#734bd1] hover:scale-110 transition">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
+                </a>
+
+                <!-- Icon Ba gạch -> Hiện thanh phụ giống Hình 2 -->
+                <button id="menu-btn" class="text-[#734bd1] hover:scale-110 transition focus:outline-none">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 6h14M3 12h18M7 18h14"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Thanh phụ (Dropdown Menu - Hình 2) -->
+        <div id="sub-menu" class="hidden absolute right-0 top-[72px] w-72 bg-[#764bd6] text-white rounded-b-[24px] rounded-tl-[24px] shadow-2xl overflow-hidden z-50 flex-col">
+            <a href="index.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Đầu Hẻm</a>
+            <a href="chuhem.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Chủ Hẻm</a>
+            <a href="Donate.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Donate</a>
+            <a href="lichstream.html" class="px-8 py-5 text-right text-lg hover:bg-white/10 transition">Lịch Stream</a>
+        </div>
+    </header>
+
+    <!-- ================= KHU VỰC NỘI DUNG CHÍNH (HERO) ================= -->
+    <main class="max-w-6xl w-full mx-auto relative flex-1 min-h-[620px] md:min-h-[680px]">
+        
+        <!-- Lưới chấm bi trang trí phía sau -->
+        <div class="halftone-dots absolute w-[450px] h-[450px] top-[15%] left-[20%] z-0 pointer-events-none"></div>
+
+        <!-- Các hạt dấu cộng (+) trang trí giữ nguyên vị trí như Hình 1 -->
+        <div class="text-[#6c43c0] font-bold text-3xl absolute top-[5%] left-[42%] z-10 pointer-events-none">+</div>
+        <div class="text-[#6c43c0]/70 font-bold text-xl absolute top-[8%] left-[37.5%] z-10 pointer-events-none">+</div>
+        <div class="text-[#6c43c0] font-bold text-5xl absolute top-[18%] left-[26.5%] z-10 pointer-events-none">+</div>
+        <div class="text-[#6c43c0] font-bold text-2xl absolute top-[27%] left-[34%] z-10 pointer-events-none">+</div>
+        <div class="text-[#6c43c0] font-bold text-3xl absolute top-[41%] right-[8.5%] z-10 pointer-events-none">+</div>
+        <div class="text-[#6c43c0] font-bold text-5xl absolute top-[52%] right-[4.5%] z-10 pointer-events-none">+</div>
+
+        <!-- 5 Hình Phomat nằm dọc dưới góc trái (Dưới Logo) -->
+        <div class="absolute left-2 top-5 flex flex-col space-y-4 z-20 w-12 md:w-14">
+            <img src="https://i.ibb.co/sJFnKJWB/Phomai1.png" alt="Phomai1" border="0" class="w-full object-contain hover:scale-110 transition" />
+            <img src="https://i.ibb.co/TBbQbX1k/Phomai2.png" alt="Phomai2" border="0" class="w-full object-contain hover:scale-110 transition" />
+            <img src="https://i.ibb.co/ZRdGvvcx/Phomai3.png" alt="Phomai3" border="0" class="w-full object-contain hover:scale-110 transition" />
+            <img src="https://i.ibb.co/wF8rYZL0/Phomai4.png" alt="Phomai4" border="0" class="w-full object-contain hover:scale-110 transition" />
+            <img src="https://i.ibb.co/Xk59QL8F/Phomai5.png" alt="Phomai5" border="0" class="w-full object-contain hover:scale-110 transition" />
+        </div>
+
+        <!-- Thanh Ngày Tháng Năm thực tế bên dưới icon 3 gạch (Hình 3) -->
+        <div class="absolute right-1 top-5 bg-white rounded-full py-5 px-3 card-shadow flex flex-col items-center z-20 text-[#6c43c0]">
+            <span id="vn-day" class="text-2xl font-bold tracking-tight">23</span>
+            <div class="w-6 h-[3px] bg-[#6c43c0] rounded-full my-2"></div>
+            <span id="vn-month" class="text-lg font-bold">07</span>
+            <div class="w-3.5 h-[3px] bg-[#6c43c0] rounded-full my-2"></div>
+            <span id="vn-year" class="vertical-year text-xs font-bold tracking-wider mt-1">2026</span>
+        </div>
+
+        <!-- Chữ "Giang Hehe" & Hình Chuột bên cạnh chủ thể (Hình 6) -->
+        <div class="absolute left-[140px] md:left-[200px] top-[230px] z-20">
+            <h1 class="font-giang-hehe text-6xl md:text-[76px] text-[#6c43c0] leading-[1.15] tracking-wide">
+                Giang<br>Hehe
+            </h1>
+            <div class="mt-6 ml-[-10px]">
+                <img src="https://i.ibb.co/v6Kj5nrD/pad1.png" alt="pad1" border="0" class="w-48 md:w-60 object-contain drop-shadow-sm hover:scale-105 transition" />
+            </div>
+        </div>
+
+        <!-- Hình chủ thể Vtuber (Hình 5) - Đặt z-index nằm dưới khung nội dung bên dưới -->
+        <div class="absolute bottom-[-25px] right-[4%] md:right-[7%] w-[380px] md:w-[500px] z-10 pointer-events-none">
+            <img src="https://i.ibb.co/6JRzrSZN/pad3.png" alt="pad3" border="0" class="w-full h-auto object-contain" />
+        </div>
+
+    </main>
+
+    <!-- ================= KHU VỰC THÔNG TIN & FOOTER BÊN DƯỚI ================= -->
+    <section class="max-w-6xl w-full mx-auto relative z-30 flex flex-col space-y-5">
+        
+        <!-- Hàng 2 khung: Khung Tags (Trái) & Khung Lời chào (Phải) -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
+            
+            <!-- Khung Tags -->
+            <div class="md:col-span-4 bg-white rounded-[26px] p-6 card-shadow flex flex-wrap items-center justify-center gap-3">
+                <span class="bg-[#e9e2f8] text-[#6c43c0] px-5 py-2 rounded-full text-base">Game</span>
+                <span class="bg-[#e9e2f8] text-[#6c43c0] px-5 py-2 rounded-full text-base">Chill</span>
+                <span class="bg-[#e9e2f8] text-[#6c43c0] px-5 py-2 rounded-full text-base">Vtuber</span>
+                <span class="bg-[#e9e2f8] text-[#6c43c0] px-5 py-2 rounded-full text-base">Là phụ nữ</span>
+                <span class="bg-[#e9e2f8] text-[#6c43c0] px-5 py-2 rounded-full text-base">Youtube</span>
+            </div>
+
+            <!-- Khung Chào mừng đến với Hẻm Chuột! -->
+            <div class="md:col-span-8 bg-white rounded-[26px] p-6 md:px-9 flex flex-col justify-center card-shadow">
+                <h2 class="font-welcome text-xl md:text-2xl text-[#6c43c0] mb-2">
+                    Chào mừng đến với Hẻm Chuột!
+                </h2>
+                <p class="text-[#6c43c0] text-sm md:text-base leading-relaxed">
+                    Hẻm Chuột là mái nhà nhỏ của cộng đồng yêu quý Giang Hehe, nơi những chú chuột cùng gặp gỡ, sẻ chia niềm vui và gửi gắm yêu thương.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Thanh Footer: Liên hệ, Nền tảng xã hội, Model góc dưới phải (Hình 7) -->
+        <footer class="bg-white rounded-[26px] px-8 py-4 card-shadow flex flex-col md:flex-row items-center justify-between gap-6">
+            
+            <!-- Cột 1: Thông tin liên hệ -->
+            <div class="flex-1 text-center md:text-left">
+                <h3 class="text-lg text-[#6c43c0] mb-1">Thông tin liên hệ:</h3>
+                <p class="text-sm text-[#6c43c0] underline decoration-1 underline-offset-2">Mèo Ớt Chuông</p>
+                <p class="text-sm text-[#6c43c0] mt-0.5">cuacachoigame2377@gmail.com</p>
+            </div>
+
+            <!-- Vạch ngăn cách 1 -->
+            <div class="hidden md:block w-[2.5px] h-14 bg-[#734bd1] rounded-full"></div>
+
+            <!-- Cột 2: Nền tảng xã hội -->
+            <div class="flex-1 flex flex-col items-center">
+                <div class="text-left">
+                    <h3 class="text-lg text-[#6c43c0] mb-2.5">Nền tảng xã hội:</h3>
+                    <div class="flex items-center space-x-4">
+                        <!-- Discord -->
+                        <a href="https://discord.gg/dWHXgh8US" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                            <i class="fa-brands fa-discord"></i>
+                        </a>
+                        <!-- TikTok -->
+                        <a href="https://www.tiktok.com/@gianghehe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                            <i class="fa-brands fa-tiktok"></i>
+                        </a>
+                        <!-- Facebook -->
+                        <a href="https://www.facebook.com/GiangHeHe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <!-- YouTube -->
+                        <a href="https://www.youtube.com/@GiangHehe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vạch ngăn cách 2 -->
+            <div class="hidden md:block w-[2.5px] h-14 bg-[#734bd1] rounded-full"></div>
+
+            <!-- Cột 3: Hình Model nhỏ góc dưới phải (Hình 7) -->
+            <div class="flex-1 flex justify-center md:justify-end pr-2">
+                <img src="https://i.ibb.co/93njPYXn/pad2.png" alt="pad2" border="0" class="w-20 h-20 object-contain hover:scale-110 transition" />
+            </div>
+
+        </footer>
+
+    </section>
+
+    <!-- ================= JAVASCRIPT XỬ LÝ TÍNH NĂNG ================= -->
+    <script>
+        // 1. Xử lý bật/tắt thanh menu phụ khi ấn vào icon 3 gạch (Hình 2)
+        const menuBtn = document.getElementById('menu-btn');
+        const subMenu = document.getElementById('sub-menu');
+        const avatarImg = document.getElementById('avatar-img');
+
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            subMenu.classList.toggle('hidden');
+            subMenu.classList.toggle('flex');
+            avatarImg.classList.toggle('opacity-0');
+        });
+
+        // Đóng thanh phụ khi bấm ra ngoài
+        document.addEventListener('click', (e) => {
+            if (!subMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                subMenu.classList.add('hidden');
+                subMenu.classList.remove('flex');
+                avatarImg.classList.remove('opacity-0');
+            }
+        });
+
+        // 2. Chạy ngày tháng năm thực tế của Việt Nam (Múi giờ Asia/Ho_Chi_Minh)
+        function updateVietnamDate() {
+            const now = new Date();
+            const vnTimeStr = now.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" });
+            const vnDate = new Date(vnTimeStr);
+
+            const day = String(vnDate.getDate()).padStart(2, '0');
+            const month = String(vnDate.getMonth() + 1).padStart(2, '0');
+            const year = vnDate.getFullYear();
+
+            document.getElementById('vn-day').textContent = day;
+            document.getElementById('vn-month').textContent = month;
+            document.getElementById('vn-year').textContent = year;
+        }
+
+        updateVietnamDate();
+        setInterval(updateVietnamDate, 1000);
+    
+        // 3. Cấu hình Supabase
+        const SUPABASE_URL = 'https://jmipwcfmnoygqtaadecv.supabase.co'; 
+        const SUPABASE_KEY = 'sb_publishable_ii-OIerOFW00_e7janGKAg_XKhMsDWn'; 
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Hàm kiểm tra đăng nhập và cập nhật riêng Avatar cho thanh điều hướng
+        async function checkSessionAndUpdateNavAvatar() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            
+            if (session && session.user) {
+                // Lấy link ảnh từ tài khoản, nếu không có thì dùng ảnh con chuột mặc định
+                const avatarUrl = session.user.user_metadata?.avatar_url || 'https://i.ibb.co/HfCMcYyB/hs1.png';
+                
+                // Ở trang Đầu Hẻm, ID của ảnh avatar là 'avatar-img'
+                document.getElementById('avatar-img').src = avatarUrl;
+            }
+        }
+
+        // Chạy hàm ngay khi load trang
+        checkSessionAndUpdateNavAvatar();
+        // ---------------------------------------
+    </script>
+</body>
+</html>

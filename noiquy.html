@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nội Quy Hẻm Chuột - Giang Hehe</title>
+    <!-- Tích hợp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tích hợp Font Awesome cho các icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Import Font Comfortaa và DejaVu Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/dejavu-sans" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* Mặc định tất cả chữ là Comfortaa - in đậm */
+        body {
+            font-family: 'Comfortaa', cursive;
+            font-weight: 700;
+            background-color: #f4f1fa;
+            color: #6c43c0;
+            overflow-x: hidden;
+        }
+
+        /* Font DejaVu Sans - in đậm, in nghiêng cho Tiêu đề chính */
+        .font-dejavu-title {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        /* Tùy chỉnh danh sách ul (dấu chấm màu tím) */
+        ul.custom-list {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+        ul.custom-list li {
+            position: relative;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        ul.custom-list li::before {
+            content: "•";
+            color: #764bd6;
+            font-size: 1.5rem;
+            position: absolute;
+            left: -1.25rem;
+            top: -0.25rem;
+        }
+
+        /* Đổ bóng nhẹ giống thiết kế */
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(108, 67, 192, 0.08);
+        }
+        .pill-shadow {
+            box-shadow: 0 4px 14px rgba(108, 67, 192, 0.14);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-6 relative select-none">
+
+    <!-- ================= HEADER / THANH ĐIỀU HƯỚNG ================= -->
+    <header class="max-w-6xl w-full mx-auto relative z-50">
+        <nav class="bg-white rounded-[28px] px-5 py-2.5 flex items-center justify-between card-shadow">
+            
+            <!-- Logo con chuột góc trái (Hình 4) -> Chuyển về trang chủ -->
+            <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
+                <img src="https://i.ibb.co/212LVzZq/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
+            </a>
+
+            <!-- Menu điều hướng ở giữa -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-12 text-base lg:text-lg text-[#6c43c0]">
+                <a href="index.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Đầu Hẻm</a>
+                <a href="chuhem.html" class="bg-[#e9e2f8] px-6 py-2 rounded-full transition hover:bg-[#dcd0f5]">Chủ Hẻm</a>
+                <a href="donate.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Donate</a>
+                <a href="lichstream.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Lịch Stream</a>
+            </div>
+
+            <!-- Cụm Icon góc phải: Avatar, Chuông, Ba gạch -->
+            <div class="flex items-center space-x-4 md:space-x-5">
+                <!-- Icon Avatar -> chuyển miền đến hosochuot -->
+                <a href="hosochuot.html" class="w-11 h-11 rounded-full bg-[#734bd1] overflow-hidden flex items-center justify-center border-2 border-[#734bd1] hover:opacity-90 transition shadow-sm">
+                    <img id="avatar-img" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
+                </a>
+
+                <!-- Icon Chuông -> chuyển miền đến thongbao -->
+                <a href="thongbao.html" class="text-[#734bd1] hover:scale-110 transition">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
+                </a>
+
+                <!-- Icon Ba gạch -> Hiện thanh phụ giống Hình 2 -->
+                <button id="menu-btn" class="text-[#734bd1] hover:scale-110 transition focus:outline-none">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 6h14M3 12h18M7 18h14"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Thanh phụ (Dropdown Menu - Hình 2) -->
+        <div id="sub-menu" class="hidden absolute right-0 top-[72px] w-72 bg-[#764bd6] text-white rounded-b-[24px] rounded-tl-[24px] shadow-2xl overflow-hidden z-50 flex-col">
+            <a href="index.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Đầu Hẻm</a>
+            <a href="chuhem.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Chủ Hẻm</a>
+            <a href="Donate.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Donate</a>
+            <a href="lichstream.html" class="px-8 py-5 text-right text-lg hover:bg-white/10 transition">Lịch Stream</a>
+        </div>
+    </header>
+
+    <!-- ================= KHU VỰC NỘI DUNG CHÍNH (NỘI QUY) ================= -->
+    <main class="max-w-4xl w-full mx-auto relative flex-1 flex flex-col mt-4 mb-12 z-10 px-2 md:px-0">
+        
+        <!-- Tiêu đề NỘI QUY -->
+        <div class="relative w-full mb-10">
+            <!-- Dấu cộng trang trí -->
+            <div class="absolute -top-4 right-1/4 text-[#764bd6] text-4xl font-black">+</div>
+            <div class="absolute top-2 right-[45%] text-[#764bd6]/50 text-xl font-black">+</div>
+            <div class="absolute top-4 right-0 text-[#764bd6]/40 text-2xl font-black">+</div>
+
+            <h1 class="font-dejavu-title text-5xl md:text-[72px] text-[#734bd1] tracking-wide uppercase mb-6">
+                Nội Quy
+            </h1>
+            
+            <div class="bg-white rounded-full py-2.5 px-6 border border-[#e9e2f8] inline-block shadow-sm">
+                <span class="text-[11px] md:text-[13px] text-[#6c43c0] uppercase tracking-wide">Mong tất cả các chuột dân đọc và làm theo để tránh bị xử lý vi phạm</span>
+            </div>
+        </div>
+
+        <!-- ================= 1. THÔNG TIN CÁ NHÂN ================= -->
+        <div class="mb-14">
+            <h2 class="text-[13px] md:text-[15px] text-[#764bd6] uppercase tracking-wider border-b-2 border-[#764bd6] pb-1.5 mb-6 block w-full">
+                1. Thông tin cá nhân
+            </h2>
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <ul class="custom-list text-[#6c43c0] text-[15px] md:text-[17px] w-full md:w-[65%] pr-4">
+                    <li>Không thắc mắc về những gì thuộc đời tư riêng của chủ Kênh</li>
+                    <li><span class="text-[#cda434]">NGHIÊM CẤM TUYỆT ĐỐI</span> chia sẻ thông tin cá nhân, nhắc tới hay bàn luận về bất kì các Vtuber, Streamer khác dưới bất kì hình thức nào.</li>
+                    <li><span class="text-[#cda434]">HẠN CHẾ</span> thông tin quan trọng của bản thân để tránh một số rắc rối không đáng có cho bạn.</li>
+                    <li>Không đặt nickname chứa những từ ngữ phản cảm</li>
+                </ul>
+                <div class="w-full md:w-[35%] flex justify-center mt-2 md:mt-0">
+                    <img src="https://i.ibb.co/N2Dj2hdK/nq1.png" alt="nq1" class="w-48 md:w-56 object-contain">
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 2. CỔ ĐIỂN - TÔN TRỌNG ================= -->
+        <div class="mb-14">
+            <h2 class="text-[13px] md:text-[15px] text-[#764bd6] uppercase tracking-wider border-b-2 border-[#764bd6] pb-1.5 mb-6 block w-full">
+                2. Cổ điển - Tôn trọng
+            </h2>
+            <div class="flex flex-col md:flex-row items-start justify-between gap-6">
+                <!-- Cột Trái chứa Icon và Hình -->
+                <div class="w-full md:w-[35%] flex flex-col items-center space-y-6 pt-2">
+                    <div class="flex items-center justify-center gap-6 w-full">
+                        <i class="fa-solid fa-link text-[#8b5cf6] text-5xl -rotate-45"></i>
+                        <i class="fa-solid fa-bug text-[#059669] text-5xl"></i>
+                    </div>
+                    <img src="https://i.ibb.co/d4QR81ZR/nq2.png" alt="nq2" class="w-56 object-contain">
+                    <div class="relative">
+                        <span class="font-black text-4xl text-black tracking-widest">SPAM</span>
+                        <i class="fa-solid fa-ban absolute inset-0 text-red-600 text-[64px] flex items-center justify-center -ml-2 -mt-2 opacity-90"></i>
+                    </div>
+                </div>
+
+                <!-- Cột Phải chứa danh sách -->
+                <ul class="custom-list text-[#6c43c0] text-[15px] md:text-[17px] w-full md:w-[65%] mt-6 md:mt-0">
+                    <li>Không phân biệt vùng miền, tôn giáo, tuổi tác, giới tính.</li>
+                    <li>Không chửi thề quá mức cho phép và dùng từ nhạy cảm, nếu bạn joke làm người khác khó chịu, bạn sai.</li>
+                    <li>Cấm link lừa đảo, virus, ref link/code, link mời vào discord server khác, cấm lôi kéo người sang server khác.</li>
+                    <li>Mua/bán, thuê, quảng cáo, nhờ vả like/follow, khảo sát, các hành vi có tính chất trục lợi cá nhân, ảnh QR code.</li>
+                    <li>Cấm lan truyền, bàn tán những thông tin chưa được xác thực.</li>
+                    <li>Các nội dung không lành mạnh, hack/cheat, cày thuê, tiêu cực, 18+, kinh dị/jump scare (ảnh/video/avatar), lạm bàn chính trị, không đúng với thuần phong mỹ tục Việt Nam (Kể cả bạn có nói là giáo dục giới tính ), tên/chức danh/hình ảnh của lực lượng chức năng trong và ngoài nước.</li>
+                    <li>Không spam chat, reaction, hạn chế chat sử dụng caps lock.</li>
+                    <li>Không fake hoặc để thông tin (ảnh, nickname ...) gây nhầm lẫn tổ chức khác</li>
+                    <li>Hành vi cố tình tag, reply người khác mà bạn không quen trên kênh chat public sẽ đc tính là làm phiền khi bị report</li>
+                    <li>Tránh spam tin nhắn giống nhau hoặc vô nghĩa, emoji, hình ảnh trong thời gian ngắn.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ================= 3 & 4. NSFW VÀ SỬ DỤNG KÊNH ================= -->
+        <div class="flex flex-col md:flex-row items-start justify-between gap-6 mb-14">
+            <div class="w-full md:w-[65%] flex flex-col space-y-10">
+                <!-- Mục 3 -->
+                <div>
+                    <h2 class="text-[13px] md:text-[15px] text-[#764bd6] uppercase tracking-wider border-b-2 border-[#764bd6] pb-1.5 mb-6 block w-full">
+                        3. Nghiêm cấm toàn bộ NSFW
+                    </h2>
+                    <ul class="custom-list text-[#6c43c0] text-[15px] md:text-[17px]">
+                        <li>Bất kể hình thức nào hay loại hình gì</li>
+                    </ul>
+                </div>
+                <!-- Mục 4 -->
+                <div>
+                    <h2 class="text-[13px] md:text-[15px] text-[#764bd6] uppercase tracking-wider border-b-2 border-[#764bd6] pb-1.5 mb-6 block w-full">
+                        4. Sử dụng kênh đúng mục đích
+                    </h2>
+                    <ul class="custom-list text-[#6c43c0] text-[15px] md:text-[17px]">
+                        <li>Các kênh tạo ra đều có vai trò riêng của nó.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="w-full md:w-[35%] flex justify-center mt-4 md:mt-0">
+                <img src="https://i.ibb.co/HDVJQwb0/nq3.png" alt="nq3" class="w-56 md:w-64 object-contain mt-4">
+            </div>
+        </div>
+
+        <!-- ================= 5. NÓI KHÔNG VỚI CHIẾN TRANH ================= -->
+        <div class="mb-16">
+            <h2 class="text-[13px] md:text-[15px] text-[#764bd6] uppercase tracking-wider border-b-2 border-[#764bd6] pb-1.5 mb-6 block w-full">
+                5. Nói không với chiến tranh
+            </h2>
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="w-full md:w-[35%] flex justify-center mb-4 md:mb-0">
+                    <img src="https://i.ibb.co/chdVfCkj/nq4.png" alt="nq4" class="w-48 md:w-56 object-contain">
+                </div>
+                <ul class="custom-list text-[#6c43c0] text-[15px] md:text-[17px] w-full md:w-[65%]">
+                    <li>Không gây war, không quấy rối, không đe dọa bằng bất kì hình thức nào với các thành viên server hiện tại cũng như trong server khác.</li>
+                    <li>Hình Thức Xử Lý chỉ có 2 tùy theo mức độ: Mute - Ban Vĩnh Viễn.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ================= LỜI KẾT & XƯƠNG CÁ ================= -->
+        <div class="mt-8 flex flex-col items-center relative w-full pt-4 border-t-2 border-[#764bd6]">
+            
+            <!-- Xương cá trang trí bay lơ lửng -->
+            <img src="https://i.ibb.co/jZy9KYgJ/xuongca.png" alt="xuongca" class="absolute w-12 md:w-16 left-[5%] md:left-[15%] top-16 rotate-12 opacity-90">
+            <img src="https://i.ibb.co/jZy9KYgJ/xuongca.png" alt="xuongca" class="absolute w-14 md:w-20 left-[10%] md:left-[20%] bottom-32 -rotate-12 opacity-90">
+            <img src="https://i.ibb.co/jZy9KYgJ/xuongca.png" alt="xuongca" class="absolute w-10 md:w-14 right-[10%] md:right-[20%] top-10 -rotate-45 opacity-90">
+            <img src="https://i.ibb.co/jZy9KYgJ/xuongca.png" alt="xuongca" class="absolute w-10 md:w-12 right-[15%] md:right-[25%] bottom-28 rotate-[60deg] opacity-90">
+
+            <!-- Hình Mèo ở giữa -->
+            <img src="https://i.ibb.co/fVwkL8ML/nq5.png" alt="nq5" class="w-56 md:w-72 object-contain z-10 my-4">
+            
+            <!-- Lời kết dưới cùng -->
+            <p class="text-center text-[#6c43c0] text-[15px] md:text-[17px] max-w-3xl mt-4 leading-relaxed px-4">
+                Server nhỏ nhà trồng nên chúng tôi hy vọng ở đây chúng ta sẽ có quãng thời gian vui vẻ, thư giãn, chia sẻ những khoảnh khắc đời sống. Nếu mục đích của bạn nhiều hơn như vậy, nơi đây có lẽ không dành cho bạn.
+            </p>
+        </div>
+
+    </main>
+
+    <!-- Khoảng trống footer -->
+    <footer></footer>
+
+    <!-- ================= KHU VỰC THÔNG TIN & FOOTER BÊN DƯỚI ================= -->
+    <footer class="max-w-6xl w-full mx-auto bg-white rounded-[26px] px-8 py-4 card-shadow flex flex-col md:flex-row items-center justify-between gap-6 mt-10 mb-4 z-30 relative">
+        
+        <!-- Cột 1: Thông tin liên hệ -->
+        <div class="flex-1 text-center md:text-left">
+            <h3 class="text-lg text-[#6c43c0] mb-1">Thông tin liên hệ:</h3>
+            <p class="text-sm text-[#6c43c0] underline decoration-1 underline-offset-2">Mèo Ớt Chuông</p>
+            <p class="text-sm text-[#6c43c0] mt-0.5">cuacachoigame2377@gmail.com</p>
+        </div>
+
+        <!-- Vạch ngăn cách 1 -->
+        <div class="hidden md:block w-[2.5px] h-14 bg-[#734bd1] rounded-full"></div>
+
+        <!-- Cột 2: Nền tảng xã hội -->
+        <div class="flex-1 flex flex-col items-center">
+            <div class="text-left">
+                <h3 class="text-lg text-[#6c43c0] mb-2.5">Nền tảng xã hội:</h3>
+                <div class="flex items-center space-x-4">
+                    <!-- Discord -->
+                    <a href="https://discord.gg/dWHXgh8US" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-discord"></i>
+                    </a>
+                    <!-- TikTok -->
+                    <a href="https://www.tiktok.com/@gianghehe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-tiktok"></i>
+                    </a>
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/GiangHeHe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <!-- YouTube -->
+                    <a href="https://www.youtube.com/@GiangHehe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vạch ngăn cách 2 -->
+        <div class="hidden md:block w-[2.5px] h-14 bg-[#734bd1] rounded-full"></div>
+
+        <!-- Cột 3: Hình Model nhỏ góc dưới phải (Hình 7) -->
+        <div class="flex-1 flex justify-center md:justify-end pr-2">
+            <img src="https://i.ibb.co/BK4yqndL/pad2.png" alt="pad2" border="0" class="w-20 h-20 object-contain hover:scale-110 transition" />
+        </div>
+
+    </footer>
+
+    <!-- ================= JAVASCRIPT XỬ LÝ THANH MENU PHỤ ================= -->
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const subMenu = document.getElementById('sub-menu');
+        const navAvatarImg = document.getElementById('nav-avatar-img');
+
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            subMenu.classList.toggle('hidden');
+            subMenu.classList.toggle('flex');
+            navAvatarImg.parentElement.classList.toggle('opacity-0');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!subMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                subMenu.classList.add('hidden');
+                subMenu.classList.remove('flex');
+                navAvatarImg.parentElement.classList.remove('opacity-0');
+            }
+        });
+
+        // 3. Cấu hình Supabase
+        const SUPABASE_URL = 'https://jmipwcfmnoygqtaadecv.supabase.co'; 
+        const SUPABASE_KEY = 'sb_publishable_ii-OIerOFW00_e7janGKAg_XKhMsDWn'; 
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Hàm kiểm tra đăng nhập và cập nhật riêng Avatar cho thanh điều hướng
+        async function checkSessionAndUpdateNavAvatar() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            
+            if (session && session.user) {
+                // Lấy link ảnh từ tài khoản, nếu không có thì dùng ảnh con chuột mặc định
+                const avatarUrl = session.user.user_metadata?.avatar_url || 'https://i.ibb.co/HfCMcYyB/hs1.png';
+                
+                // Ở trang Đầu Hẻm, ID của ảnh avatar là 'avatar-img'
+                document.getElementById('avatar-img').src = avatarUrl;
+            }
+        }
+
+        // Chạy hàm ngay khi load trang
+        checkSessionAndUpdateNavAvatar();
+        // ---------------------------------------
+    </script>
+</body>
+</html>

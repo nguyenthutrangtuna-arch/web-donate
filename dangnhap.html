@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Giang Hehe</title>
+    <!-- Tích hợp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tích hợp Font Awesome cho icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Import Font Comfortaa và DejaVu Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/dejavu-sans" rel="stylesheet">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* Mặc định tất cả chữ là DejaVu Sans - In đậm */
+        body {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-weight: bold;
+            background-color: #f4f1fa; /* Màu nền tím nhạt */
+            color: #6c43c0;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        /* Chữ "Đăng ký", "Quên mật khẩu" dùng font Comfortaa */
+        .font-comfortaa {
+            font-family: 'Comfortaa', cursive;
+        }
+
+        /* Nửa hình tròn khổng lồ ở đáy */
+        .bottom-circle {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150vw;
+            height: 45vh;
+            background-color: #7351c4; /* Tím đậm đồng màu */
+            border-top-left-radius: 50%;
+            border-top-right-radius: 50%;
+            z-index: 0;
+        }
+
+        /* Khung đăng nhập chính màu tím với viền phát sáng đen */
+        .login-card {
+            background-color: #764bd6;
+            border-radius: 24px;
+            /* Hiệu ứng phát sáng đen dưới khung để làm nổi khung lên */
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.45);
+            z-index: 10;
+        }
+
+        /* Font chữ tiêu đề Đăng nhập (in đậm, in nghiêng) */
+        .font-title {
+            font-style: italic;
+        }
+
+        /* CSS cho thẻ input để giống thiết kế */
+        .input-field {
+            background-color: #ebe4f5;
+            color: #764bd6;
+            border-radius: 9999px; /* Bo tròn hoàn toàn */
+            padding: 18px 24px;
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 15px;
+        }
+        
+        .input-field::placeholder {
+            color: #a48de5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nền trang trí nửa hình tròn phóng to ở dưới -->
+    <div class="bottom-circle"></div>
+
+    <!-- Các dấu cộng trang trí -->
+    <div class="absolute top-12 text-[#764bd6] text-4xl z-0 font-black" style="left: 55%;">+</div>
+    <div class="absolute top-16 text-[#764bd6]/60 text-2xl z-0 font-black" style="left: 30%;">+</div>
+    <div class="absolute top-24 text-[#764bd6]/60 text-2xl z-0 font-black" style="left: 15%;">+</div>
+    <div class="absolute top-36 text-[#764bd6] text-3xl z-0 font-black" style="left: 32%;">+</div>
+    <div class="absolute top-24 text-[#764bd6]/60 text-xl z-0 font-black" style="right: 32%;">+</div>
+    <div class="absolute top-16 text-[#764bd6]/50 text-xl z-0 font-black" style="right: 18%;">+</div>
+    <div class="absolute top-36 text-[#764bd6]/70 text-2xl z-0 font-black" style="right: 8%;">+</div>
+
+    <!-- KHUNG ĐĂNG NHẬP CHÍNH -->
+    <div class="login-card w-full max-w-[440px] p-8 md:p-10 relative mt-4 mb-12">
+        <h1 class="font-title text-[40px] md:text-[46px] text-white text-center mb-10 tracking-wide mt-2">
+            Đăng nhập
+        </h1>
+
+        <form id="loginForm" class="space-y-6 flex flex-col">
+            
+            <!-- 1. Tên người dùng / Email (Sử dụng Email để đăng nhập Supabase) -->
+            <div class="relative">
+                <input type="email" id="loginEmail" required class="input-field pr-14" placeholder="Email (Tên người dùng)">
+                <div class="absolute right-6 top-1/2 -translate-y-1/2 text-[#764bd6] text-xl pointer-events-none">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </div>
+
+            <!-- 2. Mật khẩu (Có icon Ẩn/Hiện mật khẩu) -->
+            <div class="relative">
+                <input type="password" id="loginPassword" required class="input-field pr-14" placeholder="Mật khẩu">
+                <button type="button" onclick="togglePassword('loginPassword', 'eyeIcon')" class="absolute right-6 top-1/2 -translate-y-1/2 text-[#764bd6] hover:text-[#523398] transition text-xl">
+                    <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+
+            <!-- Hàng chứa: Quên mật khẩu & Đăng ký -->
+            <div class="flex justify-between items-center px-4 pt-1 font-comfortaa text-[15px]">
+                <a href="quenmatkhau.html" class="text-white hover:underline hover:text-white/80 transition tracking-wide">
+                    Quên mật khẩu?
+                </a>
+                <a href="dangky.html" class="text-white hover:underline hover:text-white/80 transition tracking-wide">
+                    Đăng ký
+                </a>
+            </div>
+
+            <!-- Hiển thị lỗi đăng nhập -->
+            <p id="errorMsg" class="text-xs text-yellow-300 text-center h-4"></p>
+
+            <!-- Nút Đăng nhập -->
+            <button type="submit" id="submitBtn" class="w-full bg-white text-[#764bd6] text-[22px] py-4 rounded-full shadow-md hover:bg-gray-100 hover:scale-[1.02] transition mt-2 tracking-wide">
+                Đăng nhập
+            </button>
+        </form>
+    </div>
+
+    <!-- ================= JAVASCRIPT XỬ LÝ ĐĂNG NHẬP VỚI SUPABASE ================= -->
+    <script>
+        // Cấu hình Supabase (Đã loại bỏ /rest/v1/ dư thừa từ URL)
+        const SUPABASE_URL = 'https://jmipwcfmnoygqtaadecv.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_ii-OIerOFW00_e7janGKAg_XKhMsDWn';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Chức năng Ẩn/Hiện Mật khẩu bằng con mắt
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Xử lý sự kiện Gửi form
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const msg = document.getElementById('errorMsg');
+            const submitBtn = document.getElementById('submitBtn');
+
+            msg.innerText = "";
+            submitBtn.innerText = "Đang xử lý...";
+            submitBtn.disabled = true;
+
+            // Gửi yêu cầu đăng nhập lên Supabase
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ 
+                email: email, 
+                password: password 
+            });
+
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Đăng nhập";
+
+            if (error) {
+                // Hiển thị lỗi (vd: Sai email hoặc mật khẩu)
+                msg.innerText = "Sai email hoặc mật khẩu. Vui lòng thử lại!";
+            } else {
+                // Đăng nhập thành công -> Chuyển về hosochuot.html (nó sẽ tự động vào trạng thái Đã đăng nhập)
+                window.location.href = "hosochuot.html";
+            }
+        });
+    </script>
+</body>
+</html>

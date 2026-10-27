@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - Giang Hehe</title>
+    <!-- Tích hợp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tích hợp Font Awesome cho icon con mắt -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Import Font Comfortaa và DejaVu Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/dejavu-sans" rel="stylesheet">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* Mặc định tất cả chữ là DejaVu Sans - In đậm */
+        body {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-weight: bold;
+            background-color: #f4f1fa; /* Màu nền tím nhạt */
+            color: #6c43c0;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        /* Chữ Đăng nhập dùng font Comfortaa */
+        .font-comfortaa {
+            font-family: 'Comfortaa', cursive;
+        }
+
+        /* Nửa hình tròn khổng lồ ở đáy */
+        .bottom-circle {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150vw;
+            height: 45vh;
+            background-color: #7351c4; /* Tím đậm đồng màu */
+            border-top-left-radius: 50%;
+            border-top-right-radius: 50%;
+            z-index: 0;
+        }
+
+        /* Khung đăng ký chính màu tím với viền phát sáng đen */
+        .register-card {
+            background-color: #764bd6;
+            border-radius: 24px;
+            /* Hiệu ứng phát sáng đen dưới khung để làm nổi khung lên */
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.45);
+            z-index: 10;
+        }
+
+        /* Font chữ tiêu đề Đăng ký (in đậm, in nghiêng) */
+        .font-title {
+            font-style: italic;
+        }
+
+        /* CSS cho thẻ input để giống thiết kế */
+        .input-field {
+            background-color: #ebe4f5;
+            color: #764bd6;
+            border-radius: 9999px; /* Bo tròn hoàn toàn dạng viên thuốc */
+            padding: 18px 24px;
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 15px;
+        }
+        
+        .input-field::placeholder {
+            color: #a48de5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nền trang trí nửa hình tròn phóng to ở dưới -->
+    <div class="bottom-circle"></div>
+
+    <!-- Các dấu cộng trang trí -->
+    <div class="absolute top-10 text-[#764bd6] text-[40px] z-0 font-black" style="left: 48%;">+</div>
+    <div class="absolute top-16 text-[#764bd6]/60 text-2xl z-0 font-black" style="left: 32%;">+</div>
+    <div class="absolute top-20 text-[#764bd6]/60 text-xl z-0 font-black" style="right: 22%;">+</div>
+    <div class="absolute top-36 text-[#764bd6]/70 text-3xl z-0 font-black" style="right: 7%;">+</div>
+    <div class="absolute top-12 text-[#764bd6]/40 text-lg z-0 font-black" style="left: 12%;">+</div>
+
+    <!-- KHUNG ĐĂNG KÝ CHÍNH -->
+    <div class="register-card w-full max-w-[460px] p-8 md:p-10 relative mt-4 mb-8">
+        <h1 class="font-title text-[40px] md:text-[48px] text-white text-center mb-8 tracking-wide mt-2">
+            Đăng ký
+        </h1>
+
+        <form id="registerForm" class="space-y-6 flex flex-col">
+            
+            <!-- 1. Email (Sử dụng autocomplete="email" để gợi ý mail trên máy) -->
+            <div>
+                <input type="email" id="regEmail" autocomplete="email" required class="input-field" placeholder="E - Mail">
+            </div>
+
+            <!-- 2. Tên người dùng (ID) (Regex: 6-15 ký tự, chữ thường, số, dấu . - _) -->
+            <div>
+                <input type="text" id="regUserId" required minlength="6" maxlength="15" pattern="^[a-z0-9\.\-_]+$" title="Tên người dùng từ 6-15 ký tự. Chỉ gồm chữ cái thường, số và ký tự . - _" class="input-field" placeholder="Tên người dùng">
+            </div>
+
+            <!-- 3. Tên hiển thị (2-30 ký tự, nhập tự do) -->
+            <div>
+                <input type="text" id="regDisplayName" required minlength="2" maxlength="30" class="input-field" placeholder="Tên hiển thị">
+            </div>
+
+            <!-- 4. Mật khẩu (Có icon con mắt) -->
+            <div class="relative">
+                <input type="password" id="regPassword" required minlength="8" maxlength="30" class="input-field pr-14" placeholder="Mật khẩu">
+                <button type="button" onclick="togglePassword('regPassword', 'eyeIcon1')" class="absolute right-5 top-1/2 -translate-y-1/2 text-[#764bd6] hover:text-[#523398] transition text-xl">
+                    <i id="eyeIcon1" class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+
+            <!-- 5. Xác nhận mật khẩu (Có icon con mắt) -->
+            <div class="relative">
+                <input type="password" id="regConfirmPassword" required minlength="8" maxlength="30" class="input-field pr-14" placeholder="Xác nhận mật khẩu">
+                <button type="button" onclick="togglePassword('regConfirmPassword', 'eyeIcon2')" class="absolute right-5 top-1/2 -translate-y-1/2 text-[#764bd6] hover:text-[#523398] transition text-xl">
+                    <i id="eyeIcon2" class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+
+            <!-- Nơi hiển thị thông báo lỗi bằng chữ màu vàng -->
+            <p id="errorMsg" class="text-sm text-yellow-300 text-center h-4"></p>
+
+            <!-- Chữ "Đăng nhập" (Dùng font Comfortaa) -> Chuyển đến dangnhap.html -->
+            <div class="text-left px-4 pt-1 font-comfortaa">
+                <a href="dangnhap.html" class="text-white text-[15px] hover:underline hover:text-white/80 transition tracking-wide">Đăng nhập</a>
+            </div>
+
+            <!-- Nút Đăng ký màu trắng chữ tím -->
+            <button type="submit" id="submitBtn" class="w-full bg-white text-[#764bd6] text-[22px] py-4 rounded-full shadow-md hover:bg-gray-100 hover:scale-[1.02] transition mt-2 tracking-wide">
+                Đăng ký
+            </button>
+        </form>
+    </div>
+
+    <!-- ================= JAVASCRIPT XỬ LÝ LÔ-GIC VÀ SUPABASE ================= -->
+    <script>
+        // Cấu hình Supabase
+        const SUPABASE_URL = 'https://jmipwcfmnoygqtaadecv.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_ii-OIerOFW00_e7janGKAg_XKhMsDWn';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Chức năng Ẩn/Hiện Mật khẩu bằng con mắt
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Kiểm tra định dạng mật khẩu: Phải có 1 In Hoa, 1 Số, 1 Đặc Biệt
+        function isValidPassword(password) {
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password);
+            return hasUpperCase && hasNumber && hasSpecialChar;
+        }
+
+        // Xử lý sự kiện Gửi form
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('regEmail').value.trim();
+            const userId = document.getElementById('regUserId').value.trim();
+            const displayName = document.getElementById('regDisplayName').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const msg = document.getElementById('errorMsg');
+            const submitBtn = document.getElementById('submitBtn');
+
+            msg.innerText = "";
+
+            // 1. Kiểm tra hai mật khẩu xác nhận có khớp nhau không
+            if (password !== confirmPassword) {
+                return msg.innerText = "Mật khẩu xác nhận không khớp!";
+            }
+
+            // 2. Kiểm tra quy tắc bảo mật của mật khẩu
+            if (!isValidPassword(password)) {
+                return msg.innerText = "Mật khẩu cần ít nhất 1 IN HOA, 1 Số, 1 Ký tự đặc biệt!";
+            }
+
+            // 3. Khóa nút bấm và gửi dữ liệu lên Supabase
+            submitBtn.innerText = "Đang xử lý...";
+            submitBtn.disabled = true;
+
+            // Gửi email, password và kèm thông tin ID_Chuot, Display_Name vào user_metadata
+            const { data, error } = await supabaseClient.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: {
+                        id_chuot: userId,
+                        display_name: displayName
+                    }
+                }
+            });
+
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Đăng ký";
+
+            if (error) {
+                msg.innerText = "Lỗi đăng ký: " + error.message;
+            } else {
+                alert("Tạo Hồ sơ Chuột thành công!");
+                // Theo yêu cầu mới: Đăng ký xong nhảy về dangnhap.html
+                window.location.href = "dangnhap.html";
+            }
+        });
+    </script>
+</body>
+</html>

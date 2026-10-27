@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đầu Hẻm - Giang Hehe</title>
+    <!-- Tích hợp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tích hợp Font Awesome cho các icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Import Font Comfortaa (In đậm 700) và DejaVu Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/dejavu-sans" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* Mặc định tất cả chữ là Comfortaa - In đậm */
+        body {
+            font-family: 'Comfortaa', cursive;
+            font-weight: 700;
+            background-color: #f4f1fa;
+            color: #764bd6;
+            overflow-x: hidden;
+        }
+
+        /* Font DejaVu Sans - In đậm, In nghiêng cho Tiêu đề và Tên Tể tướng */
+        .font-dejavu-title {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        /* Đổ bóng nhẹ cho khối */
+        .card-shadow {
+            box-shadow: 0 4px 24px rgba(108, 67, 192, 0.08);
+        }
+
+        .pill-shadow {
+            box-shadow: 0 2px 10px rgba(108, 67, 192, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-6 relative select-none">
+    <!-- ================= HEADER / THANH ĐIỀU HƯỚNG ================= -->
+    <header class="max-w-6xl w-full mx-auto relative z-50">
+        <nav class="bg-white rounded-[28px] px-5 py-2.5 flex items-center justify-between card-shadow">
+            
+            <!-- Logo con chuột góc trái (Hình 4) -> Chuyển về trang chủ -->
+            <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
+                <img src="https://i.ibb.co/212LVzZq/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
+            </a>
+
+            <!-- Menu điều hướng ở giữa -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-12 text-base lg:text-lg text-[#6c43c0]">
+                <a href="index.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Đầu Hẻm</a>
+                <a href="chuhem.html" class="bg-[#e9e2f8] px-6 py-2 rounded-full transition hover:bg-[#dcd0f5]">Chủ Hẻm</a>
+                <a href="donate.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Donate</a>
+                <a href="lichstream.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Lịch Stream</a>
+            </div>
+
+            <!-- Cụm Icon góc phải: Avatar, Chuông, Ba gạch -->
+            <div class="flex items-center space-x-4 md:space-x-5">
+                <!-- Icon Avatar -> chuyển miền đến hosochuot -->
+                <a href="hosochuot.html" class="w-11 h-11 rounded-full bg-[#734bd1] overflow-hidden flex items-center justify-center border-2 border-[#734bd1] hover:opacity-90 transition shadow-sm">
+                    <img id="avatar-img" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
+                </a>
+
+                <!-- Icon Chuông -> chuyển miền đến thongbao -->
+                <a href="thongbao.html" class="text-[#734bd1] hover:scale-110 transition">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
+                </a>
+
+                <!-- Icon Ba gạch -> Hiện thanh phụ giống Hình 2 -->
+                <button id="menu-btn" class="text-[#734bd1] hover:scale-110 transition focus:outline-none">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 6h14M3 12h18M7 18h14"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Thanh phụ (Dropdown Menu - Hình 2) -->
+        <div id="sub-menu" class="hidden absolute right-0 top-[72px] w-72 bg-[#764bd6] text-white rounded-b-[24px] rounded-tl-[24px] shadow-2xl overflow-hidden z-50 flex-col">
+            <a href="index.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Đầu Hẻm</a>
+            <a href="chuhem.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Chủ Hẻm</a>
+            <a href="donate.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Donate</a>
+            <a href="lichstream.html" class="px-8 py-5 text-right text-lg hover:bg-white/10 transition">Lịch Stream</a>
+        </div>
+    </header>
+
+    <!-- ================= KHU VỰC NỘI DUNG CHÍNH ================= -->
+    <main class="max-w-[900px] w-full mx-auto relative flex-1 flex flex-col px-4 md:px-0 z-10 mb-16">
+        
+        <!-- 1. Tiêu đề và Dấu cộng trang trí -->
+        <div class="relative w-full pt-8 md:pt-10">
+            <!-- Tiêu đề (Lệch trái giống thiết kế) -->
+            <h1 class="font-dejavu-title text-[50px] md:text-[76px] text-[#764bd6] tracking-wide leading-[1.1] ml-2 md:ml-6 relative z-10">
+                Tể Tướng<br>Ratti
+            </h1>
+            
+            <!-- Cụm Dấu cộng trang trí (Tập trung bên phải) -->
+            <div class="absolute top-2 md:top-8 right-[5%] md:right-[15%] text-[#764bd6]/60 text-2xl font-black">+</div>
+            <div class="absolute top-[80px] md:top-[120px] right-[25%] md:right-[35%] text-[#764bd6]/40 text-3xl font-black">+</div>
+            <div class="absolute top-[120px] md:top-[160px] right-4 md:right-10 text-[#764bd6] text-4xl font-black">+</div>
+            <div class="absolute top-[200px] left-[40%] text-[#764bd6]/50 text-2xl font-black">+</div>
+
+            <!-- Hình Ảnh Bìa Chính (Nhóm 3 Tể tướng) -->
+            <div class="w-full flex justify-center mt-4 md:mt-0 relative z-0">
+                <img src="https://i.ibb.co/hR0PvqsD/vt2-1.png" alt="vt2 1" class="w-full max-w-[700px] object-contain drop-shadow-sm" />
+            </div>
+        </div>
+
+        <!-- 2. Khung Thông Tin Tể Tướng Ratti (Đè lên hình một chút) -->
+        <div class="w-full max-w-[850px] mx-auto bg-white rounded-[24px] p-6 md:p-10 card-shadow relative z-20 -mt-8 md:-mt-14 border border-[#e9e2f8]">
+            <p class="text-[#764bd6] text-[15px] md:text-[16px] leading-loose text-justify mb-8 font-bold">
+                Tể tướng Ratti là danh xưng dành cho những nhân vật được Quốc trưởng Giang HeHe de Montmorency Noire trực tiếp lựa chọn để đảm nhiệm các chức vụ cố vấn, điều phối và hỗ trợ vận hành Hẻm Chuột. Đây là một trong những chức vị quan trọng trong hệ thống tổ chức của cộng đồng, đứng dưới quyền Quốc trưởng và thực hiện nhiệm vụ theo phạm vi được giao.
+            </p>
+            <p class="text-[#764bd6] text-[15px] md:text-[16px] leading-loose text-justify font-bold">
+                Khác với những chức vụ được hình thành thông qua bầu cử, chức vị Tể tướng Ratti được xác lập hoàn toàn dựa trên quyết định bổ nhiệm của Quốc trưởng. Việc trở thành Tể tướng không phụ thuộc vào lượt bình chọn, số phiếu ủng hộ hay kết quả bỏ phiếu của thần dân. Quyền lựa chọn và bổ nhiệm Tể tướng thuộc về Quốc trưởng Giang HeHe de Montmorency Noire.
+            </p>
+        </div>
+
+        <!-- 3. Thanh Tiêu Đề Divider (Có dòng kẻ ngang và viên thuốc ở giữa) -->
+        <div class="w-full max-w-[850px] mx-auto mt-16 mb-12 relative flex items-center justify-center">
+            <!-- Đường kẻ ngang -->
+            <div class="absolute w-full h-[2px] bg-[#764bd6] z-0"></div>
+            <!-- Khung chữ Pill -->
+            <div class="bg-[#f4f1fa] px-4 z-10">
+                <div class="bg-white rounded-full py-2.5 px-8 pill-shadow border border-[#e9e2f8]">
+                    <span class="text-[#764bd6] text-[12px] md:text-[13px] uppercase tracking-wide font-bold">CÁC TỂ TƯỚNG RATTI ĐƯƠNG NHIỆM</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Danh sách 3 Tể Tướng -->
+        <div class="w-full mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 px-2">
+            
+            <!-- Cột 1: Tể tướng Chuột (Jokerren) -->
+            <div class="flex flex-col items-center text-center">
+                <img src="https://i.ibb.co/q3gBmrvj/vt2-2.png" alt="vt2 2" class="w-32 h-32 md:w-36 md:h-36 object-contain mb-4 drop-shadow-md rounded-full" />
+                <h3 class="font-dejavu-title text-[#764bd6] text-[18px] md:text-[20px] uppercase mb-1">TỂ TƯỚNG CHUỘT</h3>
+                <span class="text-[#764bd6]/70 text-[12px] md:text-[13px] uppercase tracking-widest mb-4">JOKERREN</span>
+                <p class="text-[#764bd6] text-[14px] md:text-[15px] leading-relaxed text-justify mb-4">
+                    Tể tướng Chuột là chức vị dành cho thành viên thuộc cộng đồng Hẻm Chuột, đảm nhiệm vai trò hỗ trợ Quốc trưởng trong các hoạt động liên quan đến cộng đồng. Đây là vị trí đại diện cho lực lượng thành viên trực tiếp tham gia vào đời sống và các hoạt động của Hẻm Chuột.
+                </p>
+                <p class="text-[#764bd6] text-[14px] md:text-[15px] leading-relaxed text-justify">
+                    JokerRen là người được Quốc trưởng lựa chọn để đảm nhiệm chức vị này. Việc bổ nhiệm thể hiện sự tín nhiệm của Quốc trưởng đối với cá nhân được lựa chọn, không phải kết quả của một cuộc bầu cử hay bình chọn công khai.
+                </p>
+            </div>
+
+            <!-- Cột 2: Tể tướng Điều phối (Pingcord) -->
+            <div class="flex flex-col items-center text-center">
+                <img src="https://i.ibb.co/Gy3gDzs/vt2-3.png" alt="vt2 3" class="w-32 h-32 md:w-36 md:h-36 object-contain mb-4 drop-shadow-md rounded-full" />
+                <h3 class="font-dejavu-title text-[#764bd6] text-[18px] md:text-[20px] uppercase mb-1">TỂ TƯỚNG ĐIỀU PHỐI</h3>
+                <span class="text-[#764bd6]/70 text-[12px] md:text-[13px] uppercase tracking-widest mb-4">PINGCORD</span>
+                <p class="text-[#764bd6] text-[14px] md:text-[15px] leading-relaxed text-justify mb-4">
+                    Tể tướng Điều phối là chức vị dành cho hệ thống AI hỗ trợ các hoạt động tổ chức và vận hành cộng đồng. Chức vị này gắn với vai trò hỗ trợ quản lý thông tin, điều phối các chức năng và duy trì hoạt động của Hẻm Chuột thông qua những công cụ được tích hợp.
+                </p>
+                <p class="text-[#764bd6] text-[14px] md:text-[15px] leading-relaxed text-justify">
+                    Pingcord được Quốc trưởng lựa chọn và bổ nhiệm vào chức vị Tể tướng Điều phối. Danh hiệu này xác lập vị trí của Pingcord trong hệ thống chức vụ của Hẻm Chuột.
+                </p>
+            </div>
+
+            <!-- Cột 3: Tể tướng Âm thanh (VoiceMaster) -->
+            <div class="flex flex-col items-center text-center">
+                <img src="https://i.ibb.co/d4DYhhcj/vt2-4.png" alt="vt2 4" class="w-32 h-32 md:w-36 md:h-36 object-contain mb-4 drop-shadow-md rounded-full" />
+                <h3 class="font-dejavu-title text-[#764bd6] text-[18px] md:text-[20px] uppercase mb-1">TỂ TƯỚNG ÂM THANH</h3>
+                <span class="text-[#764bd6]/70 text-[12px] md:text-[13px] uppercase tracking-widest mb-4">VOICEMASTER</span>
+                <p class="text-[#764bd6] text-[14px] md:text-[15px] leading-relaxed text-justify mb-4">
+                    Tể tướng Âm thanh là chức vị dành cho hệ thống AI hỗ trợ các hoạt động tổ chức và vận hành cộng đồng. Chức vị này gắn với vai trò hỗ trợ quản lý thông tin, điều phối các chức năng và duy trì hoạt động của Hẻm Chuột thông qua những công cụ được tích hợp.
+                </p>
+                <p class="text-[#764bd6] text-[14px] md:text-[15px] leading-relaxed text-justify">
+                    VoiceMaster được Quốc trưởng lựa chọn và bổ nhiệm vào chức vị Tể tướng Âm thanh, trở thành một trong ba thành viên thuộc hệ thống Tể tướng Ratti.
+                </p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Khoảng trống footer -->
+    <footer></footer>
+    
+    <!-- ================= KHU VỰC THÔNG TIN & FOOTER BÊN DƯỚI ================= -->
+    <footer class="max-w-6xl w-full mx-auto bg-white rounded-[26px] px-8 py-4 card-shadow flex flex-col md:flex-row items-center justify-between gap-6 mt-10 mb-4 z-30 relative">
+        
+        <!-- Cột 1: Thông tin liên hệ -->
+        <div class="flex-1 text-center md:text-left">
+            <h3 class="text-lg text-[#6c43c0] mb-1">Thông tin liên hệ:</h3>
+            <p class="text-sm text-[#6c43c0] underline decoration-1 underline-offset-2">Mèo Ớt Chuông</p>
+            <p class="text-sm text-[#6c43c0] mt-0.5">cuacachoigame2377@gmail.com</p>
+        </div>
+
+        <!-- Vạch ngăn cách 1 -->
+        <div class="hidden md:block w-[2.5px] h-14 bg-[#734bd1] rounded-full"></div>
+
+        <!-- Cột 2: Nền tảng xã hội -->
+        <div class="flex-1 flex flex-col items-center">
+            <div class="text-left">
+                <h3 class="text-lg text-[#6c43c0] mb-2.5">Nền tảng xã hội:</h3>
+                <div class="flex items-center space-x-4">
+                    <!-- Discord -->
+                    <a href="https://discord.gg/dWHXgh8US" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-discord"></i>
+                    </a>
+                    <!-- TikTok -->
+                    <a href="https://www.tiktok.com/@gianghehe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-tiktok"></i>
+                    </a>
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/GiangHeHe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <!-- YouTube -->
+                    <a href="https://www.youtube.com/@GiangHehe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vạch ngăn cách 2 -->
+        <div class="hidden md:block w-[2.5px] h-14 bg-[#734bd1] rounded-full"></div>
+
+        <!-- Cột 3: Hình Model nhỏ góc dưới phải (Hình 7) -->
+        <div class="flex-1 flex justify-center md:justify-end pr-2">
+            <img src="https://i.ibb.co/BK4yqndL/pad2.png" alt="pad2" border="0" class="w-20 h-20 object-contain hover:scale-110 transition" />
+        </div>
+
+    </footer>
+    
+    <!-- ================= JAVASCRIPT XỬ LÝ THANH MENU PHỤ ================= -->
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const subMenu = document.getElementById('sub-menu');
+        const avatarImg = document.getElementById('avatar-img');
+
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            subMenu.classList.toggle('hidden');
+            subMenu.classList.toggle('flex');
+            avatarImg.classList.toggle('opacity-0');
+        });
+
+        // Đóng thanh phụ khi bấm ra ngoài
+        document.addEventListener('click', (e) => {
+            if (!subMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                subMenu.classList.add('hidden');
+                subMenu.classList.remove('flex');
+                avatarImg.classList.remove('opacity-0');
+            }
+        });
+
+        // 3. Cấu hình Supabase
+        const SUPABASE_URL = 'https://jmipwcfmnoygqtaadecv.supabase.co'; 
+        const SUPABASE_KEY = 'sb_publishable_ii-OIerOFW00_e7janGKAg_XKhMsDWn'; 
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Hàm kiểm tra đăng nhập và cập nhật riêng Avatar cho thanh điều hướng
+        async function checkSessionAndUpdateNavAvatar() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            
+            if (session && session.user) {
+                // Lấy link ảnh từ tài khoản, nếu không có thì dùng ảnh con chuột mặc định
+                const avatarUrl = session.user.user_metadata?.avatar_url || 'https://i.ibb.co/HfCMcYyB/hs1.png';
+                
+                // Ở trang Đầu Hẻm, ID của ảnh avatar là 'avatar-img'
+                document.getElementById('avatar-img').src = avatarUrl;
+            }
+        }
+
+        // Chạy hàm ngay khi load trang
+        checkSessionAndUpdateNavAvatar();
+        // ---------------------------------------
+    </script>
+</body>
+</html>

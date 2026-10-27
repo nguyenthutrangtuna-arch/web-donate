@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh Sửa Hồ Sơ - Giang Hehe</title>
+    <!-- Tích hợp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tích hợp Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Import Font Comfortaa và DejaVu Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/dejavu-sans" rel="stylesheet">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* Font chữ chung: Comfortaa - in đậm */
+        body {
+            font-family: 'Comfortaa', cursive;
+            font-weight: 700;
+            background-color: #f4f1fa;
+            color: #6c43c0;
+            overflow-x: hidden;
+        }
+
+        /* Font nhãn: DejaVu Sans - in đậm */
+        .font-label {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-weight: bold;
+        }
+
+        /* Font Tiêu đề */
+        .font-title {
+            font-family: 'Comfortaa', cursive;
+            font-weight: 700;
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(108, 67, 192, 0.08);
+        }
+
+        /* Style cho input và select */
+        .input-box {
+            background-color: white;
+            color: #764bd6;
+            border: 2px solid #764bd6;
+            border-radius: 9999px;
+            padding: 10px 20px;
+            width: 100%;
+            outline: none;
+            transition: all 0.2s;
+            font-family: 'Comfortaa', cursive;
+            font-weight: 700;
+        }
+        
+        .input-box:focus {
+            box-shadow: 0 0 0 3px rgba(118, 75, 214, 0.2);
+        }
+
+        .input-box:disabled {
+            background-color: #f3f4f6;
+            color: #9ca3af;
+            border-color: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        /* Nút giới tính được chọn */
+        .gender-btn.active {
+            background-color: #764bd6;
+            color: white;
+        }
+
+        /* Tùy chỉnh thanh cuộn cho Dropdown */
+        select.input-box {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23764bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-6 relative select-none pb-20">
+
+    <!-- ================= HEADER / THANH ĐIỀU HƯỚNG ================= -->
+    <header class="max-w-6xl w-full mx-auto relative z-50">
+        <nav class="bg-white rounded-[28px] px-5 py-2.5 flex items-center justify-between card-shadow">
+            <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
+                <img src="https://i.ibb.co/212LVzZq/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
+            </a>
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-12 text-base lg:text-lg text-[#6c43c0]">
+                <a href="index.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Đầu Hẻm</a>
+                <a href="chuhem.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Chủ Hẻm</a>
+                <a href="donate.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Donate</a>
+                <a href="lichstream.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Lịch Stream</a>
+            </div>
+            <div class="flex items-center space-x-4 md:space-x-5">
+                <a href="hosochuot.html" class="w-11 h-11 rounded-full bg-[#734bd1] overflow-hidden flex items-center justify-center border-2 border-[#734bd1] opacity-90 shadow-sm">
+                    <img id="nav-avatar-img" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
+                </a>
+                <a href="thongbao.html" class="text-[#734bd1] hover:scale-110 transition">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                </a>
+                <button id="menu-btn" class="text-[#734bd1] hover:scale-110 transition focus:outline-none">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 6h14M3 12h18M7 18h14"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="sub-menu" class="hidden absolute right-0 top-[72px] w-72 bg-[#764bd6] text-white rounded-b-[24px] rounded-tl-[24px] shadow-2xl overflow-hidden z-50 flex-col">
+            <a href="index.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Đầu Hẻm</a>
+            <a href="chuhem.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Chủ Hẻm</a>
+            <a href="donate.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Donate</a>
+            <a href="lichstream.html" class="px-8 py-5 text-right text-lg hover:bg-white/10 transition">Lịch Stream</a>
+        </div>
+    </header>
+
+    <!-- ================= KHU VỰC NỘI DUNG CHÍNH ================= -->
+    <main class="max-w-2xl w-full mx-auto relative flex-1 flex flex-col items-center mt-6 z-10 px-2">
+        
+        <!-- Tiêu đề -->
+        <h1 class="font-title text-[28px] md:text-[32px] text-[#764bd6] tracking-wide mb-8 text-center uppercase leading-tight">
+            CHỈNH SỬA<br>HỒ SƠ CHUỘT
+        </h1>
+
+        <!-- Khu vực Avatar có dấu + -->
+        <div class="relative mb-10 group" title="Bấm vào dấu + để đổi ảnh">
+            <div class="w-44 h-44 rounded-[36px] bg-white p-2.5 card-shadow border border-white flex items-center justify-center relative z-0">
+                <img id="edit-avatar" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="Avatar" class="w-full h-full object-cover rounded-[28px]" />
+            </div>
+            
+            <!-- Nút dấu + -->
+            <button onclick="document.getElementById('avatar-upload').click()" class="absolute -bottom-2 -right-2 w-14 h-14 bg-[#764bd6] rounded-full text-white text-3xl flex items-center justify-center border-4 border-[#f4f1fa] hover:scale-110 transition shadow-lg z-10 cursor-pointer">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+            <input type="file" id="avatar-upload" class="hidden" accept="image/*" onchange="handleAvatarChange(event)">
+            
+            <p id="upload-status" class="text-center text-xs text-[#764bd6] mt-3 absolute w-full left-0"></p>
+        </div>
+
+        <!-- FORM CHỈNH SỬA -->
+        <form id="profileForm" class="w-full space-y-5">
+            
+            <!-- 1. Tên hiển thị (Tự do sửa, Max 30 ký tự) -->
+            <div class="flex items-center gap-4">
+                <div class="w-[35%] md:w-[30%] bg-[#764bd6] text-white py-3.5 px-4 rounded-full text-center flex-shrink-0 card-shadow">
+                    <span class="font-label text-[14px] md:text-[15px]">Tên hiển thị</span>
+                </div>
+                <div class="flex-1">
+                    <input type="text" id="input-display-name" required minlength="2" maxlength="30" class="input-box" placeholder="tenhienthi">
+                </div>
+            </div>
+
+            <!-- 2. Tên ID (Chỉ sửa 1 lần) -->
+            <div class="flex items-center gap-4">
+                <div class="w-[35%] md:w-[30%] bg-[#764bd6] text-white py-3.5 px-4 rounded-full text-center flex-shrink-0 card-shadow">
+                    <span class="font-label text-[14px] md:text-[15px]">Tên ID</span>
+                </div>
+                <div class="flex-1 relative">
+                    <input type="text" id="input-id" required minlength="6" maxlength="15" pattern="^[a-z0-9\.\-_]+$" title="6-15 ký tự (chữ thường, số, dấu . - _)" class="input-box" placeholder="tenid" disabled>
+                    <!-- Overlay chặn click để hiện cảnh báo -->
+                    <div id="overlay-id" class="absolute inset-0 cursor-pointer rounded-full" onclick="requestEdit('id', 'input-id')"></div>
+                </div>
+            </div>
+
+            <!-- 3. Sinh nhật (Chỉ sửa 1 lần) -->
+            <div class="flex items-center gap-4">
+                <div class="w-[35%] md:w-[30%] bg-[#764bd6] text-white py-3.5 px-4 rounded-full text-center flex-shrink-0 card-shadow">
+                    <span class="font-label text-[14px] md:text-[15px]">Sinh nhật</span>
+                </div>
+                <div class="flex-1 relative">
+                    <input type="date" id="input-dob" required class="input-box" disabled>
+                    <div id="overlay-dob" class="absolute inset-0 cursor-pointer rounded-full" onclick="requestEdit('dob', 'input-dob')"></div>
+                </div>
+            </div>
+
+            <!-- 4. Giới tính (Chỉ sửa 1 lần) -->
+            <div class="flex items-center gap-4">
+                <div class="w-[35%] md:w-[30%] bg-[#764bd6] text-white py-3.5 px-4 rounded-full text-center flex-shrink-0 card-shadow">
+                    <span class="font-label text-[14px] md:text-[15px]">Giới tính</span>
+                </div>
+                <div class="flex-1 relative flex gap-3">
+                    <button type="button" id="btn-nam" class="flex-1 bg-white text-[#764bd6] border-2 border-[#764bd6] rounded-full py-2.5 font-bold transition gender-btn" disabled>Nam</button>
+                    <button type="button" id="btn-nu" class="flex-1 bg-white text-[#764bd6] border-2 border-[#764bd6] rounded-full py-2.5 font-bold transition gender-btn" disabled>Nữ</button>
+                    
+                    <input type="hidden" id="input-gender" required>
+                    <div id="overlay-gender" class="absolute inset-0 cursor-pointer rounded-full" onclick="requestEdit('gender', 'gender-btns')"></div>
+                </div>
+            </div>
+
+            <!-- 5. Xu hướng tính dục (Chỉ sửa 1 lần) -->
+            <div class="flex items-center gap-4">
+                <div class="w-[35%] md:w-[30%] bg-[#764bd6] text-white py-3.5 px-4 rounded-full text-center flex-shrink-0 card-shadow">
+                    <span class="font-label text-[12px] md:text-[15px]">Xu hướng tính dục</span>
+                </div>
+                <div class="flex-1 relative">
+                    <select id="input-orientation" required class="input-box cursor-pointer" disabled>
+                        <option value="" disabled selected>Lựa chọn</option>
+                        <option value="Heterosexual – Dị tính">Heterosexual – Dị tính</option>
+                        <option value="Homosexual – Đồng tính">Homosexual – Đồng tính</option>
+                        <option value="Gay – Đồng tính nam">Gay – Đồng tính nam</option>
+                        <option value="Lesbian – Đồng tính nữ">Lesbian – Đồng tính nữ</option>
+                        <option value="GiangHehesexual - Giang Hehe">GiangHehesexual - Giang Hehe</option>
+                        <option value="Bisexual – Song tính">Bisexual – Song tính</option>
+                        <option value="Pansexual – Toàn tính">Pansexual – Toàn tính</option>
+                        <option value="Omnisexual – Toàn giới tính">Omnisexual – Toàn giới tính</option>
+                        <option value="Polysexual – Đa tính">Polysexual – Đa tính</option>
+                        <option value="Asexual – Vô tính">Asexual – Vô tính</option>
+                        <option value="Graysexual – Thiểu tính dục">Graysexual – Thiểu tính dục</option>
+                        <option value="Demisexual – Bán tính">Demisexual – Bán tính</option>
+                        <option value="Aromantic – Vô lãng mạn">Aromantic – Vô lãng mạn</option>
+                        <option value="Grayromantic – Thiểu lãng mạn">Grayromantic – Thiểu lãng mạn</option>
+                        <option value="Demiromantic – Bán lãng mạn">Demiromantic – Bán lãng mạn</option>
+                        <option value="Biromantic – Song lãng mạn">Biromantic – Song lãng mạn</option>
+                        <option value="Panromantic – Toàn lãng mạn">Panromantic – Toàn lãng mạn</option>
+                        <option value="Polyromantic – Đa lãng mạn">Polyromantic – Đa lãng mạn</option>
+                        <option value="Androsexual – Bị hấp dẫn bởi nam tính">Androsexual – Bị hấp dẫn bởi nam tính</option>
+                        <option value="Gynesexual – Bị hấp dẫn bởi nữ tính">Gynesexual – Bị hấp dẫn bởi nữ tính</option>
+                        <option value="Skoliosexual – Bị hấp dẫn bởi người phi nhị nguyên giới">Skoliosexual – Bị hấp dẫn bởi người phi nhị nguyên giới</option>
+                        <option value="Androromantic – Hấp dẫn lãng mạn với người nam tính">Androromantic – Hấp dẫn lãng mạn với người nam tính</option>
+                        <option value="Gynoromantic – Hấp dẫn lãng mạn với người nữ tính">Gynoromantic – Hấp dẫn lãng mạn với người nữ tính</option>
+                        <option value="Reciprosexual – Chỉ cảm thấy hấp dẫn tình dục sau khi biết mình được thích">Reciprosexual – Tình cảm phụ thuộc vào đối phương</option>
+                        <option value="Akoisexual – Có hấp dẫn tình dục nhưng có thể mất đi khi được đáp lại">Akoisexual – Mất tình cảm khi được đáp lại</option>
+                        <option value="Lithromantic – Có hấp dẫn lãng mạn nhưng không nhất thiết muốn được đáp lại">Lithromantic – Yêu không cần đáp lại</option>
+                        <option value="Fraysexual – Có hấp dẫn tình dục khi chưa thân thiết, giảm khi gần gũi">Fraysexual – Hấp dẫn với người lạ</option>
+                        <option value="Cupiosexual – Không có hoặc ít hấp dẫn tình dục nhưng vẫn mong muốn">Cupiosexual – Muốn nhưng ít cảm giác</option>
+                        <option value="Aegosexual – Có hứng thú với tưởng tượng tình dục nhưng không muốn trực tiếp">Aegosexual – Thích tưởng tượng</option>
+                        <option value="Quoisexual – Khó xác định">Quoisexual – Khó xác định</option>
+                        <option value="Abrosexual – Thay đổi theo thời gian">Abrosexual – Thay đổi theo thời gian</option>
+                        <option value="Aceflux – Mức độ hấp dẫn tình dục thay đổi">Aceflux – Mức độ hấp dẫn thay đổi</option>
+                        <option value="Aroflux – Mức độ lãng mạn thay đổi">Aroflux – Mức độ lãng mạn thay đổi</option>
+                        <option value="Novosexual – Bản dạng thay đổi">Novosexual – Bản dạng thay đổi</option>
+                        <option value="Pomosexual – Không muốn dán nhãn">Pomosexual – Không muốn dán nhãn</option>
+                        <option value="Queer – Nằm ngoài chuẩn dị tính">Queer – Nằm ngoài chuẩn dị tính</option>
+                        <option value="Questioning – Đang khám phá">Questioning – Đang khám phá</option>
+                        <option value="Multisexual – Đa xu hướng hấp dẫn">Multisexual – Đa xu hướng</option>
+                        <option value="Allosexual – Có trải nghiệm hấp dẫn tình dục">Allosexual – Có trải nghiệm</option>
+                        <option value="Alloromantic – Có trải nghiệm hấp dẫn lãng mạn">Alloromantic – Trải nghiệm lãng mạn</option>
+                        <option value="Heteroflexible – Chủ yếu dị tính">Heteroflexible – Chủ yếu dị tính</option>
+                        <option value="Homoflexible – Chủ yếu đồng tính">Homoflexible – Chủ yếu đồng tính</option>
+                        <option value="Bicurious – Tò mò song tính">Bicurious – Tò mò song tính</option>
+                        <option value="Autosexual – Tự hấp dẫn bản thân">Autosexual – Tự hấp dẫn bản thân</option>
+                        <option value="Autoromantic – Tự lãng mạn với bản thân">Autoromantic – Tự lãng mạn với bản thân</option>
+                        <option value="Objectum sexual – Hấp dẫn với đồ vật">Objectum sexual – Hấp dẫn với đồ vật</option>
+                        <option value="Objectum romantic – Lãng mạn với đồ vật">Objectum romantic – Lãng mạn với đồ vật</option>
+                        <option value="Fictosexual – Hấp dẫn với nhân vật hư cấu">Fictosexual – Hấp dẫn với nhân vật hư cấu</option>
+                        <option value="Fictoromantic – Lãng mạn với nhân vật hư cấu">Fictoromantic – Lãng mạn nhân vật hư cấu</option>
+                        <option value="Sapiosexual – Bị hấp dẫn bởi trí tuệ">Sapiosexual – Bị hấp dẫn bởi trí tuệ</option>
+                        <option value="Spectrasexual – Hấp dẫn khó phân loại rõ">Spectrasexual – Khó phân loại</option>
+                        <option value="Helicoptersexual – Xu hướng tính dục trực thăng">Helicoptersexual – Trực thăng</option>
+                        <option value="Dreamsexual – Xu hướng tính dục với giấc mơ">Dreamsexual – Với giấc mơ</option>
+                        <option value="Chronosexual – Hấp dẫn liên quan đến thời gian">Chronosexual – Theo thời gian</option>
+                        <option value="Ceterosexual – Hấp dẫn với người phi nhị nguyên giới">Ceterosexual – Hấp dẫn phi nhị nguyên giới</option>
+                        <option value="Skirtsexual – Xu hướng tính dục với váy">Skirtsexual – Với váy</option>
+                        <option value="Morosexual – Bị hấp dẫn bởi sự ngốc nghếch">Morosexual – Bị hấp dẫn bởi sự ngốc nghếch</option>
+                        <option value="Plantsexual – Xu hướng tính dục với thực vật">Plantsexual – Với thực vật</option>
+                        <option value="Technosexual – Hấp dẫn với công nghệ">Technosexual – Với công nghệ</option>
+                        <option value="Monosexual – Chỉ bị hấp dẫn bởi một giới">Monosexual – Chỉ một giới</option>
+                        <option value="Apothisexual – Ác cảm với tình dục">Apothisexual – Ác cảm tình dục</option>
+                    </select>
+                    <div id="overlay-orientation" class="absolute inset-0 cursor-pointer rounded-full" onclick="requestEdit('orientation', 'input-orientation')"></div>
+                </div>
+            </div>
+
+            <!-- 6. Ngày tham gia (Chỉ sửa 1 lần) -->
+            <div class="flex items-center gap-4">
+                <div class="w-[35%] md:w-[30%] bg-[#764bd6] text-white py-3.5 px-4 rounded-full text-center flex-shrink-0 card-shadow">
+                    <span class="font-label text-[13px] md:text-[15px]">Ngày tham gia</span>
+                </div>
+                <div class="flex-1 relative">
+                    <input type="date" id="input-join-date" required class="input-box" disabled>
+                    <div id="overlay-join-date" class="absolute inset-0 cursor-pointer rounded-full" onclick="requestEdit('join-date', 'input-join-date')"></div>
+                </div>
+            </div>
+
+            <!-- 7. Email (Khóa hoàn toàn vĩnh viễn) -->
+            <div class="flex items-center gap-4">
+                <div class="w-[35%] md:w-[30%] bg-[#764bd6] text-white py-3.5 px-4 rounded-full text-center flex-shrink-0 card-shadow">
+                    <span class="font-label text-[14px] md:text-[15px]">Email</span>
+                </div>
+                <div class="flex-1">
+                    <input type="email" id="input-email" class="input-box bg-[#ebe4f5] text-[#9ca3af] border-transparent" disabled>
+                </div>
+            </div>
+
+            <!-- Thông báo Lỗi -->
+            <p id="error-msg" class="text-sm text-red-500 text-center h-4"></p>
+
+            <!-- Nút LƯU -->
+            <div class="pt-6 w-full flex justify-center pb-4">
+                <button type="submit" id="saveBtn" class="bg-white text-[#764bd6] text-[18px] md:text-xl py-3.5 px-20 rounded-full shadow-md hover:bg-[#faf8ff] hover:scale-105 transition flex items-center gap-3">
+                    <i class="fa-solid fa-bookmark"></i>
+                    Lưu
+                </button>
+            </div>
+        </form>
+
+    </main>
+
+    <!-- ================= MODAL CẢNH BÁO (ONE-TIME EDIT) ================= -->
+    <div id="warningModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center px-4 backdrop-blur-sm">
+        <div class="bg-white rounded-[28px] p-8 text-center max-w-sm w-full card-shadow shadow-2xl relative border-4 border-[#764bd6]">
+            <!-- Icon cảnh báo -->
+            <div class="w-16 h-16 bg-[#fff3cd] text-[#ffc107] rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            
+            <p class="text-[#764bd6] text-[17px] leading-relaxed mb-8">
+                Nội dung này chỉ được chỉnh sửa duy nhất một lần, chuột dân nhớ nhé!
+            </p>
+            
+            <div class="flex gap-4 justify-center">
+                <button onclick="acceptWarning()" class="bg-[#764bd6] hover:bg-[#5c37b0] text-white px-8 py-2.5 rounded-full text-[15px] transition shadow-md">Đã hiểu</button>
+                <button onclick="closeWarning()" class="bg-[#f3f4f6] hover:bg-[#e5e7eb] text-[#6c43c0] px-8 py-2.5 rounded-full text-[15px] transition">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= JAVASCRIPT LÔ GIC & SUPABASE ================= -->
+    <script>
+        const SUPABASE_URL = 'https://jmipwcfmnoygqtaadecv.supabase.co'; 
+        const SUPABASE_KEY = 'sb_publishable_ii-OIerOFW00_e7janGKAg_XKhMsDWn'; 
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentUser = null;
+        let userData = {};
+        
+        // Cờ kiểm soát trường nào đang được yêu cầu mở khóa
+        let currentEditingFieldType = null;
+        let currentEditingTargetId = null;
+
+        // Xử lý Menu
+        const menuBtn = document.getElementById('menu-btn');
+        const subMenu = document.getElementById('sub-menu');
+        const navAvatarImg = document.getElementById('nav-avatar-img');
+
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            subMenu.classList.toggle('hidden');
+            subMenu.classList.toggle('flex');
+            navAvatarImg.classList.toggle('opacity-0');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!subMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                subMenu.classList.add('hidden');
+                subMenu.classList.remove('flex');
+                navAvatarImg.classList.remove('opacity-0');
+            }
+        });
+
+        // Tải dữ liệu ban đầu
+        async function loadProfileForEdit() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                window.location.href = 'dangnhap.html';
+                return;
+            }
+            currentUser = session.user;
+            userData = currentUser.user_metadata || {};
+
+            // Render Avatar
+            const avatarUrl = userData.avatar_url || 'https://i.ibb.co/HfCMcYyB/hs1.png';
+            document.getElementById('edit-avatar').src = avatarUrl;
+            document.getElementById('nav-avatar-img').src = avatarUrl;
+
+            // Render dữ liệu vào ô input
+            document.getElementById('input-email').value = currentUser.email;
+            document.getElementById('input-display-name').value = userData.display_name || '';
+
+            // Render & Check khóa (Đã có dữ liệu thì khóa vĩnh viễn, ẩn overlay)
+            setupFieldLock('id', 'input-id', userData.id_chuot);
+            setupFieldLock('dob', 'input-dob', userData.dob);
+            setupFieldLock('orientation', 'input-orientation', userData.orientation);
+            setupFieldLock('join-date', 'input-join-date', userData.join_date);
+
+            // Riêng giới tính xử lý nút bấm
+            if (userData.gender) {
+                document.getElementById('input-gender').value = userData.gender;
+                if(userData.gender === 'Nam') document.getElementById('btn-nam').classList.add('active');
+                if(userData.gender === 'Nữ') document.getElementById('btn-nu').classList.add('active');
+                
+                // Khóa vĩnh viễn giới tính
+                document.getElementById('btn-nam').disabled = true;
+                document.getElementById('btn-nu').disabled = true;
+                document.getElementById('overlay-gender').classList.add('hidden');
+            }
+        }
+
+        // Hàm kiểm tra xem trường đó đã có dữ liệu chưa. Nếu có rồi thì khóa luôn
+        function setupFieldLock(fieldType, inputId, value) {
+            if (value && value.trim() !== '') {
+                document.getElementById(inputId).value = value;
+                document.getElementById(inputId).disabled = true; // Khóa input
+                document.getElementById(`overlay-${fieldType}`).classList.add('hidden'); // Ẩn overlay click
+            }
+        }
+
+        // Xử lý Modal Cảnh Báo
+        function requestEdit(fieldType, targetId) {
+            currentEditingFieldType = fieldType;
+            currentEditingTargetId = targetId;
+            document.getElementById('warningModal').classList.remove('hidden');
+        }
+
+        function closeWarning() {
+            document.getElementById('warningModal').classList.add('hidden');
+            currentEditingFieldType = null;
+            currentEditingTargetId = null;
+        }
+
+        function acceptWarning() {
+            document.getElementById('warningModal').classList.add('hidden');
+            
+            // Xóa overlay để user click thẳng vào input
+            document.getElementById(`overlay-${currentEditingFieldType}`).classList.add('hidden');
+            
+            if (currentEditingFieldType === 'gender') {
+                // Mở khóa nút giới tính
+                document.getElementById('btn-nam').disabled = false;
+                document.getElementById('btn-nu').disabled = false;
+            } else {
+                // Mở khóa thẻ input/select
+                const targetEl = document.getElementById(currentEditingTargetId);
+                targetEl.disabled = false;
+                targetEl.focus(); // Tự động trỏ chuột vào để gõ ngay
+            }
+            
+            currentEditingFieldType = null;
+            currentEditingTargetId = null;
+        }
+
+        // Bấm chọn Giới tính
+        document.getElementById('btn-nam').addEventListener('click', () => selectGender('Nam'));
+        document.getElementById('btn-nu').addEventListener('click', () => selectGender('Nữ'));
+
+        function selectGender(gen) {
+            document.getElementById('input-gender').value = gen;
+            if(gen === 'Nam') {
+                document.getElementById('btn-nam').classList.add('active');
+                document.getElementById('btn-nu').classList.remove('active');
+            } else {
+                document.getElementById('btn-nu').classList.add('active');
+                document.getElementById('btn-nam').classList.remove('active');
+            }
+        }
+
+        // Tải ảnh Avatar (upload lên bucket 'avatar')
+        async function handleAvatarChange(event) {
+            const file = event.target.files[0];
+            if (!file || !currentUser) return;
+
+            const uploadStatus = document.getElementById('upload-status');
+            uploadStatus.innerText = "Đang tải ảnh...";
+
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${currentUser.id}-${Math.random()}.${fileExt}`;
+
+            const { error: uploadError } = await supabaseClient.storage
+                .from('avatar')
+                .upload(fileName, file);
+
+            if (uploadError) {
+                alert("Lỗi up ảnh: " + uploadError.message);
+                uploadStatus.innerText = "";
+                return;
+            }
+
+            const { data: publicUrlData } = supabaseClient.storage
+                .from('avatar')
+                .getPublicUrl(fileName);
+            
+            const newUrl = publicUrlData.publicUrl;
+            
+            // Lưu URL vào metadata
+            await supabaseClient.auth.updateUser({ data: { avatar_url: newUrl } });
+            
+            // Hiện ảnh lập tức
+            document.getElementById('edit-avatar').src = newUrl;
+            document.getElementById('nav-avatar-img').src = newUrl;
+            uploadStatus.innerText = "Thành công!";
+            
+            setTimeout(() => { uploadStatus.innerText = ""; }, 2000);
+        }
+
+        // Submit LƯU DỮ LIỆU
+        document.getElementById('profileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('saveBtn');
+            const msg = document.getElementById('error-msg');
+            msg.innerText = "";
+
+            const displayName = document.getElementById('input-display-name').value.trim();
+            const idChuot = document.getElementById('input-id').value.trim();
+            const dob = document.getElementById('input-dob').value;
+            const gender = document.getElementById('input-gender').value;
+            const orientation = document.getElementById('input-orientation').value;
+            const joinDate = document.getElementById('input-join-date').value;
+
+            // Chặn lưu nếu có trường đang trống (chỉ báo lỗi nếu trường đó chưa bị khóa vĩnh viễn mà đang mở)
+            if(!gender && !document.getElementById('btn-nam').disabled) {
+                return msg.innerText = "Vui lòng chọn Giới tính!";
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...`;
+
+            // Cập nhật metadata
+            const { error } = await supabaseClient.auth.updateUser({
+                data: {
+                    display_name: displayName,
+                    id_chuot: idChuot,
+                    dob: dob,
+                    gender: gender,
+                    orientation: orientation,
+                    join_date: joinDate
+                }
+            });
+
+            if (error) {
+                msg.innerText = "Lỗi: " + error.message;
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-bookmark"></i> Lưu`;
+            } else {
+                // Lưu xong thì quay về trang hồ sơ chuột
+                window.location.href = "hosochuot.html";
+            }
+        });
+
+        // Chạy khởi tạo
+        loadProfileForEdit();
+    </script>
+</body>
+</html>
