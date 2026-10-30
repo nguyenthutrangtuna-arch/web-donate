@@ -87,7 +87,7 @@
     <header class="max-w-6xl w-full mx-auto relative z-50">
         <nav class="bg-white rounded-[28px] px-5 py-2.5 flex items-center justify-between card-shadow">
             <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
-                <img src="https://i.ibb.co/212LVzZq/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
+                <img src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
             </a>
             <div class="hidden md:flex items-center space-x-6 lg:space-x-12 text-base lg:text-lg text-[#6c43c0]">
                 <a href="index.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Đầu Hẻm</a>
@@ -97,7 +97,7 @@
             </div>
             <div class="flex items-center space-x-4 md:space-x-5">
                 <a href="hosochuot.html" class="w-11 h-11 rounded-full bg-[#734bd1] overflow-hidden flex items-center justify-center border-2 border-[#734bd1] opacity-90 shadow-sm">
-                    <img id="nav-avatar-img" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
+                    <img id="nav-avatar-img" src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
                 </a>
                 <a href="thongbao.html" class="text-[#734bd1] hover:scale-110 transition">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
@@ -126,7 +126,7 @@
         <!-- Khu vực Avatar có dấu + -->
         <div class="relative mb-10 group" title="Bấm vào dấu + để đổi ảnh">
             <div class="w-44 h-44 rounded-[36px] bg-white p-2.5 card-shadow border border-white flex items-center justify-center relative z-0">
-                <img id="edit-avatar" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="Avatar" class="w-full h-full object-cover rounded-[28px]" />
+                <img id="edit-avatar" src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/hs1.png" alt="Avatar" class="w-full h-full object-cover rounded-[28px]" />
             </div>
             
             <!-- Nút dấu + -->
@@ -360,7 +360,7 @@
             userData = currentUser.user_metadata || {};
 
             // Render Avatar
-            const avatarUrl = userData.avatar_url || 'https://i.ibb.co/HfCMcYyB/hs1.png';
+            const avatarUrl = userData.avatar_url || 'https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/hs1.png';
             document.getElementById('edit-avatar').src = avatarUrl;
             document.getElementById('nav-avatar-img').src = avatarUrl;
 

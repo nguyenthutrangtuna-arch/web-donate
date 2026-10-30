@@ -42,7 +42,7 @@
             
             <!-- Logo con chuột góc trái (Hình 4) -> Chuyển về trang chủ -->
             <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
-                <img src="https://i.ibb.co/212LVzZq/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
+                <img src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
             </a>
 
             <!-- Menu điều hướng ở giữa -->
@@ -57,7 +57,7 @@
             <div class="flex items-center space-x-4 md:space-x-5">
                 <!-- Icon Avatar -> chuyển miền đến hosochuot -->
                 <a href="hosochuot.html" class="w-11 h-11 rounded-full bg-[#734bd1] overflow-hidden flex items-center justify-center border-2 border-[#734bd1] hover:opacity-90 transition shadow-sm">
-                    <img id="avatar-img" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
+                    <img id="avatar-img" src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
                 </a>
 
                 <!-- Icon Chuông -> chuyển miền đến thongbao -->
@@ -141,7 +141,7 @@
             
             if (session && session.user) {
                 // Lấy link ảnh từ tài khoản, nếu không có thì dùng ảnh con chuột mặc định
-                const avatarUrl = session.user.user_metadata?.avatar_url || 'https://i.ibb.co/HfCMcYyB/hs1.png';
+                const avatarUrl = session.user.user_metadata?.avatar_url || 'https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/hs1.png';
                 
                 // Ở trang Đầu Hẻm, ID của ảnh avatar là 'avatar-img'
                 document.getElementById('avatar-img').src = avatarUrl;

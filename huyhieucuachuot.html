@@ -42,7 +42,7 @@
             
             <!-- Logo con chuột góc trái (Hình 4) -> Chuyển về trang chủ -->
             <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
-                <img src="https://i.ibb.co/212LVzZq/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
+                <img src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
             </a>
 
             <!-- Menu điều hướng ở giữa -->
@@ -90,7 +90,7 @@
         
         <!-- Hình con cua / đang xây dựng (Sử dụng đúng link bạn yêu cầu) -->
         <div class="mb-8 w-72 md:w-96 flex justify-center">
-            <img src="https://i.ibb.co/MyfwVF3b/warning.png" alt="Khu vực đang xây dựng" border="0" class="w-full h-auto object-contain drop-shadow-md" />
+            <img src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/warning.png" alt="Khu vực đang xây dựng" border="0" class="w-full h-auto object-contain drop-shadow-md" />
         </div>
 
         <!-- Tiêu đề "KHU VỰC ĐANG XÂY DỰNG!" -->
@@ -141,7 +141,7 @@
             
             if (session && session.user) {
                 // Lấy link ảnh từ tài khoản, nếu không có thì dùng ảnh con chuột mặc định
-                const avatarUrl = session.user.user_metadata?.avatar_url || 'https://i.ibb.co/HfCMcYyB/hs1.png';
+                const avatarUrl = session.user.user_metadata?.avatar_url || 'https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/hs1.png';
                 
                 // Ở trang Đầu Hẻm, ID của ảnh avatar là 'avatar-img'
                 document.getElementById('avatar-img').src = avatarUrl;

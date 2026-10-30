@@ -14,41 +14,47 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* Mặc định tất cả chữ là Comfortaa - in đậm */
+        /* Mặc định tất cả chữ là Comfortaa - In đậm */
         body {
             font-family: 'Comfortaa', cursive;
             font-weight: 700;
             background-color: #f4f1fa;
-            color: #6c43c0;
+            color: #764bd6;
             overflow-x: hidden;
         }
 
-        /* Font chữ tiêu đề: DejaVu Sans - in đậm */
-        .font-dejavu-bold {
-            font-family: 'DejaVu Sans', sans-serif;
-            font-weight: bold;
+        /* Font DejaVu Sans - In đậm, In nghiêng cho Tiêu đề chính và Tiêu đề mục */
+        .font-dejavu-title {
+            font-family: 'DejaVu Sans', sans-serif !important;
+            font-weight: bold !important;
+            font-style: italic !important;
         }
 
-        /* Đổ bóng nhẹ giống thiết kế */
+        /* Đổ bóng nhẹ cho khối */
         .card-shadow {
-            box-shadow: 0 4px 20px rgba(108, 67, 192, 0.08);
+            box-shadow: 0 4px 24px rgba(108, 67, 192, 0.08);
+        }
+
+        .pill-shadow {
+            box-shadow: 0 2px 10px rgba(108, 67, 192, 0.06);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-4 md:p-6 relative select-none">
+<body class="min-h-screen flex flex-col pt-4 md:pt-6 relative select-none">
+
     <!-- ================= HEADER / THANH ĐIỀU HƯỚNG ================= -->
     <header class="max-w-6xl w-full mx-auto relative z-50">
         <nav class="bg-white rounded-[28px] px-5 py-2.5 flex items-center justify-between card-shadow">
             
             <!-- Logo con chuột góc trái (Hình 4) -> Chuyển về trang chủ -->
             <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
-                <img src="https://i.ibb.co/212LVzZq/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
+                <img src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
             </a>
 
             <!-- Menu điều hướng ở giữa -->
             <div class="hidden md:flex items-center space-x-6 lg:space-x-12 text-base lg:text-lg text-[#6c43c0]">
                 <a href="index.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Đầu Hẻm</a>
-                <a href="chuhem.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Chủ Hẻm</a>
+                <a href="chuhem.html" class="bg-[#e9e2f8] px-6 py-2 rounded-full transition hover:bg-[#dcd0f5]">Chủ Hẻm</a>
                 <a href="donate.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Donate</a>
                 <a href="lichstream.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Lịch Stream</a>
             </div>
@@ -57,7 +63,7 @@
             <div class="flex items-center space-x-4 md:space-x-5">
                 <!-- Icon Avatar -> chuyển miền đến hosochuot -->
                 <a href="hosochuot.html" class="w-11 h-11 rounded-full bg-[#734bd1] overflow-hidden flex items-center justify-center border-2 border-[#734bd1] hover:opacity-90 transition shadow-sm">
-                    <img id="avatar-img" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
+                    <img id="avatar-img" src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
                 </a>
 
                 <!-- Icon Chuông -> chuyển miền đến thongbao -->
@@ -84,29 +90,149 @@
             <a href="lichstream.html" class="px-8 py-5 text-right text-lg hover:bg-white/10 transition">Lịch Stream</a>
         </div>
     </header>
-
-    <!-- ================= KHU VỰC THÔNG BÁO CHÍNH (ĐANG XÂY DỰNG) ================= -->
-    <main class="max-w-4xl w-full mx-auto relative flex-1 flex flex-col items-center justify-center text-center my-12 z-10 px-4">
+    <!-- ================= KHU VỰC NỘI DUNG CHÍNH ================= -->
+    <main class="max-w-[850px] w-full mx-auto relative flex-1 flex flex-col z-10 mb-16 overflow-hidden md:overflow-visible">
         
-        <!-- Hình con cua / đang xây dựng (Sử dụng đúng link bạn yêu cầu) -->
-        <div class="mb-8 w-72 md:w-96 flex justify-center">
-            <img src="https://i.ibb.co/MyfwVF3b/warning.png" alt="Khu vực đang xây dựng" border="0" class="w-full h-auto object-contain drop-shadow-md" />
+        <!-- 1. Tiêu đề, Chữ & Hình Cầu Vồng -->
+        <div class="relative w-full pt-8 md:pt-14 mb-8 flex flex-col">
+            
+            <!-- Chữ bên trái -->
+            <div class="w-full md:w-[60%] z-10 px-4 md:px-8">
+                <h1 class="font-dejavu-title text-[50px] md:text-[76px] text-[#764bd6] leading-[1.1] mb-8">
+                    Bô Lão<br>Cầu Vồng
+                </h1>
+                
+                <div class="text-[#764bd6] text-[15px] md:text-[16px] leading-relaxed text-justify space-y-6">
+                    <p>Bô lão Cầu Vồng là danh xưng dành cho những chuột dân có thâm niên lâu năm trong cộng đồng Hẻm Chuột, sở hữu quá trình gắn bó đáng kể cùng những đóng góp, thành tích hoặc dấu ấn riêng được Hẻm Chuột ghi nhớ. Đây là danh hiệu mang ý nghĩa tôn vinh những chuột dân kỳ cựu, những chuột đã chứng kiến nhiều giai đoạn phát triển của Hẻm Chuột và trở thành một phần trong ký ức chung của Hẻm.</p>
+                    <p>Bô lão Cầu Vồng là danh xưng dành cho những chuột dân có thâm niên lâu năm trong cộng đồng Hẻm Chuột, sở hữu quá trình gắn bó đáng kể cùng những đóng góp, thành tích hoặc dấu ấn riêng được Hẻm Chuột ghi nhớ. Đây là danh hiệu mang ý nghĩa tôn vinh những chuột dân kỳ cựu, những chuột đã chứng kiến nhiều giai đoạn phát triển của Hẻm Chuột và trở thành một phần trong ký ức chung của Hẻm.</p>
+                </div>
+            </div>
+
+            <!-- Hình Cầu Vồng (vt4-1) nằm bên phải -->
+            <!-- *Nếu bị ngược hình, bạn chỉ cần đổi src của vt4-1 và vt4-2 cho nhau* -->
+            <div class="absolute top-0 right-[-10%] md:right-[-15%] w-[60%] md:w-[50%] h-full flex justify-end z-0 opacity-20 md:opacity-100 pointer-events-none">
+                <img src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/vt4.1.png" alt="Cầu Vồng" class="w-full h-auto object-contain object-right-top" />
+            </div>
         </div>
 
-        <!-- Tiêu đề "KHU VỰC ĐANG XÂY DỰNG!" -->
-        <h1 class="font-dejavu-bold text-2xl md:text-3xl text-[#6c43c0] tracking-wider mb-4">
-            KHU VỰC ĐANG XÂY DỰNG!
-        </h1>
+        <!-- 2. Hình Chibi ngủ (vt4-2) -->
+        <div class="w-full flex justify-center mt-2 mb-6 relative z-10">
+            <img src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/vt4.2.png" alt="Chibi Ngủ" class="w-56 md:w-72 object-contain drop-shadow-md" />
+        </div>
 
-        <!-- Đoạn văn mô tả chi tiết -->
-        <p class="text-[#6c43c0] text-sm md:text-base leading-relaxed max-w-xl mx-auto">
-            Công trình đã được khởi công, nhưng đội ngũ thi công vừa phát hiện thiếu bánh quy và cà phê. Tiến độ hoàn thành phụ thuộc vào tinh thần làm việc của Muse. Các chú chuột vui lòng quay lại sau nhé!
-        </p>
+        <!-- 3. Pill Tiêu đề: ĐẶC ĐIỂM CỦA BÔ LÃO CẦU VỒNG -->
+        <div class="w-full flex flex-col items-center justify-center mb-14 px-4 z-10">
+            <div class="bg-white rounded-full py-2.5 px-10 md:px-20 card-shadow border border-[#e9e2f8] mb-6 text-center w-full max-w-[500px]">
+                <span class="text-[#764bd6] text-[13px] md:text-[15px] uppercase tracking-widest font-bold">ĐẶC ĐIỂM CỦA BÔ LÃO CẦU VỒNG</span>
+            </div>
+            <p class="text-[#764bd6] text-[15px] md:text-[17px] text-center max-w-lg leading-relaxed">
+                Một thành viên được xem xét với danh hiệu Bô lão Cầu Vồng thường hội tụ những đặc điểm sau:
+            </p>
+        </div>
+
+        <!-- 4. Danh sách Đặc điểm -->
+        <div class="w-full mx-auto flex flex-col gap-10 mb-10 z-10">
+            
+            <!-- Item 1: Thâm niên -->
+            <div class="w-full flex flex-col">
+                <h3 class="font-dejavu-title text-[19px] md:text-[22px] text-[#764bd6] uppercase mb-2 pl-4 md:pl-8">THÂM NIÊN LÂU NĂM:</h3>
+                <div class="w-full h-[2.5px] bg-[#764bd6] mb-4"></div>
+                <div class="w-full flex justify-end">
+                    <p class="w-full md:w-[65%] text-[#764bd6] text-[15px] md:text-[17px] leading-relaxed px-4 md:px-8 text-left md:text-justify">
+                        Đã đồng hành cùng Hẻm Chuột qua một khoảng thời gian đáng kể, chứng kiến những thay đổi và các giai đoạn phát triển của Hẻm.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item 2: Công trạng -->
+            <div class="w-full flex flex-col">
+                <h3 class="font-dejavu-title text-[19px] md:text-[22px] text-[#764bd6] uppercase mb-2 pl-4 md:pl-8 leading-tight">CÓ CÔNG TRẠNG<br>HOẶC DẤU ẤN RIÊNG:</h3>
+                <div class="w-full h-[2.5px] bg-[#764bd6] mb-4"></div>
+                <div class="w-full flex justify-end">
+                    <p class="w-full md:w-[65%] text-[#764bd6] text-[15px] md:text-[17px] leading-relaxed px-4 md:px-8 text-left md:text-justify">
+                        Đã thực hiện những đóng góp, tạo nên sự kiện hoặc để lại những câu chuyện khiến chuột dân ghi nhớ.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item 3: Uy tín -->
+            <div class="w-full flex flex-col">
+                <h3 class="font-dejavu-title text-[19px] md:text-[22px] text-[#764bd6] uppercase mb-2 pl-4 md:pl-8 leading-tight">CÓ UY TÍN TRONG<br>CỘNG ĐỒNG:</h3>
+                <div class="w-full h-[2.5px] bg-[#764bd6] mb-4"></div>
+                <div class="w-full flex justify-end">
+                    <p class="w-full md:w-[65%] text-[#764bd6] text-[15px] md:text-[17px] leading-relaxed px-4 md:px-8 text-left md:text-justify">
+                        Được các chuột dân khác nhận biết, nhắc đến hoặc dành sự kính trọng nhờ quá trình hoạt động và những dấu ấn đã tạo dựng.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item 4: Giá trị lịch sử -->
+            <div class="w-full flex flex-col">
+                <h3 class="font-dejavu-title text-[19px] md:text-[22px] text-[#764bd6] uppercase mb-2 pl-4 md:pl-8 leading-tight">MANG GIÁ TRỊ<br>LỊCH SỬ:</h3>
+                <div class="w-full h-[2.5px] bg-[#764bd6] mb-4"></div>
+                <div class="w-full flex justify-end">
+                    <p class="w-full md:w-[65%] text-[#764bd6] text-[15px] md:text-[17px] leading-relaxed px-4 md:px-8 text-left md:text-justify">
+                        Đã thực hiện những đóng góp, tạo nên sự kiện hoặc để lại những câu chuyện khiến chuột dân ghi nhớ.
+                    </p>
+                </div>
+            </div>
+
+        </div>
 
     </main>
 
-    <!-- Khoảng trống footer để cân bằng bố cục -->
+    <!-- Khoảng trống footer -->
     <footer></footer>
+
+        <!-- Thanh Footer: Liên hệ, Nền tảng xã hội, Model góc dưới phải (Hình 7) -->
+        <footer class="bg-white rounded-[26px] px-8 py-4 card-shadow flex flex-col md:flex-row items-center justify-between gap-6">
+            
+            <!-- Cột 1: Thông tin liên hệ -->
+            <div class="flex-1 text-center md:text-left">
+                <h3 class="text-lg text-[#6c43c0] mb-1">Thông tin liên hệ:</h3>
+                <p class="text-sm text-[#6c43c0] underline decoration-1 underline-offset-2">Mèo Ớt Chuông</p>
+                <p class="text-sm text-[#6c43c0] mt-0.5">cuacachoigame2377@gmail.com</p>
+            </div>
+
+            <!-- Vạch ngăn cách 1 -->
+            <div class="hidden md:block w-[2.5px] h-14 bg-[#734bd1] rounded-full"></div>
+
+            <!-- Cột 2: Nền tảng xã hội -->
+            <div class="flex-1 flex flex-col items-center">
+                <div class="text-left">
+                    <h3 class="text-lg text-[#6c43c0] mb-2.5">Nền tảng xã hội:</h3>
+                    <div class="flex items-center space-x-4">
+                        <!-- Discord -->
+                        <a href="https://discord.gg/dWHXgh8US" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                            <i class="fa-brands fa-discord"></i>
+                        </a>
+                        <!-- TikTok -->
+                        <a href="https://www.tiktok.com/@gianghehe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                            <i class="fa-brands fa-tiktok"></i>
+                        </a>
+                        <!-- Facebook -->
+                        <a href="https://www.facebook.com/GiangHeHe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <!-- YouTube -->
+                        <a href="https://www.youtube.com/@GiangHehe23" target="_blank" class="w-10 h-10 rounded-full bg-[#734bd1] text-white flex items-center justify-center text-lg hover:scale-110 transition">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vạch ngăn cách 2 -->
+            <div class="hidden md:block w-[2.5px] h-14 bg-[#734bd1] rounded-full"></div>
+
+            <!-- Cột 3: Hình Model nhỏ góc dưới phải (Hình 7) -->
+            <div class="flex-1 flex justify-center md:justify-end pr-2">
+                <img src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/pad2.png" alt="pad2" border="0" class="w-20 h-20 object-contain hover:scale-110 transition" />
+            </div>
+
+        </footer>
+
+    </section>
 
     <!-- ================= JAVASCRIPT XỬ LÝ THANH MENU PHỤ ================= -->
     <script>
@@ -141,7 +267,7 @@
             
             if (session && session.user) {
                 // Lấy link ảnh từ tài khoản, nếu không có thì dùng ảnh con chuột mặc định
-                const avatarUrl = session.user.user_metadata?.avatar_url || 'https://i.ibb.co/HfCMcYyB/hs1.png';
+                const avatarUrl = session.user.user_metadata?.avatar_url || 'https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/hs1.png';
                 
                 // Ở trang Đầu Hẻm, ID của ảnh avatar là 'avatar-img'
                 document.getElementById('avatar-img').src = avatarUrl;
