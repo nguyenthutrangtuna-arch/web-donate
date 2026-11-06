@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đầu Hẻm - Giang Hehe</title>
+    <title>Vòng Quay Tiểu Quý Tộc - Giang Hehe</title>
     <!-- Tích hợp Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tích hợp Font Awesome cho các icon -->
+    <!-- Tích hợp Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Import Font Comfortaa (In đậm 700) và DejaVu Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
@@ -23,60 +23,83 @@
             overflow-x: hidden;
         }
 
-        /* Font chữ tiêu đề: DejaVu Sans - in đậm */
-        .font-dejavu-bold {
-            font-family: 'DejaVu Sans', sans-serif;
-            font-weight: bold;
+        /* Font chữ tiêu đề: DejaVu Sans - in đậm, in nghiêng */
+        .font-dejavu-title {
+            font-family: 'DejaVu Sans', sans-serif !important;
+            font-weight: bold !important;
+            font-style: italic !important;
         }
 
-        /* Đổ bóng nhẹ giống thiết kế */
         .card-shadow {
             box-shadow: 0 4px 20px rgba(108, 67, 192, 0.08);
         }
+
+        .input-box {
+            background-color: white;
+            color: #764bd6;
+            border: 2px solid #764bd6;
+            border-radius: 9999px;
+            padding: 12px 24px;
+            width: 100%;
+            outline: none;
+            transition: all 0.2s;
+            font-family: 'Comfortaa', cursive;
+        }
+        
+        .input-box:focus {
+            box-shadow: 0 0 0 3px rgba(118, 75, 214, 0.2);
+        }
+
+        textarea.input-box {
+            border-radius: 24px;
+            resize: none;
+            height: 120px;
+        }
+
+        /* Danh sách phần thưởng */
+        .prize-item {
+            background-color: white;
+            border: 2px solid #764bd6;
+            color: #764bd6;
+            border-radius: 9999px;
+            padding: 10px 24px;
+            margin-bottom: 12px;
+        }
+
+        /* Tùy chỉnh radio button */
+        input[type="radio"] {
+            accent-color: #764bd6;
+            transform: scale(1.5);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-4 md:p-6 relative select-none">
-    <!-- ================= HEADER / THANH ĐIỀU HƯỚNG ================= -->
-    <header class="max-w-6xl w-full mx-auto relative z-50">
-        <nav class="bg-white rounded-[28px] px-5 py-2.5 flex items-center justify-between card-shadow">
-            
-            <!-- Logo con chuột góc trái (Hình 4) -> Chuyển về trang chủ -->
-            <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
-                <img src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
-            </a>
+<body class="min-h-screen flex flex-col justify-between pt-4 md:pt-6 relative select-none">
 
-            <!-- Menu điều hướng ở giữa -->
+    <!-- ================= HEADER ================= -->
+    <header class="max-w-6xl w-full mx-auto relative z-50 mb-8 px-4 md:px-6">
+        <nav class="bg-white rounded-[28px] px-5 py-2.5 flex items-center justify-between card-shadow">
+            <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
+                <img src="https://i.ibb.co/212LVzZq/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
+            </a>
             <div class="hidden md:flex items-center space-x-6 lg:space-x-12 text-base lg:text-lg text-[#6c43c0]">
                 <a href="index.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Đầu Hẻm</a>
                 <a href="chuhem.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Chủ Hẻm</a>
-                <a href="donate.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Donate</a>
+                <a href="donate.html" class="bg-[#e9e2f8] px-6 py-2 rounded-full transition hover:bg-[#dcd0f5]">Donate</a>
                 <a href="lichstream.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Lịch Stream</a>
             </div>
-
-            <!-- Cụm Icon góc phải: Avatar, Chuông, Ba gạch -->
             <div class="flex items-center space-x-4 md:space-x-5">
-                <!-- Icon Avatar -> chuyển miền đến hosochuot -->
                 <a href="hosochuot.html" class="w-11 h-11 rounded-full bg-[#734bd1] overflow-hidden flex items-center justify-center border-2 border-[#734bd1] hover:opacity-90 transition shadow-sm">
-                    <img id="avatar-img" src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
+                    <img id="nav-avatar-img" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
                 </a>
-
-                <!-- Icon Chuông -> chuyển miền đến thongbao -->
                 <a href="thongbao.html" class="text-[#734bd1] hover:scale-110 transition">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                    </svg>
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
                 </a>
-
-                <!-- Icon Ba gạch -> Hiện thanh phụ giống Hình 2 -->
                 <button id="menu-btn" class="text-[#734bd1] hover:scale-110 transition focus:outline-none">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 6h14M3 12h18M7 18h14"></path>
-                    </svg>
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 6h14M3 12h18M7 18h14"></path></svg>
                 </button>
             </div>
         </nav>
-
-        <!-- Thanh phụ (Dropdown Menu - Hình 2) -->
+        <!-- Dropdown Menu -->
         <div id="sub-menu" class="hidden absolute right-0 top-[72px] w-72 bg-[#764bd6] text-white rounded-b-[24px] rounded-tl-[24px] shadow-2xl overflow-hidden z-50 flex-col">
             <a href="index.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Đầu Hẻm</a>
             <a href="chuhem.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Chủ Hẻm</a>
@@ -85,72 +108,385 @@
         </div>
     </header>
 
-    <!-- ================= KHU VỰC THÔNG BÁO CHÍNH (ĐANG XÂY DỰNG) ================= -->
-    <main class="max-w-4xl w-full mx-auto relative flex-1 flex flex-col items-center justify-center text-center my-12 z-10 px-4">
+    <!-- ================= KHU VỰC NỘI DUNG CHÍNH ================= -->
+    <main class="max-w-4xl w-full mx-auto relative flex-1 flex flex-col px-4 md:px-0 z-10 mb-16 items-center">
         
-        <!-- Hình con cua / đang xây dựng (Sử dụng đúng link bạn yêu cầu) -->
-        <div class="mb-8 w-72 md:w-96 flex justify-center">
-            <img src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/warning.png" alt="Khu vực đang xây dựng" border="0" class="w-full h-auto object-contain drop-shadow-md" />
+        <!-- Tiêu đề -->
+        <div class="relative w-full text-center mt-6 md:mt-12 mb-16">
+            <div class="absolute top-0 left-[10%] text-[#764bd6]/60 text-2xl font-black">+</div>
+            <div class="absolute top-[60px] left-[5%] text-[#764bd6] text-4xl font-black">+</div>
+            <div class="absolute top-[40px] right-[15%] text-[#764bd6]/60 text-2xl font-black">+</div>
+            <div class="absolute top-[100px] right-[5%] text-[#764bd6]/40 text-3xl font-black">+</div>
+
+            <h1 class="font-dejavu-title text-[40px] md:text-[64px] text-[#764bd6] leading-[1.2] tracking-wide relative z-10">
+                Vòng Quay<br>Tiểu Quý Tộc
+            </h1>
         </div>
 
-        <!-- Tiêu đề "KHU VỰC ĐANG XÂY DỰNG!" -->
-        <h1 class="font-dejavu-bold text-2xl md:text-3xl text-[#6c43c0] tracking-wider mb-4">
-            KHU VỰC ĐANG XÂY DỰNG!
-        </h1>
+        <!-- FORM NHẬP THÔNG TIN ĐỂ QUAY -->
+        <div class="w-full max-w-[600px] flex flex-col gap-6 mb-12">
+            
+            <!-- Tên hiển thị -->
+            <div>
+                <div class="bg-[#9f85de] text-white py-2 px-6 rounded-full inline-block mb-3 card-shadow font-dejavu-bold text-sm">
+                    Tên hiển thị
+                </div>
+                <input type="text" id="user-display-name" class="input-box text-[#6c43c0]" value="Đang tải..." disabled>
+            </div>
 
-        <!-- Đoạn văn mô tả chi tiết -->
-        <p class="text-[#6c43c0] text-sm md:text-base leading-relaxed max-w-xl mx-auto">
-            Công trình đã được khởi công, nhưng đội ngũ thi công vừa phát hiện thiếu bánh quy và cà phê. Tiến độ hoàn thành phụ thuộc vào tinh thần làm việc của Muse. Các chú chuột vui lòng quay lại sau nhé!
-        </p>
+            <!-- Số tiền -->
+            <div>
+                <div class="bg-[#9f85de] text-white py-2 px-6 rounded-full inline-block mb-3 card-shadow font-dejavu-bold text-sm">
+                    Số tiền
+                </div>
+                <input type="text" value="36.000" class="input-box text-[#6c43c0]" disabled>
+            </div>
 
+            <!-- Lời nhắn -->
+            <div>
+                <div class="bg-[#9f85de] text-white py-2 px-6 rounded-full inline-block mb-3 card-shadow font-dejavu-bold text-sm">
+                    Lời nhắn
+                </div>
+                <textarea id="user-message" class="input-box text-[#6c43c0]" maxlength="255" placeholder="Nhập lời nhắn..."></textarea>
+            </div>
+
+            <!-- Nút Thanh Toán Chuyển Step -->
+            <button onclick="openPaymentMethodModal()" class="w-full bg-[#764bd6] hover:bg-[#5b3aa8] text-white text-xl py-4 rounded-full card-shadow transition-transform hover:scale-[1.02]">
+                THANH TOÁN ĐỂ QUAY
+            </button>
+        </div>
+
+        <!-- Danh sách phần thưởng (Text nhạt) -->
+        <div class="w-full max-w-[600px]">
+            <p class="text-center text-[#c2b9f8] mb-6 text-lg">Vòng quay thử thách, ra gì thực hiện đó</p>
+            <div id="prize-list" class="flex flex-col opacity-70">
+                <div class="prize-item">Ban 5 con chuột ngẫu nhiên trong 5p</div>
+                <div class="prize-item">Ban 1 khiên ngẫu nhiên trong 5p</div>
+                <div class="prize-item">Ban 1 người được chỉ định</div>
+                <div class="prize-item">Ban 3 con chuột có phô mát trong 5 phút</div>
+                <div class="prize-item">Hát karaoke trong 2 phút</div>
+                <div class="prize-item">Cắn Giang Giang ngay lập tức</div>
+                <div class="prize-item">Cắn Trang Trang ngay lập tức</div>
+                <div class="prize-item">Giang Giang là mặt trời nhỏ nè</div>
+                <div class="prize-item">Chúc Chuột yêu đi làm về</div>
+                <div class="prize-item">Chúc Chuột may mắn lần sau!</div>
+                <div class="prize-item">Quăng game ngay lập tức</div>
+                <div class="prize-item">Live thêm 10 phút</div>
+                <div class="prize-item">Ăn một viewer bất kỳ</div>
+            </div>
+        </div>
+
+        <!-- ================= BẢNG LỊCH SỬ GIAO DỊCH VÒNG QUAY ================= -->
+        <div class="w-full max-w-[800px] mt-20 mb-10">
+            <h2 class="font-dejavu-title text-2xl text-[#764bd6] text-center mb-6">LỊCH SỬ VÒNG QUAY</h2>
+            <div class="bg-white rounded-[24px] p-6 card-shadow border border-[#e9e2f8] min-h-[200px] max-h-[500px] overflow-y-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b-2 border-[#e9e2f8] text-[#9f85de] text-sm">
+                            <th class="py-3 px-2 font-bold w-[25%]">Người Quay</th>
+                            <th class="py-3 px-2 font-bold w-[45%]">Lời nhắn</th>
+                            <th class="py-3 px-2 font-bold w-[30%]">Phần Thưởng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body" class="text-[#764bd6] text-[15px]">
+                        <!-- Dữ liệu JS sẽ đổ vào đây -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </main>
 
-    <!-- Khoảng trống footer để cân bằng bố cục -->
+    <!-- Khoảng trống footer -->
     <footer></footer>
 
-    <!-- ================= JAVASCRIPT XỬ LÝ THANH MENU PHỤ ================= -->
-    <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const subMenu = document.getElementById('sub-menu');
-        const avatarImg = document.getElementById('avatar-img');
 
-        menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            subMenu.classList.toggle('hidden');
-            subMenu.classList.toggle('flex');
-            avatarImg.classList.toggle('opacity-0');
-        });
-
-        // Đóng thanh phụ khi bấm ra ngoài
-        document.addEventListener('click', (e) => {
-            if (!subMenu.contains(e.target) && !menuBtn.contains(e.target)) {
-                subMenu.classList.add('hidden');
-                subMenu.classList.remove('flex');
-                avatarImg.classList.remove('opacity-0');
-            }
-        });
-
-        // 3. Cấu hình Supabase
-        const SUPABASE_URL = 'https://jmipwcfmnoygqtaadecv.supabase.co'; 
-        const SUPABASE_KEY = 'sb_publishable_ii-OIerOFW00_e7janGKAg_XKhMsDWn'; 
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // Hàm kiểm tra đăng nhập và cập nhật riêng Avatar cho thanh điều hướng
-        async function checkSessionAndUpdateNavAvatar() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
+    <!-- ================= 1. MODAL CHỌN PHƯƠNG THỨC THANH TOÁN ================= -->
+    <div id="methodModal" class="hidden fixed inset-0 bg-black/50 z-[100] flex items-center justify-center px-4 backdrop-blur-sm">
+        <div class="bg-white rounded-[24px] w-full max-w-[500px] card-shadow border-t-8 border-[#764bd6] overflow-hidden">
+            <div class="px-6 py-5 border-b-2 border-[#e9e2f8]">
+                <h3 class="font-dejavu-title text-[#764bd6] text-xl uppercase">CHỌN PHƯƠNG THỨC THANH TOÁN</h3>
+            </div>
             
-            if (session && session.user) {
-                // Lấy link ảnh từ tài khoản, nếu không có thì dùng ảnh con chuột mặc định
-                const avatarUrl = session.user.user_metadata?.avatar_url || 'https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/hs1.png';
-                
-                // Ở trang Đầu Hẻm, ID của ảnh avatar là 'avatar-img'
-                document.getElementById('avatar-img').src = avatarUrl;
-            }
-        }
+            <div class="p-6 space-y-5">
+                <!-- Option: Ngân hàng -->
+                <label class="flex items-center justify-between bg-[#e9e2f8] p-5 rounded-[20px] cursor-pointer hover:bg-[#dcd0f5] transition border border-transparent">
+                    <div class="flex items-center gap-5">
+                        <i class="fa-solid fa-qrcode text-4xl text-black"></i>
+                        <div class="flex flex-col">
+                            <span class="text-black text-lg">CHUYỂN KHOẢN NGÂN HÀNG</span>
+                            <span class="text-black/70 text-sm">APIPAY - VNĐ</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-black">36.000 VNĐ</span>
+                        <input type="radio" name="payment_method" value="bank" checked>
+                    </div>
+                </label>
 
-        // Chạy hàm ngay khi load trang
-        checkSessionAndUpdateNavAvatar();
-        // ---------------------------------------
-    </script>
-</body>
-</html>
+                <!-- Option: Xu -->
+                <label class="flex items-center justify-between bg-[#e9e2f8] p-5 rounded-[20px] cursor-pointer hover:bg-[#dcd0f5] transition border border-transparent">
+                    <div class="flex items-center gap-5">
+                        <div class="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center text-xl font-black">$</div>
+                        <div class="flex flex-col">
+                            <span class="text-black text-lg">XU</span>
+                            <span class="text-black/70 text-sm" id="user-coins-display">0 XU</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-black">36 XU</span>
+                        <input type="radio" name="payment_method" value="coin">
+                    </div>
+                </label>
+            </div>
+
+            <!-- Nút Hành Động -->
+            <div class="px-6 py-5 border-t-2 border-[#e9e2f8] flex justify-end gap-4">
+                <button onclick="closeModals()" class="bg-[#e9e2f8] text-[#764bd6] px-8 py-3 rounded-lg hover:bg-[#dcd0f5] transition font-bold">HUỶ</button>
+                <button onclick="processMethodSelection()" class="bg-[#764bd6] text-white px-8 py-3 rounded-lg hover:bg-[#5b3aa8] transition font-bold">THANH TOÁN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 2. MODAL QUÉT MÃ QR ================= -->
+    <div id="qrModal" class="hidden fixed inset-0 bg-black/60 z-[110] flex items-center justify-center px-4 backdrop-blur-sm">
+        <div class="bg-white rounded-[24px] w-full max-w-[450px] card-shadow border-t-8 border-[#764bd6] overflow-hidden flex flex-col items-center pb-6">
+            <div class="w-full px-6 py-5 border-b-2 border-[#e9e2f8] mb-6">
+                <h3 class="font-dejavu-title text-[#764bd6] text-xl uppercase">CHỌN PHƯƠNG THỨC THANH TOÁN</h3>
+            </div>
+            
+            <!-- Mã QR Động (VietQR) -->
+            <img id="dynamic-qr" src="" alt="QR" class="w-[220px] h-[220px] object-contain border p-2 rounded-lg mb-6">
+
+            <!-- Thông tin Bank -->
+            <div class="w-full px-8 text-black text-[15px] space-y-3 mb-8">
+                <p>NGÂN HÀNG: <span class="font-bold">VietinBank</span></p>
+                <p>CHỦ TÀI KHOẢN: <span class="font-bold">NGUYEN THU TRANG</span></p>
+                <p>SỐ TÀI KHOẢN: <span class="font-bold">108880114345</span></p>
+                
+                <div class="flex items-center gap-2">
+                    <p>NỘI DUNG THANH TOÁN: <span id="payment-code" class="font-bold text-[#764bd6]"></span></p>
+                    <button onclick="copyPaymentCode()" class="text-[#764bd6] hover:scale-110 transition"><i class="fa-regular fa-copy"></i></button>
+                </div>
+            </div>
+
+            <p id="bank-error-msg" class="text-red-500 mb-2 h-5 font-bold"></p>
+
+            <!-- Nút Xác nhận -->
+            <div class="w-full px-6 border-t-2 border-[#e9e2f8] pt-5 flex justify-end gap-4">
+                <button onclick="closeModals()" class="bg-[#e9e2f8] text-[#764bd6] px-6 py-2.5 rounded-lg hover:bg-[#dcd0f5] transition font-bold">HUỶ</button>
+                <button id="btn-check-bank" onclick="checkRealPayment()" class="bg-[#764bd6] text-white px-6 py-2.5 rounded-lg hover:bg-[#5b3aa8] transition font-bold uppercase">Tôi đã thanh toán</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= JAVASCRIPT LÔ GIC HỆ THỐNG ================= -->
+    <script>
+    const SUPABASE_URL = 'https://jmipwcfmnoygqtaadecv.supabase.co'; 
+    const SUPABASE_KEY = 'sb_publishable_ii-OIerOFW00_e7janGKAg_XKhMsDWn';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentUser = null;
+    let userName = "Chuột Ẩn Danh";
+    let userCoins = 0;
+    let generatedCode = ""; 
+    let checkInterval; // Biến dùng để chạy bộ đếm giờ tự động kiểm tra
+
+    const ALL_PRIZES = [
+        "Cắn Trang Trang ngay lập tức", "Ban 3 con chuột có phô mát trong 5 phút", "Chúc Chuột may mắn lần sau!",
+        "Hát karaoke trong 2 phút", "Ban 5 con chuột ngẫu nhiên trong 5p", "Giang Giang là mặt trời nhỏ nè",
+        "Quăng game ngay lập tức", "Cắn Giang Giang ngay lập tức", "Ban 1 khiên ngẫu nhiên trong 5p",
+        "Ăn một viewer bất kỳ", "Chúc Chuột yêu đi làm về", "Ban 1 người được chỉ định",
+        "Live thêm 10 phút"
+    ];
+
+    // 3. HÀM GỬI LỜI NHẮN LÊN SUPABASE
+    async function luuLoiNhan(email, ten, soTien, loiNhan) {
+        // Gọi bảng 'donations' và chèn (insert) dữ liệu vào các cột tương ứng
+        const { data, error } = await supabaseClient
+            .from('donations')
+            .insert([
+                { 
+                    user_email: email, 
+                    donor_name: ten, 
+                    amount: soTien, 
+                    message: loiNhan 
+                }
+            ]);
+
+        // Bắt lỗi nếu có
+        if (error) {
+            console.error("Lỗi khi lưu dữ liệu:", error.message);
+            alert("Có lỗi xảy ra khi gửi lời nhắn!");
+        } else {
+            console.log("Đã gửi lời nhắn lên Supabase thành công!");
+        }
+    }
+    
+    // Khởi tạo dữ liệu User
+    async function initUserData() {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+            currentUser = session.user;
+            const metadata = currentUser.user_metadata || {};
+            
+            userName = metadata.display_name || "Chuột Ẩn Danh";
+            document.getElementById('user-display-name').value = userName;
+            if(document.getElementById('nav-avatar-img')) {
+                document.getElementById('nav-avatar-img').src = metadata.avatar_url || 'https://i.ibb.co/HfCMcYyB/hs1.png';
+            }
+
+            userCoins = metadata.coins || 0; 
+            document.getElementById('user-coins-display').innerText = `${userCoins} XU`;
+        }
+        fetchSpinHistory();
+    }
+
+    function openPaymentMethodModal() {
+        document.getElementById('methodModal').classList.remove('hidden');
+    }
+
+    // Đã sửa: Dừng tự động quét nếu người dùng bấm Hủy
+    function closeModals() {
+        if (checkInterval) clearInterval(checkInterval);
+        document.getElementById('methodModal').classList.add('hidden');
+        document.getElementById('qrModal').classList.add('hidden');
+    }
+
+    // Xử lý tạo đơn
+    async function processMethodSelection() {
+        const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+        
+        if (selectedMethod === 'coin') {
+            if (userCoins >= 36) {
+                const newCoins = userCoins - 36;
+                supabaseClient.auth.updateUser({ data: { coins: newCoins } });
+                document.getElementById('user-coins-display').innerText = `${newCoins} XU`;
+                closeModals();
+                triggerSpin(); 
+            } else {
+                alert("Thanh toán chưa thành công: Bạn không đủ Xu!");
+            }
+        } 
+        else if (selectedMethod === 'bank') {
+            document.getElementById('methodModal').classList.add('hidden');
+            document.getElementById('qrModal').classList.remove('hidden');
+            
+            let randomNum = Math.floor(1000 + Math.random() * 9000);
+            generatedCode = `SEVQR VQ1 ${randomNum}`;
+            document.getElementById('payment-code').innerText = generatedCode;
+            
+            const bankId = "VietinBank"; 
+            const accNo = "108880114345";
+            const template = "compact2";
+            const amount = "36000";
+            const addInfoEncoded = encodeURIComponent(generatedCode);
+            const qrUrl = `https://img.vietqr.io/image/${bankId}-${accNo}-${template}.png?amount=${amount}&addInfo=${addInfoEncoded}&accountName=NGUYEN%20THU%20TRANG`;
+            
+            document.getElementById('dynamic-qr').src = qrUrl;
+
+            const { data, error } = await supabaseClient
+                .from('pending_payments')
+                .insert([{ 
+                    order_code: generatedCode.replace('SEVQR ', '').trim(), 
+                    status: 'pending',
+                    amount: 36000 
+                }]);
+
+            if (error) {
+                alert("Lỗi tạo đơn: " + error.message);
+                closeModals();
+                return; 
+            }
+
+            // YÊU CẦU 2: Bật chế độ tự động kiểm tra mỗi 3 giây
+            const btn = document.getElementById('btn-check-bank');
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang chờ tiền vào...`;
+            btn.disabled = true; // Khóa nút để tránh bấm thủ công
+
+            checkInterval = setInterval(autoCheckPayment, 3000);
+        }
+    }
+
+    function copyPaymentCode() {
+        navigator.clipboard.writeText(generatedCode);
+        alert("Đã sao chép nội dung: " + generatedCode);
+    }
+
+    // Hàm tự động quét Supabase (Chạy ngầm)
+    async function autoCheckPayment() {
+        const { data, error } = await supabaseClient
+            .from('pending_payments')
+            .select('status')
+            .eq('order_code', generatedCode.replace('SEVQR ', '').trim())
+            .order('created_at', { ascending: false })
+            .limit(1);
+
+        if (data && data.length > 0 && data[0].status === 'success') {
+            clearInterval(checkInterval); // Tiền vào -> Tắt quét
+            closeModals(); // Đóng mã QR
+            triggerSpin(); // Kích hoạt quay
+        }
+    }
+
+    // Nút thủ công (Giữ lại làm phương án dự phòng)
+    async function checkRealPayment() {
+        autoCheckPayment(); 
+    }
+
+    // Thuật toán quay & YÊU CẦU 1 + 3: Giấu kết quả và Reload
+    async function triggerSpin() {
+        const userMsg = document.getElementById('user-message').value.trim();
+        const randomIndex = Math.floor(Math.random() * ALL_PRIZES.length);
+        const finalPrize = ALL_PRIZES[randomIndex];
+        
+        const { data, error } = await supabaseClient
+            .from('spin_history')
+            .insert([{ 
+                user_name: userName, 
+                message: userMsg, 
+                spin_type: 'VQ1', 
+                prize: finalPrize 
+            }]);
+
+        if (error) {
+            console.error("Lỗi:", error);
+            alert("Có lỗi lưu dữ liệu, vui lòng báo Admin!"); 
+        } else {
+            // Bỏ hiển thị giải thưởng, chỉ báo thành công
+            alert("🎉 Thanh toán thành công! Lệnh quay đã được gửi lên màn hình Live.");
+            
+            // Tải lại trang ngay lập tức
+            window.location.reload();
+        }
+    }
+
+    // Hiển thị lịch sử
+    async function fetchSpinHistory() {
+        const { data, error } = await supabaseClient
+            .from('spin_history')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(20);
+
+        if (!error && data) {
+            const tbody = document.getElementById('history-table-body');
+            tbody.innerHTML = '';
+            
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-[#e9e2f8]/50 hover:bg-[#faf8ff]";
+                tr.innerHTML = `
+                    <td class="py-3 px-2 font-bold">${row.user_name}</td>
+                    <td class="py-3 px-2 italic text-sm">${row.message || ''}</td>
+                    <td class="py-3 px-2 font-bold text-red-500">Bí mật trên Live</td>
+                `;
+                // Lưu ý: Mình đã đổi cột hiển thị lịch sử thành "Bí mật trên Live" 
+                // để người chơi không xem trước được kết quả ở bảng lịch sử.
+                tbody.appendChild(tr);
+            });
+        }
+    }
+
+    initUserData();
+</script>
