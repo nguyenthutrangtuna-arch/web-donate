@@ -71,35 +71,67 @@
             accent-color: #764bd6;
             transform: scale(1.5);
         }
+
+        /* Tùy chỉnh thanh cuộn cho danh sách phần thưởng */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c2b9f8; 
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9f85de; 
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between pt-4 md:pt-6 relative select-none">
 
-    <!-- ================= HEADER ================= -->
-    <header class="max-w-6xl w-full mx-auto relative z-50 mb-8 px-4 md:px-6">
+    <!-- ================= HEADER / THANH ĐIỀU HƯỚNG ================= -->
+    <header class="max-w-6xl w-full mx-auto relative z-50">
         <nav class="bg-white rounded-[28px] px-5 py-2.5 flex items-center justify-between card-shadow">
+            
+            <!-- Logo con chuột góc trái (Hình 4) -> Chuyển về trang chủ -->
             <a href="index.html" class="flex-shrink-0 hover:scale-105 transition-transform">
-                <img src="https://i.ibb.co/212LVzZq/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
+                <img src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/logo.png" alt="logo" border="0" class="w-14 h-14 object-contain" />
             </a>
+
+            <!-- Menu điều hướng ở giữa -->
             <div class="hidden md:flex items-center space-x-6 lg:space-x-12 text-base lg:text-lg text-[#6c43c0]">
                 <a href="index.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Đầu Hẻm</a>
                 <a href="chuhem.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Chủ Hẻm</a>
                 <a href="donate.html" class="bg-[#e9e2f8] px-6 py-2 rounded-full transition hover:bg-[#dcd0f5]">Donate</a>
                 <a href="lichstream.html" class="px-4 py-2 rounded-full hover:bg-[#e9e2f8]/50 transition">Lịch Stream</a>
             </div>
+
+            <!-- Cụm Icon góc phải: Avatar, Chuông, Ba gạch -->
             <div class="flex items-center space-x-4 md:space-x-5">
+                <!-- Icon Avatar -> chuyển miền đến hosochuot -->
                 <a href="hosochuot.html" class="w-11 h-11 rounded-full bg-[#734bd1] overflow-hidden flex items-center justify-center border-2 border-[#734bd1] hover:opacity-90 transition shadow-sm">
-                    <img id="nav-avatar-img" src="https://i.ibb.co/HfCMcYyB/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
+                    <img id="avatar-img" src="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/hs1.png" alt="avatar" class="w-full h-full object-cover object-top scale-125" />
                 </a>
+
+                <!-- Icon Chuông -> chuyển miền đến thongbao -->
                 <a href="thongbao.html" class="text-[#734bd1] hover:scale-110 transition">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
                 </a>
+
+                <!-- Icon Ba gạch -> Hiện thanh phụ giống Hình 2 -->
                 <button id="menu-btn" class="text-[#734bd1] hover:scale-110 transition focus:outline-none">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 6h14M3 12h18M7 18h14"></path></svg>
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 6h14M3 12h18M7 18h14"></path>
+                    </svg>
                 </button>
             </div>
         </nav>
-        <!-- Dropdown Menu -->
+
+        <!-- Thanh phụ (Dropdown Menu - Hình 2) -->
         <div id="sub-menu" class="hidden absolute right-0 top-[72px] w-72 bg-[#764bd6] text-white rounded-b-[24px] rounded-tl-[24px] shadow-2xl overflow-hidden z-50 flex-col">
             <a href="index.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Đầu Hẻm</a>
             <a href="chuhem.html" class="px-8 py-5 text-right text-lg border-b border-white/30 hover:bg-white/10 transition">Chủ Hẻm</a>
@@ -131,7 +163,7 @@
                 <div class="bg-[#9f85de] text-white py-2 px-6 rounded-full inline-block mb-3 card-shadow font-dejavu-bold text-sm">
                     Tên hiển thị
                 </div>
-                <input type="text" id="user-display-name" class="input-box text-[#6c43c0]" value="Đang tải..." disabled>
+                <input type="text" id="user-display-name" class="input-box text-[#6c43c0]" value="Chuột Lạ" disabled>
             </div>
 
             <!-- Số tiền -->
@@ -151,7 +183,7 @@
             </div>
 
             <!-- Nút Thanh Toán Chuyển Step -->
-            <button onclick="openPaymentMethodModal()" class="w-full bg-[#764bd6] hover:bg-[#5b3aa8] text-white text-xl py-4 rounded-full card-shadow transition-transform hover:scale-[1.02]">
+            <button onclick="checkAuthAndProceed()" class="w-full bg-[#764bd6] hover:bg-[#5b3aa8] text-white text-xl py-4 rounded-full card-shadow transition-transform hover:scale-[1.02]">
                 THANH TOÁN ĐỂ QUAY
             </button>
         </div>
@@ -159,7 +191,7 @@
         <!-- Danh sách phần thưởng (Text nhạt) -->
         <div class="w-full max-w-[600px]">
             <p class="text-center text-[#c2b9f8] mb-6 text-lg">Vòng quay thử thách, ra gì thực hiện đó</p>
-            <div id="prize-list" class="flex flex-col opacity-70">
+            <div id="prize-list" class="flex flex-col opacity-70 custom-scrollbar overflow-y-auto max-h-[300px] pr-2">
                 <div class="prize-item">Ban 5 con chuột ngẫu nhiên trong 5p</div>
                 <div class="prize-item">Ban 1 khiên ngẫu nhiên trong 5p</div>
                 <div class="prize-item">Ban 1 người được chỉ định</div>
@@ -179,7 +211,7 @@
         <!-- ================= BẢNG LỊCH SỬ GIAO DỊCH VÒNG QUAY ================= -->
         <div class="w-full max-w-[800px] mt-20 mb-10">
             <h2 class="font-dejavu-title text-2xl text-[#764bd6] text-center mb-6">LỊCH SỬ VÒNG QUAY</h2>
-            <div class="bg-white rounded-[24px] p-6 card-shadow border border-[#e9e2f8] min-h-[200px] max-h-[500px] overflow-y-auto">
+            <div class="bg-white rounded-[24px] p-6 card-shadow border border-[#e9e2f8] min-h-[200px] max-h-[500px] overflow-y-auto custom-scrollbar">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b-2 border-[#e9e2f8] text-[#9f85de] text-sm">
@@ -199,6 +231,23 @@
     <!-- Khoảng trống footer -->
     <footer></footer>
 
+    <!-- ================= 0. MODAL NHẮC ĐĂNG NHẬP DÀNH CHO CHUỘT LẠ ================= -->
+    <div id="loginPromptModal" class="hidden fixed inset-0 bg-black/50 z-[120] flex items-center justify-center px-4 backdrop-blur-sm">
+        <div class="bg-white rounded-[24px] w-full max-w-[400px] card-shadow border-t-8 border-[#764bd6] overflow-hidden text-center">
+            <div class="p-8">
+                <div class="text-[#764bd6] text-5xl mb-4">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <h3 class="font-dejavu-title text-[#764bd6] text-xl uppercase mb-3">Chưa Đăng Nhập</h3>
+                <p class="text-[#6c43c0] text-lg mb-8">Chuột lạ cần đăng ký để thử vận may!</p>
+                <div class="flex justify-center gap-4">
+                    <button onclick="closeLoginPrompt()" class="bg-[#e9e2f8] text-[#764bd6] px-6 py-2.5 rounded-lg hover:bg-[#dcd0f5] transition font-bold w-full">HUỶ</button>
+                    <!-- Lưu ý: Thay 'hosochuot.html' thành link đăng nhập nếu bạn muốn -->
+                    <button onclick="window.location.href='hosochuot.html'" class="bg-[#764bd6] text-white px-6 py-2.5 rounded-lg hover:bg-[#5b3aa8] transition font-bold uppercase w-full">ĐỒNG Ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ================= 1. MODAL CHỌN PHƯƠNG THỨC THANH TOÁN ================= -->
     <div id="methodModal" class="hidden fixed inset-0 bg-black/50 z-[100] flex items-center justify-center px-4 backdrop-blur-sm">
@@ -287,10 +336,10 @@
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentUser = null;
-    let userName = "Chuột Ẩn Danh";
+    let userName = "Chuột Lạ";
     let userCoins = 0;
     let generatedCode = ""; 
-    let checkInterval; // Biến dùng để chạy bộ đếm giờ tự động kiểm tra
+    let checkInterval; 
 
     const ALL_PRIZES = [
         "Cắn Trang Trang ngay lập tức", "Ban 3 con chuột có phô mát trong 5 phút", "Chúc Chuột may mắn lần sau!",
@@ -339,14 +388,30 @@
             userCoins = metadata.coins || 0; 
             document.getElementById('user-coins-display').innerText = `${userCoins} XU`;
         }
+        // Nếu không có session, biến userName giữ mặc định là "Chuột Lạ", ô input vẫn hiển thị "Chuột Lạ"
+        
         fetchSpinHistory();
+    }
+
+    // HÀM KIỂM TRA ĐĂNG NHẬP KHI BẤM NÚT "THANH TOÁN ĐỂ QUAY"
+    function checkAuthAndProceed() {
+        if (!currentUser) {
+            // Chưa đăng nhập -> Hiện bảng nhắc nhở
+            document.getElementById('loginPromptModal').classList.remove('hidden');
+        } else {
+            // Đã đăng nhập -> Mở bảng chọn phương thức
+            openPaymentMethodModal();
+        }
+    }
+
+    function closeLoginPrompt() {
+        document.getElementById('loginPromptModal').classList.add('hidden');
     }
 
     function openPaymentMethodModal() {
         document.getElementById('methodModal').classList.remove('hidden');
     }
 
-    // Đã sửa: Dừng tự động quét nếu người dùng bấm Hủy
     function closeModals() {
         if (checkInterval) clearInterval(checkInterval);
         document.getElementById('methodModal').classList.add('hidden');
@@ -399,10 +464,9 @@
                 return; 
             }
 
-            // YÊU CẦU 2: Bật chế độ tự động kiểm tra mỗi 3 giây
             const btn = document.getElementById('btn-check-bank');
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang chờ tiền vào...`;
-            btn.disabled = true; // Khóa nút để tránh bấm thủ công
+            btn.disabled = true; 
 
             checkInterval = setInterval(autoCheckPayment, 3000);
         }
@@ -423,18 +487,18 @@
             .limit(1);
 
         if (data && data.length > 0 && data[0].status === 'success') {
-            clearInterval(checkInterval); // Tiền vào -> Tắt quét
-            closeModals(); // Đóng mã QR
-            triggerSpin(); // Kích hoạt quay
+            clearInterval(checkInterval); 
+            closeModals(); 
+            triggerSpin(); 
         }
     }
 
-    // Nút thủ công (Giữ lại làm phương án dự phòng)
+    // Nút thủ công 
     async function checkRealPayment() {
         autoCheckPayment(); 
     }
 
-    // Thuật toán quay & YÊU CẦU 1 + 3: Giấu kết quả và Reload
+    // Thuật toán quay & Giấu kết quả
     async function triggerSpin() {
         const userMsg = document.getElementById('user-message').value.trim();
         const randomIndex = Math.floor(Math.random() * ALL_PRIZES.length);
@@ -453,11 +517,9 @@
             console.error("Lỗi:", error);
             alert("Có lỗi lưu dữ liệu, vui lòng báo Admin!"); 
         } else {
-            // Bỏ hiển thị giải thưởng, chỉ báo thành công
-            alert("🎉 Thanh toán thành công! Lệnh quay đã được gửi lên màn hình Live.");
-            
-            // Tải lại trang ngay lập tức
-            window.location.reload();
+            alert("🎉 Thanh toán thành công! Vòng quay đang xoay trên màn hình Livestream, hãy chú ý theo dõi nhé!");
+            document.getElementById('user-message').value = "";
+            fetchSpinHistory();
         }
     }
 
@@ -473,20 +535,73 @@
             const tbody = document.getElementById('history-table-body');
             tbody.innerHTML = '';
             
+            // Lấy thời gian hiện tại của máy tính
+            const now = new Date().getTime();
+            
             data.forEach(row => {
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-[#e9e2f8]/50 hover:bg-[#faf8ff]";
+                
+                // Tính khoảng thời gian từ lúc lệnh quay được tạo (lưu vào DB) đến hiện tại
+                const spinTime = new Date(row.created_at).getTime();
+                const timeDiff = now - spinTime;
+                
+                let prizeHTML = '';
+                
+                // Nếu chưa đủ 15 giây (15000 mili-giây) kể từ lúc chốt đơn
+                if (timeDiff < 15000) {
+                    const timeLeft = 15000 - timeDiff;
+                    // Hiện chữ "Nội dung đang tải..." màu vàng cam và có hiệu ứng nhấp nháy (animate-pulse)
+                    prizeHTML = `<span class="prize-reveal text-amber-500 font-bold animate-pulse" data-prize="${row.prize}" data-timeleft="${timeLeft}">Nội dung đang tải...</span>`;
+                } else {
+                    // Lịch sử cũ đã qua 15 giây, hiện luôn kết quả màu đỏ
+                    prizeHTML = `<span class="text-red-500 font-bold">${row.prize}</span>`;
+                }
+
                 tr.innerHTML = `
                     <td class="py-3 px-2 font-bold">${row.user_name}</td>
                     <td class="py-3 px-2 italic text-sm">${row.message || ''}</td>
-                    <td class="py-3 px-2 font-bold text-red-500">Bí mật trên Live</td>
+                    <td class="py-3 px-2">${prizeHTML}</td>
                 `;
-                // Lưu ý: Mình đã đổi cột hiển thị lịch sử thành "Bí mật trên Live" 
-                // để người chơi không xem trước được kết quả ở bảng lịch sử.
                 tbody.appendChild(tr);
+            });
+
+            // Kích hoạt bộ đếm ngược tự động lật mở phần thưởng cho những dòng chưa đủ 15s
+            document.querySelectorAll('.prize-reveal').forEach(el => {
+                const timeLeft = parseInt(el.getAttribute('data-timeleft'));
+                const actualPrize = el.getAttribute('data-prize');
+                
+                setTimeout(() => {
+                    el.innerText = actualPrize; // Đổi chữ thành phần thưởng thật
+                    el.classList.remove('text-amber-500', 'animate-pulse'); // Bỏ hiệu ứng đang tải
+                    el.classList.add('text-red-500'); // Đổi sang màu đỏ
+                }, timeLeft);
             });
         }
     }
 
     initUserData();
-</script>
+
+    // Menu toggle fix
+    const menuBtn = document.getElementById('menu-btn');
+    const subMenu = document.getElementById('sub-menu');
+    const navAvatarImg = document.getElementById('nav-avatar-img');
+
+    menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        subMenu.classList.toggle('hidden');
+        subMenu.classList.toggle('flex');
+        if(navAvatarImg) navAvatarImg.parentElement.classList.toggle('opacity-0');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!subMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+            subMenu.classList.add('hidden');
+            subMenu.classList.remove('flex');
+            if(navAvatarImg) navAvatarImg.parentElement.classList.remove('opacity-0');
+        }
+    });
+
+    </script>
+</body>
+</html>
