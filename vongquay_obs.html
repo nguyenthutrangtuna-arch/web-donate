@@ -44,7 +44,7 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            transition: transform 7s cubic-bezier(0.15, 0.9, 0.15, 1); /* Hiệu ứng quay mượt mà, chậm dần về cuối */
+            transition: transform 7s cubic-bezier(0.15, 0.9, 0.15, 1); 
             box-shadow: 0 0 40px rgba(118, 75, 214, 0.6);
             border: 8px solid #764bd6;
         }
@@ -112,21 +112,15 @@
         Test Vòng Quay
     </button>
 
-    <!-- Khu vực Vòng Quay (Đã thêm ID wheel-container) -->
     <div id="wheel-container" class="relative w-[650px] h-[650px] flex items-center justify-center">
-        <!-- Mũi tên -->
         <div class="pointer"></div>
-        
-        <!-- Vẽ đồ họa Bánh xe bằng Canvas -->
         <canvas id="wheel" width="1000" height="1000" class="w-full h-full rounded-full"></canvas>
-
-        <!-- Tâm bánh xe (Logo) -->
         <div class="wheel-center">
             <img src="https://i.ibb.co/212LVzZq/logo.png" class="w-14 h-14 object-contain scale-125 ml-1" alt="Logo">
         </div>
     </div>
 
-    <!-- Khung thông báo kết quả (Ẩn đi, chỉ hiện khi bánh xe dừng) -->
+    <!-- Khung thông báo kết quả -->
     <div id="prizeAlert" class="bg-white/95 border-[6px] border-[#764bd6] p-10 rounded-[40px] text-center shadow-[0_10px_50px_rgba(0,0,0,0.5)] min-w-[600px] max-w-[800px]">
         <img src="https://i.ibb.co/212LVzZq/logo.png" class="w-28 h-28 mx-auto mb-4 object-contain animate-bounce">
         <h2 class="text-3xl font-dejavu text-[#764bd6] mb-3"><span id="alertName" class="text-[#ff4757]">Tên</span> vừa quay trúng:</h2>
@@ -134,13 +128,11 @@
         <p id="alertMessage" class="text-xl text-[#764bd6]/80 italic mt-2"></p>
     </div>
 
-    <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
         const SUPABASE_URL = 'https://jmipwcfmnoygqtaadecv.supabase.co'; 
         const SUPABASE_KEY = 'sb_publishable_ii-OIerOFW00_e7janGKAg_XKhMsDWn'; 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Danh sách 13 phần thưởng giống hệt trên web
         const ALL_PRIZES = [
             "Cắn Trang Trang ngay lập tức", "Ban 3 con chuột có phô mát trong 5 phút", "Chúc Chuột may mắn lần sau!",
             "Hát karaoke trong 2 phút", "Ban 5 con chuột ngẫu nhiên trong 5p", "Giang Giang là mặt trời nhỏ nè",
@@ -152,11 +144,9 @@
         const numSlices = ALL_PRIZES.length;
         const sliceDeg = 360 / numSlices;
         let currentRotation = 0;
-        
         let isSpinning = false;
         let spinQueue = []; 
 
-        // 1. Vẽ vòng quay bằng HTML5 Canvas
         function drawWheel() {
             const canvas = document.getElementById('wheel');
             const ctx = canvas.getContext('2d');
@@ -168,12 +158,10 @@
                 const startAngle = (i * sliceDeg) * Math.PI / 180;
                 const endAngle = ((i + 1) * sliceDeg) * Math.PI / 180;
                 
-                // Vẽ ô
                 ctx.beginPath();
                 ctx.moveTo(radius, radius);
                 ctx.arc(radius, radius, radius, startAngle, endAngle);
                 
-                // Tô màu xen kẽ
                 if (i % 2 === 0) {
                     ctx.fillStyle = '#e9e2f8';
                 } else if (i % 3 === 0) {
@@ -186,7 +174,6 @@
                 ctx.lineWidth = 1;
                 ctx.stroke();
                 
-                // Vẽ chữ
                 ctx.save();
                 ctx.translate(radius, radius);
                 ctx.rotate((i * sliceDeg + sliceDeg / 2) * Math.PI / 180); 
@@ -195,7 +182,6 @@
                 ctx.fillStyle = "#6c43c0";
                 ctx.font = "bold 17px 'Comfortaa', sans-serif";
                 
-                // Cắt chữ nếu quá dài
                 const text = ALL_PRIZES[i];
                 const shortText = text.length > 30 ? text.substring(0, 30) + '...' : text;
                 ctx.fillText(shortText, radius - 30, 0); 
@@ -203,26 +189,23 @@
             }
         }
 
-        // 2. Logic Quay & Chốt số
+        // Logic Quay & Phát Âm Thanh Quay
         function spinTo(prizeStr, userName, message) {
-            // LỆNH HIỆN VÒNG QUAY
             document.getElementById('wheel-container').classList.add('active');
 
-            // BẬT TIẾNG QUAY BÁNH XE
+            // PHÁT ÂM THANH BÁNH XE QUAY TẠCH TẠCH
             const spinAudio = document.getElementById('spin-sound');
             spinAudio.currentTime = 0;
-            spinAudio.play().catch(e => console.log('Không thể phát âm thanh', e));
+            spinAudio.play().catch(e => console.log('Lỗi phát âm thanh:', e));
 
             const indices = [];
             ALL_PRIZES.forEach((p, i) => { if (p === prizeStr) indices.push(i); });
-            
             const index = indices.length > 0 ? indices[Math.floor(Math.random() * indices.length)] : 0;
             
             const sliceCenter = index * sliceDeg + sliceDeg / 2;
             const randomOffset = (Math.random() - 0.5) * (sliceDeg * 0.7); 
             
             let targetRotation = -90 - sliceCenter + randomOffset;
-            
             targetRotation += 360 * 8; 
             
             const remainder = currentRotation % 360;
@@ -234,60 +217,67 @@
             currentRotation = nextRot;
             document.getElementById('wheel').style.transform = `rotate(${currentRotation}deg)`;
             
-            // Sau 7 giây (thời gian xoay CSS), bung bảng thông báo
+            // Đợi 7 giây cho bánh xe quay xong
             setTimeout(() => {
                 spinAudio.pause(); // Tắt tiếng quay
                 showPrizeAlert(prizeStr, userName, message);
             }, 7000);
         }
 
-        // 3. Hiển thị Popup và Giọng đọc
+        // Hiển thị kết quả & Đọc giọng AI
         function showPrizeAlert(prize, name, message) {
-            // PHÁT TIẾNG TADA
+            // PHÁT ÂM THANH NỔ GIẢI (TADA)
             const winAudio = document.getElementById('win-sound');
             winAudio.currentTime = 0;
             winAudio.play().catch(e => console.log(e));
 
+            // Hiển thị khung popup
             const alertBox = document.getElementById('prizeAlert');
             document.getElementById('alertName').innerText = name;
             document.getElementById('alertPrize').innerText = prize;
             document.getElementById('alertMessage').innerText = message ? `"${message}"` : "";
-            
             alertBox.classList.add('show'); 
             
-            const speakText = `${name} vừa quay trúng, ${prize}. ${message ? 'Với lời nhắn: ' + message : ''}`;
+            // CÚ PHÁP ĐỌC: "Tên hiển thị đã quay được... Lời nhắn là..."
+            const speakText = `${name} đã quay được, ${prize}. ${message ? 'Với lời nhắn: ' + message : ''}`;
             
-            // Đọc giọng Google
+            // Đợi 1.5 giây sau tiếng Tada rồi mới bắt đầu đọc
             setTimeout(() => {
                 if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
+                    window.speechSynthesis.cancel(); // Hủy giọng đang đọc (nếu có)
                     const utterance = new SpeechSynthesisUtterance(speakText);
-                    utterance.lang = 'vi-VN';
-                    utterance.rate = 1.0;
                     
+                    // Thiết lập giọng đọc: Tiếng Việt, Giọng Nữ
+                    utterance.lang = 'vi-VN';
+                    utterance.rate = 1.0; // Tốc độ đọc bình thường
+                    
+                    // Lọc tìm giọng Nữ tiếng Việt nếu có sẵn trên máy tính
+                    const voices = window.speechSynthesis.getVoices();
+                    const viVoice = voices.find(v => v.lang.includes('vi') && v.name.toLowerCase().includes('female'));
+                    if (viVoice) {
+                        utterance.voice = viVoice;
+                    }
+
                     utterance.onend = () => finishAlert(alertBox);
                     window.speechSynthesis.speak(utterance);
                 } else {
                     setTimeout(() => finishAlert(alertBox), 6000);
                 }
-            }, 1500); // Chờ tiếng Tada nổ xong mới đọc
+            }, 1500);
         }
 
         function finishAlert(alertBox) {
             setTimeout(() => {
                 alertBox.classList.remove('show');
-                
-                // LỆNH ẨN VÒNG QUAY SAU KHI ĐỌC GIẢI XONG
                 document.getElementById('wheel-container').classList.remove('active');
                 
                 setTimeout(() => {
                     isSpinning = false;
                     processQueue(); 
                 }, 1500); 
-            }, 4000); 
+            }, 4000); // Bảng hiện thêm 4 giây sau khi đọc xong
         }
 
-        // 4. Hàng đợi Xử lý (Queue)
         function processQueue() {
             if (isSpinning || spinQueue.length === 0) return;
             isSpinning = true;
@@ -295,7 +285,7 @@
             spinTo(data.prize, data.user_name, data.message);
         }
 
-        // 5. Kết nối Supabase Realtime (Nghe lén Database)
+        // Bắt Realtime từ Supabase
         supabaseClient
             .channel('realtime_spin')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'spin_history' }, payload => {
@@ -309,14 +299,21 @@
                 if (status === 'SUBSCRIBED') console.log('Đã kết nối luồng Realtime Supabase!');
             });
 
-        // 6. Hàm Test
+        // Hàm Test Vòng Quay
         function testSpin() {
             spinQueue.push({
                 user_name: "Chuột Test",
-                message: "Test thử vòng quay trên OBS nè. Chúc livestream rực rỡ nhé!",
+                message: "Chúc Streamer hôm nay leo rank thành công nha!",
                 prize: ALL_PRIZES[Math.floor(Math.random() * ALL_PRIZES.length)]
             });
             processQueue();
+        }
+
+        // Đảm bảo load đủ danh sách giọng nói trước khi đọc
+        if (window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = function() {
+                window.speechSynthesis.getVoices();
+            };
         }
 
         drawWheel();
