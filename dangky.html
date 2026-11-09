@@ -146,6 +146,24 @@
         </form>
     </div>
 
+    <!-- ================= MODAL THÔNG BÁO THÀNH CÔNG ================= -->
+    <div id="successModal" class="hidden fixed inset-0 bg-black/60 z-[120] flex items-center justify-center px-4 backdrop-blur-sm">
+        <div class="bg-white rounded-[28px] w-full max-w-[400px] modal-shadow border-t-8 border-[#764bd6] overflow-hidden text-center">
+            <div class="p-8">
+                <!-- Icon ăn mừng -->
+                <div class="text-[#764bd6] text-5xl mb-5">
+                    <i class="fa-solid fa-face-smile-beam"></i>
+                </div>
+                <h3 class="font-dejavu-title text-[#764bd6] text-xl uppercase mb-4">Chào mừng</h3>
+                <p class="text-[#6c43c0] text-lg mb-8 leading-relaxed">Bạn đã là Chuột dân của Hẻm chuột</p>
+                <div class="flex justify-center">
+                    <!-- Bấm OK sẽ chuyển hướng -->
+                    <button onclick="goToLogin()" class="bg-[#764bd6] text-white px-10 py-3 rounded-full hover:bg-[#5b3aa8] transition font-bold text-lg uppercase w-full">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= JAVASCRIPT XỬ LÝ LÔ-GIC VÀ SUPABASE ================= -->
     <script>
         // Cấu hình Supabase
@@ -168,12 +186,17 @@
             }
         }
 
-        // Kiểm tra định dạng mật khẩu: Phải có 1 In Hoa, 1 Số, 1 Đặc Biệt
+        // Kiểm tra định dạng mật khẩu: Phải có ít nhất 1 In Hoa, 1 Số, 1 Đặc Biệt
         function isValidPassword(password) {
             const hasUpperCase = /[A-Z]/.test(password);
             const hasNumber = /[0-9]/.test(password);
             const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password);
             return hasUpperCase && hasNumber && hasSpecialChar;
+        }
+
+        // Hàm chuyển hướng khi ấn nút OK trong Modal
+        function goToLogin() {
+            window.location.href = "dangnhap.html";
         }
 
         // Xử lý sự kiện Gửi form
@@ -222,9 +245,8 @@
             if (error) {
                 msg.innerText = "Lỗi đăng ký: " + error.message;
             } else {
-                alert("Tạo Hồ sơ Chuột thành công!");
-                // Theo yêu cầu mới: Đăng ký xong nhảy về dangnhap.html
-                window.location.href = "dangnhap.html";
+                // Đăng ký thành công -> Bật Modal thông báo
+                document.getElementById('successModal').classList.remove('hidden');
             }
         });
     </script>
