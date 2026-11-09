@@ -213,26 +213,6 @@
             document.getElementById('alertPrize').innerText = prize;
             document.getElementById('alertMessage').innerText = message ? `"${message}"` : "";
             alertBox.classList.add('show'); 
-            
-            // CÚ PHÁP ĐỌC CỦA CHỊ GOOGLE
-            const speakText = `${name} đã quay được, ${prize}. ${message ? 'Với lời nhắn: ' + message : ''}`;
-            
-            setTimeout(() => {
-                // Gọi trực tiếp hệ thống API của Google Dịch để ép ra giọng Tiếng Việt 100%
-                const googleTtsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=${encodeURIComponent(speakText)}`;
-                const googleAudio = new Audio(googleTtsUrl);
-                
-                // Khi chị Google đọc xong thì mới cho bảng thông báo biến mất
-                googleAudio.onended = () => finishAlert(alertBox);
-                
-                // Phát giọng đọc
-                googleAudio.play().catch(e => {
-                    console.log('Lỗi phát giọng đọc Google:', e);
-                    // Nếu lỗi (ví dụ rớt mạng), vẫn cho bảng thông báo tự ẩn sau 6 giây
-                    setTimeout(() => finishAlert(alertBox), 6000);
-                });
-                
-            }, 1500); // Chờ 1.5s cho tiếng nổ giải Tada nổ xong mới bắt đầu đọc
         }
 
         function finishAlert(alertBox) {
