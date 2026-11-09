@@ -14,7 +14,7 @@
 
     <style>
         body {
-            background-color: transparent !important; /* Nền trong suốt để add vào OBS */
+            background-color: transparent !important;
             overflow: hidden;
             font-family: 'Comfortaa', cursive;
             font-weight: 700;
@@ -26,7 +26,6 @@
             font-style: italic;
         }
 
-        /* KHU VỰC ẨN HIỆN VÒNG QUAY */
         #wheel-container {
             opacity: 0;
             transform: scale(0.8);
@@ -39,7 +38,6 @@
             transform: scale(1);
         }
 
-        /* Vòng quay (Canvas) */
         #wheel {
             width: 100%;
             height: 100%;
@@ -49,7 +47,6 @@
             border: 8px solid #764bd6;
         }
 
-        /* Mũi tên chỉ */
         .pointer {
             position: absolute;
             top: -25px;
@@ -64,7 +61,6 @@
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
         }
 
-        /* Nút tâm vòng quay */
         .wheel-center {
             position: absolute;
             top: 50%;
@@ -82,7 +78,6 @@
             justify-content: center;
         }
 
-        /* Khung popup thông báo trúng thưởng */
         #prizeAlert {
             position: absolute;
             top: 50%;
@@ -102,14 +97,12 @@
 </head>
 <body class="flex items-center justify-center h-screen relative">
 
-    <!-- CÁC FILE ÂM THANH (Bạn có thể thay link mp3 khác nếu muốn) -->
-    <!-- Âm thanh bánh xe xoay tạch tạch -->
+    <!-- CÁC FILE ÂM THANH -->
     <audio id="spin-sound" src="https://www.myinstants.com/media/sounds/wheel-of-fortune-spin.mp3" preload="auto"></audio>
-    <!-- Âm thanh nổ giải Tada -->
     <audio id="win-sound" src="https://www.myinstants.com/media/sounds/tada.mp3" preload="auto"></audio>
 
     <button onclick="testSpin()" class="absolute top-4 left-4 bg-white/30 text-white px-4 py-2 rounded-lg text-sm hover:bg-white/60 z-[100] transition">
-        Test Vòng Quay
+        Test Vòng Quay (Bấm 1 lần để mồi âm thanh)
     </button>
 
     <div id="wheel-container" class="relative w-[650px] h-[650px] flex items-center justify-center">
@@ -120,7 +113,6 @@
         </div>
     </div>
 
-    <!-- Khung thông báo kết quả -->
     <div id="prizeAlert" class="bg-white/95 border-[6px] border-[#764bd6] p-10 rounded-[40px] text-center shadow-[0_10px_50px_rgba(0,0,0,0.5)] min-w-[600px] max-w-[800px]">
         <img src="https://i.ibb.co/212LVzZq/logo.png" class="w-28 h-28 mx-auto mb-4 object-contain animate-bounce">
         <h2 class="text-3xl font-dejavu text-[#764bd6] mb-3"><span id="alertName" class="text-[#ff4757]">Tên</span> vừa quay trúng:</h2>
@@ -151,24 +143,19 @@
             const canvas = document.getElementById('wheel');
             const ctx = canvas.getContext('2d');
             const radius = canvas.width / 2;
-            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             for (let i = 0; i < numSlices; i++) {
                 const startAngle = (i * sliceDeg) * Math.PI / 180;
                 const endAngle = ((i + 1) * sliceDeg) * Math.PI / 180;
-                
                 ctx.beginPath();
                 ctx.moveTo(radius, radius);
                 ctx.arc(radius, radius, radius, startAngle, endAngle);
                 
-                if (i % 2 === 0) {
-                    ctx.fillStyle = '#e9e2f8';
-                } else if (i % 3 === 0) {
-                    ctx.fillStyle = '#dcd0f5';
-                } else {
-                    ctx.fillStyle = '#ffffff';
-                }
+                if (i % 2 === 0) ctx.fillStyle = '#e9e2f8';
+                else if (i % 3 === 0) ctx.fillStyle = '#dcd0f5';
+                else ctx.fillStyle = '#ffffff';
+                
                 ctx.fill();
                 ctx.strokeStyle = '#764bd6';
                 ctx.lineWidth = 1;
@@ -189,14 +176,11 @@
             }
         }
 
-        // Logic Quay & Phát Âm Thanh Quay
         function spinTo(prizeStr, userName, message) {
             document.getElementById('wheel-container').classList.add('active');
-
-            // PHÁT ÂM THANH BÁNH XE QUAY TẠCH TẠCH
             const spinAudio = document.getElementById('spin-sound');
             spinAudio.currentTime = 0;
-            spinAudio.play().catch(e => console.log('Lỗi phát âm thanh:', e));
+            spinAudio.play().catch(e => console.log('Lỗi phát âm thanh quay:', e));
 
             const indices = [];
             ALL_PRIZES.forEach((p, i) => { if (p === prizeStr) indices.push(i); });
@@ -204,78 +188,61 @@
             
             const sliceCenter = index * sliceDeg + sliceDeg / 2;
             const randomOffset = (Math.random() - 0.5) * (sliceDeg * 0.7); 
-            
-            let targetRotation = -90 - sliceCenter + randomOffset;
-            targetRotation += 360 * 8; 
+            let targetRotation = -90 - sliceCenter + randomOffset + (360 * 8); 
             
             const remainder = currentRotation % 360;
             let nextRot = currentRotation - remainder + targetRotation;
-            if (nextRot <= currentRotation + 360 * 3) {
-                nextRot += 360 * 5;
-            }
+            if (nextRot <= currentRotation + 360 * 3) nextRot += 360 * 5;
             
             currentRotation = nextRot;
             document.getElementById('wheel').style.transform = `rotate(${currentRotation}deg)`;
             
-            // Đợi 7 giây cho bánh xe quay xong
             setTimeout(() => {
-                spinAudio.pause(); // Tắt tiếng quay
+                spinAudio.pause(); 
                 showPrizeAlert(prizeStr, userName, message);
             }, 7000);
         }
 
-        // Hiển thị kết quả & Đọc giọng AI
         function showPrizeAlert(prize, name, message) {
-            // PHÁT ÂM THANH NỔ GIẢI (TADA)
             const winAudio = document.getElementById('win-sound');
             winAudio.currentTime = 0;
             winAudio.play().catch(e => console.log(e));
 
-            // Hiển thị khung popup
             const alertBox = document.getElementById('prizeAlert');
             document.getElementById('alertName').innerText = name;
             document.getElementById('alertPrize').innerText = prize;
             document.getElementById('alertMessage').innerText = message ? `"${message}"` : "";
             alertBox.classList.add('show'); 
             
-            // CÚ PHÁP ĐỌC: "Tên hiển thị đã quay được... Lời nhắn là..."
+            // CÚ PHÁP ĐỌC CỦA CHỊ GOOGLE
             const speakText = `${name} đã quay được, ${prize}. ${message ? 'Với lời nhắn: ' + message : ''}`;
             
-            // Đợi 1.5 giây sau tiếng Tada rồi mới bắt đầu đọc
             setTimeout(() => {
                 if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel(); // Hủy giọng đang đọc (nếu có)
+                    window.speechSynthesis.cancel(); 
                     const utterance = new SpeechSynthesisUtterance(speakText);
-                    
-                    // Thiết lập giọng đọc: Tiếng Việt, Giọng Nữ
                     utterance.lang = 'vi-VN';
-                    utterance.rate = 1.0; // Tốc độ đọc bình thường
+                    utterance.rate = 1.0; 
                     
-                    // Lọc tìm giọng Nữ tiếng Việt nếu có sẵn trên máy tính
-                    const voices = window.speechSynthesis.getVoices();
-                    const viVoice = voices.find(v => v.lang.includes('vi') && v.name.toLowerCase().includes('female'));
-                    if (viVoice) {
-                        utterance.voice = viVoice;
-                    }
-
                     utterance.onend = () => finishAlert(alertBox);
+                    
+                    // Phát âm thanh
                     window.speechSynthesis.speak(utterance);
                 } else {
                     setTimeout(() => finishAlert(alertBox), 6000);
                 }
-            }, 1500);
+            }, 1500); // Chờ 1.5s cho tiếng pháo hoa nổ xong mới đọc
         }
 
         function finishAlert(alertBox) {
             setTimeout(() => {
                 alertBox.classList.remove('show');
                 document.getElementById('wheel-container').classList.remove('active');
-                
                 setTimeout(() => {
                     isSpinning = false;
                     processQueue(); 
                 }, 1500); 
-            }, 4000); // Bảng hiện thêm 4 giây sau khi đọc xong
+            }, 5000); 
         }
 
         function processQueue() {
@@ -285,7 +252,6 @@
             spinTo(data.prize, data.user_name, data.message);
         }
 
-        // Bắt Realtime từ Supabase
         supabaseClient
             .channel('realtime_spin')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'spin_history' }, payload => {
@@ -299,7 +265,6 @@
                 if (status === 'SUBSCRIBED') console.log('Đã kết nối luồng Realtime Supabase!');
             });
 
-        // Hàm Test Vòng Quay
         function testSpin() {
             spinQueue.push({
                 user_name: "Chuột Test",
@@ -309,11 +274,9 @@
             processQueue();
         }
 
-        // Đảm bảo load đủ danh sách giọng nói trước khi đọc
+        // Mồi load sẵn giọng đọc của trình duyệt để không bị trễ nhịp
         if (window.speechSynthesis) {
-            window.speechSynthesis.onvoiceschanged = function() {
-                window.speechSynthesis.getVoices();
-            };
+            window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
         }
 
         drawWheel();
