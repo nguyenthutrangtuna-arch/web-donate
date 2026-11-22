@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OBS Vòng Quay - Giang Hehe</title>
+    <!-- Logo hiển thị trên tab trình duyệt & tìm kiếm (Favicon) -->
+    <link rel="icon" type="image/png" href="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/xuongca.png">
+    <link rel="apple-touch-icon" href="https://jmipwcfmnoygqtaadecv.supabase.co/storage/v1/object/public/images/xuongca.png">
     <!-- Tích hợp Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Import Font -->
@@ -137,7 +140,9 @@
         const sliceDeg = 360 / numSlices;
         let currentRotation = 0;
         let isSpinning = false;
-        let spinQueue = []; 
+        let spinQueue = [];
+        let lastSpinId = 0;
+        const processedIds = new Set(); // Chống quay trùng giữa Realtime và Quét ngầm
 
         function drawWheel() {
             const canvas = document.getElementById('wheel');
@@ -213,6 +218,26 @@
             document.getElementById('alertPrize').innerText = prize;
             document.getElementById('alertMessage').innerText = message ? `"${message}"` : "";
             alertBox.classList.add('show'); 
+
+            const speakText = `${name} đã quay được, ${prize}. ${message ? 'Với lời nhắn: ' + message : ''}`;
+
+            // Đợi 1.5s cho tiếng Tada nổ xong rồi đọc giọng chị Google và tự đóng bảng
+            setTimeout(() => {
+                const googleTtsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=${encodeURIComponent(speakText)}`;
+                const googleAudio = new Audio(googleTtsUrl);
+                let finished = false;
+
+                const done = () => {
+                    if (!finished) {
+                        finished = true;
+                        finishAlert(alertBox);
+                    }
+                };
+
+                googleAudio.onended = done;
+                googleAudio.onerror = () => setTimeout(done, 4000);
+                googleAudio.play().catch(() => setTimeout(done, 4000));
+            }, 1500);
         }
 
         function finishAlert(alertBox) {
@@ -223,7 +248,7 @@
                     isSpinning = false;
                     processQueue(); 
                 }, 1500); 
-            }, 5000); 
+            }, 4000); 
         }
 
         function processQueue() {
@@ -233,14 +258,51 @@
             spinTo(data.prize, data.user_name, data.message);
         }
 
+        // Hàm gom đơn mới (chống lặp)
+        function handleNewSpin(data) {
+            if (!data || data.spin_type !== 'VQ1') return;
+            if (data.id && processedIds.has(data.id)) return;
+            if (data.id) {
+                processedIds.add(data.id);
+                if (data.id > lastSpinId) lastSpinId = data.id;
+            }
+            spinQueue.push(data);
+            processQueue();
+        }
+
+        // 1. Lấy mốc ID mới nhất khi mở OBS để không quay lại lịch sử cũ
+        async function initLastSpinId() {
+            const { data, error } = await supabaseClient
+                .from('spin_history')
+                .select('id')
+                .order('id', { ascending: false })
+                .limit(1);
+
+            if (!error && data && data.length > 0) {
+                lastSpinId = data[0].id;
+                processedIds.add(lastSpinId);
+            }
+        }
+
+        // 2. Cơ chế quét ngầm mỗi 3 giây (Dự phòng chắc chắn nếu Realtime không chạy)
+        async function pollNewSpins() {
+            const { data, error } = await supabaseClient
+                .from('spin_history')
+                .select('*')
+                .gt('id', lastSpinId)
+                .eq('spin_type', 'VQ1')
+                .order('id', { ascending: true });
+
+            if (!error && data && data.length > 0) {
+                data.forEach(row => handleNewSpin(row));
+            }
+        }
+
+        // 3. Kết nối Supabase Realtime (Nhận tức thì nếu đã bật Replication)
         supabaseClient
             .channel('realtime_spin')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'spin_history' }, payload => {
-                const data = payload.new;
-                if (data.spin_type === 'VQ1') {
-                    spinQueue.push(data);
-                    processQueue();
-                }
+                handleNewSpin(payload.new);
             })
             .subscribe((status) => {
                 if (status === 'SUBSCRIBED') console.log('Đã kết nối luồng Realtime Supabase!');
@@ -255,12 +317,10 @@
             processQueue();
         }
 
-        // Mồi load sẵn giọng đọc của trình duyệt để không bị trễ nhịp
-        if (window.speechSynthesis) {
-            window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-        }
-
         drawWheel();
+        initLastSpinId().then(() => {
+            setInterval(pollNewSpins, 3000);
+        });
     </script>
 </body>
 </html>
